@@ -75,6 +75,7 @@ class Cffr(models.Model):
     agency_code =  models.CharField(max_length=4)
     funding_sign =  models.CharField(max_length=1)
     amount =  models.IntegerField()
+    amount_adjusted = models.IntegerField(null=True)
     
 class CffrAgency(models.Model):
     year = models.IntegerField()
