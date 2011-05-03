@@ -1,7 +1,7 @@
 from django import db
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
-from data.models import CFFRProgram
+from data.models import CffrProgram
 
 # National Priorities Project Data Repository
 # import_cffr_annual_pre93_prog.py 
@@ -13,17 +13,17 @@ from data.models import CFFRProgram
 # pre-93: http://assets.nationalpriorities.org/raw_data/cffr/cffr_pre93.tar.gz
 # '93 and later: http://assets.nationalpriorities.org/raw_data/cffr/cffr.tar.gz
 
-# destination model:  CFFRProgram
+# destination model:  CffrProgram
 
 # HOWTO:
 # 1) Download .tar.gz from source data below
 # 2) decompress source data into a path and enter path into SOURCE_PATH var below
-# 3) Run as Django management command from your project path "python manage.py import_cffr_anual_prog"
+# 3) Run as Django management command from your project path "python manage.py import_cffr_annual_prog"
 # AFTER IMPORTING EVERY YEAR:
 # 4) Create indexes in database
 #   CREATE INDEX idx_year ON data_cffrprogram (year)
 
-YEAR = 1983
+YEAR = 2009
 SOURCE_PATH = '%s/cffr/%s/' % (settings.LOCAL_DATA_ROOT, YEAR)
 
 if YEAR < 1993:
@@ -42,7 +42,7 @@ class Command(NoArgsCommand):
             program_name = line[6:79]
             
             print (YEAR, program_id_code, program_name)
-            record = CFFRProgram(year=YEAR, program_id_code=program_id_code, program_name=program_name)
+            record = CffrProgram(year=YEAR, program_id_code=program_id_code, program_name=program_name)
         
             try:
                 record.save()

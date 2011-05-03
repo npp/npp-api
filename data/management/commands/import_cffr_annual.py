@@ -1,7 +1,7 @@
 from django import db
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
-from data.models import CFFR
+from data.models import Cffr
 
 # National Priorities Project Data Repository
 # import_cffr_annual.py 
@@ -15,14 +15,14 @@ from data.models import CFFR
 # HOWTO:
 # 1) Download .tar.gz from source data below
 # 2) decompress source data into a path and enter path into SOURCE_PATH var below
-# 3) Run as Django management command from your project path "python manage.py import_cffr_anual"
+# 3) Run as Django management command from your project path "python manage.py import_cffr_annual"
 # 4) Make sure your database has amount field set as a bigint (and not a regular int)
 # AFTER IMPORTING EVERY YEAR:
 # 5) Create indexes in database
 #   CREATE INDEX idx_state_postal ON data_cffr (state_postal)
 #   CREATE INDEX idx_year ON data_cffr (year)
 
-YEAR = 1993
+YEAR = 2009
 SOURCE_PATH = '%s/cffr/%s/' % (settings.LOCAL_DATA_ROOT, YEAR)
 if YEAR > 2002:
     SOURCE_FILE = '%s%s%scffcom.txt' % (SOURCE_PATH, str(YEAR)[2], str(YEAR)[3])
@@ -49,12 +49,17 @@ class Command(NoArgsCommand):
             agency_code = line[111:115]
             funding_sign = line[115:116]
             amount = int(line[116:128])
+            
+            if funding_sign == '-':
+                amount_adjusted = amount*-1
+            else:
+                amount_adjusted = amount
 
-            record = CFFR(year=YEAR, state_code=state_code, county_code=county_code, 
+            record = Cffr(year=YEAR, state_code=state_code, county_code=county_code, 
                 place_code=place_code, state_postal=state_postal, county_name=county_name, 
                 place_name=place_name, population=population, congress_district=congress_district, 
                 program_code=program_code, object_type=object_type, agency_code=agency_code, 
-                funding_sign=funding_sign, amount=amount)
+                funding_sign=funding_sign, amount=amount, amount_adjusted=amount_adjusted)
             try:
                 record.save()
                 db.reset_queries()

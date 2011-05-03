@@ -1,7 +1,7 @@
 from django import db
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
-from data.models import CFFRObjectCode
+from data.models import CffrObjectCode
 
 # National Priorities Project Data Repository
 # import_cffr_annual_object_codes.py
@@ -10,7 +10,7 @@ from data.models import CFFRObjectCode
 # Imports Annual CFFR Object Code File
 # government source: mailed to Barb Chalfonte from Census
 # source data: http://assets.nationalpriorities.org/raw_data/cffr/cffr.tar.gz
-# destination model:  CFFRObjectCode
+# destination model:  CffrObjectCode
 
 # HOWTO:
 # 1) Download .tar.gz from source data below
@@ -30,7 +30,7 @@ class Command(NoArgsCommand):
             category = line[2:82]
             
             print (object_code, category)
-            record = CFFRObjectCode(object_code=object_code, category=category)
+            record = CffrObjectCode(object_code=object_code, category=category)
         
             try:
                 record.save()
