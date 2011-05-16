@@ -1,7 +1,7 @@
 from django import db
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
-from data.models import CffrProgram
+from data.models import CffrProgramRaw
 
 # National Priorities Project Data Repository
 # import_cffr_annual_pre93_prog.py 
@@ -13,7 +13,7 @@ from data.models import CffrProgram
 # pre-93: http://assets.nationalpriorities.org/raw_data/cffr/cffr_pre93.tar.gz
 # '93 and later: http://assets.nationalpriorities.org/raw_data/cffr/cffr.tar.gz
 
-# destination model:  CffrProgram
+# destination model:  CffrProgramRaw
 
 # HOWTO:
 # 1) Download .tar.gz from source data below
@@ -21,7 +21,7 @@ from data.models import CffrProgram
 # 3) Run as Django management command from your project path "python manage.py import_cffr_annual_prog"
 # AFTER IMPORTING EVERY YEAR:
 # 4) Create indexes in database
-#   CREATE INDEX idx_year ON data_cffrprogram (year)
+#   CREATE INDEX idx_year ON data_cffrprogramraw (year)
 
 YEAR = 2009
 SOURCE_PATH = '%s/cffr/%s/' % (settings.LOCAL_DATA_ROOT, YEAR)
@@ -36,17 +36,24 @@ class Command(NoArgsCommand):
     def handle_noargs(self, **options):
         print SOURCE_FILE
         f = open(SOURCE_FILE, 'r')
+        record_count = 0
+        error_count = 0
 
         for line in f:
             program_id_code= line[0:6]
             program_name = line[6:79]
             
             print (YEAR, program_id_code, program_name)
-            record = CffrProgram(year=YEAR, program_id_code=program_id_code, program_name=program_name)
+            record = CffrProgramRaw(year=YEAR, program_id_code=program_id_code, program_name=program_name)
         
             try:
                 record.save()
                 db.reset_queries()
                 print record
+                record_count = record_count + 1
             except:
                 print "FAIL"
+                error_count = error_count + 1
+                
+        print str(record_count) + ' records loaded from ' + SOURCE_FILE + '. Number of errors was ' + str(error_count) + '.'
+        

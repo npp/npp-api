@@ -1,7 +1,7 @@
 from django import db
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
-from data.models import ANSICountyState
+from data.models import AnsiCountyState
 import csv
 
 # National Priorities Project Data Repository
@@ -12,7 +12,7 @@ import csv
 # source file: http://www.census.gov/geo/www/ansi/national.txt (accurate as of 11/30/2009)
 # source info: http://www.census.gov/geo/www/ansi/download.html
 # npp cache: http://assets.nationalpriorities.org/raw_data/ansi/national.txt
-# destination model:  ANSICountyState
+# destination model:  AnsiCountyState
 
 # HOWTO:
 # 1) Download source file from url listed above
@@ -35,7 +35,7 @@ class Command(NoArgsCommand):
                 for column in fields:
                     row_dict[column] = row[j]            
                     j = j + 1
-                db_row =ANSICountyState(state=row_dict['State'], 
+                db_row =AnsiCountyState(state=row_dict['State'], 
                     ansi_state=row_dict['ANSI'], code=row_dict['Code'], county=row_dict['County'],
                     ansi_class=row_dict['ANSI Cl'])
                 db_row.save()

@@ -86,12 +86,19 @@ class BudgetCategorySubfunctionsHandler(GenericHandler):
         model = BudgetCategorySubfunctions
         super(BudgetCategorySubfunctionsHandler, self).__init__(allowed_keys, model)
         
+#class CffrHandler(GenericHandler):
+#    def __init__(self):
+#        allowed_keys = ('id', 'year', 'state_code', 'county_code', 'state_abbr', 'program_code')
+#        model = Cffr
+#        fields = ('year', ('state', ('state_fips', 'state_abbr')), ('county', ('county_fips', 'county_name')), ('program', ('program_code')))
+#        super(CffrHandler, self).__init__(allowed_keys, model)
+        
 class CffrHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('id', 'year', 'state_code', 'county_code', 'place_code', 'state_postal', 'congress_district', 'program_code', 'object_type', 'agency_code', 'funding_sign')
-        model = Cffr
+        model = CffrRaw
         super(CffrHandler, self).__init__(allowed_keys, model)
-  
+        
 class CffrAgencyHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('id', 'year', 'agency_code', 'agency_name')

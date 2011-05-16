@@ -14,7 +14,7 @@ class Source(models.Model):
     def __unicode__(self):
         return self.title
     
-### data types
+### "raw" models (i.e., represent data as it is pulled in from the source)
 
 class AlternativeFuelVehicles(models.Model):
     state = models.CharField(max_length=32)
@@ -40,6 +40,12 @@ class AnsiCountyState(models.Model):
     county = models.CharField(max_length=255)
     ansi_class = models.CharField(max_length=2)
     
+class AnsiState(models.Model):
+    ansi_state = models.CharField(max_length=2)
+    state = models.CharField(max_length=2)
+    state_name = models.CharField(max_length=50)
+    gnisid = models.CharField(max_length=8)
+    
 class AtCodes(models.Model):
     code = models.CharField(max_length=1)
     assistance_type = models.CharField(max_length=64)
@@ -60,7 +66,7 @@ class BudgetCategorySubfunctions(models.Model):
     subfunction = models.TextField(max_length=3)
     npp_budget_category = models.TextField(max_length=64)
 
-class Cffr(models.Model):
+class CffrRaw(models.Model):
     year = models.IntegerField()
     state_code = models.CharField(max_length=2)
     county_code = models.CharField(max_length=3)
@@ -100,7 +106,7 @@ class CffrObjectCode(models.Model):
     object_code = models.CharField(max_length=2)
     category = models.CharField(max_length=80)
 
-class CffrProgram(models.Model):
+class CffrProgramRaw(models.Model):
     year = models.IntegerField()
     program_id_code = models.CharField(max_length=6)
     program_name = models.CharField(max_length=74)
@@ -896,3 +902,55 @@ class WicParticipants(models.Model):
     type = models.CharField(max_length=32)
     year = models.IntegerField()
     value = models.IntegerField(null=True)
+    
+
+### public-facing data models, including reference tables.
+### ideally, these will in separate files someday
+
+### reference models
+class CffrProgramRef(models.Model):
+    year = models.IntegerField()
+    program_code = models.CharField(max_length=6)
+    program_name = models.CharField(max_length=255)
+    program_desc = models.CharField(max_length=255,null=True)
+    create_date = models.DateField(auto_now_add=True)
+    update_date = models.DateField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'program_code')
+
+class StateRef(models.Model):
+    state_ansi = models.CharField(max_length=2,unique=True)
+    state_abbr = models.CharField(max_length=2,unique=True)
+    state_name = models.CharField(max_length=50)
+    state_desc = models.CharField(max_length=255,null=True)
+    state_gnisid = models.CharField(max_length=10,null=True)
+    sort_order = models.SmallIntegerField(null=True)
+    create_date = models.DateField(auto_now_add=True)
+    update_date = models.DateField(auto_now=True)
+
+class CountyRef(models.Model):
+    state_ref = models.ForeignKey(StateRef)
+    county_ansi = models.CharField(max_length=3)
+    county_abbr = models.CharField(max_length=20)
+    county_name = models.CharField(max_length=100)
+    county_desc = models.CharField(max_length=255,null=True)
+    sort_order = models.SmallIntegerField(null=True)
+    create_date = models.DateField(auto_now_add=True)
+    update_date = models.DateField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('state_ref', 'county_ansi')
+
+### the actual data
+class Cffr(models.Model):
+    year = models.IntegerField()
+    stateref = models.ForeignKey(StateRef)
+    countyref = models.ForeignKey(CountyRef)
+    cffrprogramref = models.ForeignKey(CffrProgramRef)
+    amount = models.IntegerField()
+    create_date = models.DateField(auto_now_add=True)
+    update_date = models.DateField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'stateref', 'countyref', 'cffrprogramref')
