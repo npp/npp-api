@@ -14,11 +14,33 @@ def page_limits(request_get):
     
     return {'lower':lower_row, 'upper':upper_row}
     
+def flatten(seq, container=None):
+    if container is None:
+        container = []
+    for s in seq:
+        if hasattr(s,'__iter__'):
+            flatten(s,container)
+        else:
+            container.append(s)
+    return container
+    
+def key_search(key, fieldlist):
+    param_key = None
+    for i in fieldlist:
+        if hasattr(i, '__iter__'):
+            if key in flatten(i):
+                param_key = i[0]
+        else:
+            if key in i :
+                param_key = key
+    return param_key
+        
 class GenericHandler(BaseHandler):
-    def __init__(self, allowed_keys, model, fields=None):
+    def __init__(self, allowed_keys, model, fields=None, exclude='id'):
         self.model = model
         self.allowed_keys = allowed_keys
         self.fields = fields
+        self.exclude = exclude
 
     allowed_methods = ('GET',)
     
@@ -27,29 +49,49 @@ class GenericHandler(BaseHandler):
 
     def read(self, request, *args, **kwargs):
         bound = page_limits(request.GET)
-
+ 
         params = {}
         for key,val in request.GET.items():
             if key in self.allowed_keys:
-                params[str(key)] = val
+                model_fields = []
+                #get a list of fields in the model; if our key
+                #is in it, we're good--add to parameter dictionary
+                for f in self.model._meta.fields:
+                    model_fields.append(f.name)
+                if key in model_fields:
+                    params[str(key)] = val
+                else:
+                    #requested key is not a field the model.
+                    #see if it's an attribute of a related model.
+                    #if so, format the parameter dictionary key accordingly.
+                    #(note: related attribute lookups only work if the field
+                    #being used as the key is also in the fields list)
+                    found_key = key_search(key,self.fields)
+                    if found_key == key:
+                        params[str(key)] = val
+                    elif found_key is not None:
+                        params[str(found_key) + '__' + key] = val
         
-        for key in kwargs:
+        #5/11 not sure if loop below needs to handle look-ups on attributes of related models...left if alone
+        for key in kwargs: 
             if key in self.allowed_keys:
                 params[str(key)] = kwargs[key]
-        
-        records = self.model.objects.all()           
-        
+                
+        records = self.model.objects.all() 
+        print 'here are the params:'
+        print params
+ 
         # ADDED 01/05/2010 - allow a no_limit option for apps making large queries, 
         # else paginate normally
+        print self.fields
         if 'no_limit' in request.GET:
                 no_limit = True
                 records = records.filter(**params)
         else:
             records = records.filter(**params)[bound['lower']:bound['upper']]
-            
-
-        return records
         
+        return records
+
 class AlternativeFuelVehiclesHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state', 'year', 'fips_state')
@@ -85,20 +127,14 @@ class BudgetCategorySubfunctionsHandler(GenericHandler):
         allowed_keys = ('subfunction',)
         model = BudgetCategorySubfunctions
         super(BudgetCategorySubfunctionsHandler, self).__init__(allowed_keys, model)
-        
-#class CffrHandler(GenericHandler):
-#    def __init__(self):
-#        allowed_keys = ('id', 'year', 'state_code', 'county_code', 'state_abbr', 'program_code')
-#        model = Cffr
-#        fields = ('year', ('state', ('state_fips', 'state_abbr')), ('county', ('county_fips', 'county_name')), ('program', ('program_code')))
-#        super(CffrHandler, self).__init__(allowed_keys, model)
-        
+
 class CffrHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('id', 'year', 'state_code', 'county_code', 'place_code', 'state_postal', 'congress_district', 'program_code', 'object_type', 'agency_code', 'funding_sign')
-        model = CffrRaw
-        super(CffrHandler, self).__init__(allowed_keys, model)
-        
+        allowed_keys = ('year', 'state_ansi', 'state_abbr', 'county_ansi', 'county_name', 'program_code')
+        model = Cffr
+        fields = ('year', 'amount', ('stateref', ('state_ansi', 'state_abbr')), ('countyref', ('county_ansi', 'county_name')), ('cffrprogramref', ('program_code', 'program_name')))
+        super(CffrHandler, self).__init__(allowed_keys, model, fields)
+
 class CffrAgencyHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('id', 'year', 'agency_code', 'agency_name')
@@ -119,8 +155,9 @@ class CffrObjectCodeHandler(GenericHandler):
         
 class CffrProgramHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('id', 'year', 'program_id_code', 'program_name')
-        model = CffrProgram
+        allowed_keys = ('year', 'program_code', 'program_name')
+        exclude = ('id', 'program_desc')
+        model = CffrProgramRef
         super(CffrProgramHandler, self).__init__(allowed_keys, model)
         
 class ChildrenPovertyHandler(GenericHandler):
