@@ -15,8 +15,8 @@
 	<li>
 		<div>cffr</div>
 		<div>Primary CFFR Data</div>
-		<div>Allowed Keys: 'id', 'year', 'state_code', 'county_code', 'place_code', 'state_postal', 'congressional_district', 'program_code', 'object_type', 'agency_code', 'funding_sign'</div>
-		<div>Example: <a href="/api/cffr/list.json?state_code=01&county_code=001&year=2008">http://data.nationalpriorities.org/api/cffr/list.json?state_code=01&county_code=001&amp;year=2008</a></div>
+		<div>Allowed Keys: 'year', 'state_ansi', 'state_abbr', 'county_ansi', 'program_code'</div>
+		<div>Example: <a href="/api/cffr/list.json?state_ansi=01&county_ansi=001&year=2008">http://data.nationalpriorities.org/api/cffr/list.json?state_ansi=01&county_ansi=001&amp;year=2008</a></div>
 	</li>
 	<li>
 		<div>cffragency</div>
@@ -40,8 +40,8 @@
 	<li>
 		<div>cffrprogram</div>
 		<div>CFFR Programs</div>
-		<div>Allowed Keys: 'id', 'year', 'program_id_code', 'program_name'</div>
-		<div>Example: <a href="/api/cffrprogram/list.xml?year=2008">http://dta.nationalpriorities.org/api/cffrprogram/list.xml?year=2008</a></div>
+		<div>Allowed Keys: 'year', 'program_code', 'program_name'</div>
+		<div>Example: <a href="/api/cffrprogram/list.xml?year=2008">http://data.nationalpriorities.org/api/cffrprogram/list.xml?year=2008</a></div>
 	</li>
 </ul>
 {% endblock %}
