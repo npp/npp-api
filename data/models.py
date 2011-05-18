@@ -908,7 +908,7 @@ class WicParticipants(models.Model):
 ### ideally, these will in separate files someday
 
 ### reference models
-class CffrProgramRef(models.Model):
+class CffrProgram(models.Model):
     year = models.IntegerField()
     program_code = models.CharField(max_length=6)
     program_name = models.CharField(max_length=255)
@@ -919,7 +919,7 @@ class CffrProgramRef(models.Model):
     class Meta:
         unique_together = ('year', 'program_code')
 
-class StateRef(models.Model):
+class State(models.Model):
     state_ansi = models.CharField(max_length=2,unique=True)
     state_abbr = models.CharField(max_length=2,unique=True)
     state_name = models.CharField(max_length=50)
@@ -929,8 +929,8 @@ class StateRef(models.Model):
     create_date = models.DateField(auto_now_add=True)
     update_date = models.DateField(auto_now=True)
 
-class CountyRef(models.Model):
-    state_ref = models.ForeignKey(StateRef)
+class County(models.Model):
+    state = models.ForeignKey(State)
     county_ansi = models.CharField(max_length=3)
     county_abbr = models.CharField(max_length=20)
     county_name = models.CharField(max_length=100)
@@ -940,17 +940,17 @@ class CountyRef(models.Model):
     update_date = models.DateField(auto_now=True)
     
     class Meta:
-        unique_together = ('state_ref', 'county_ansi')
+        unique_together = ('state', 'county_ansi')
 
 ### the actual data
 class Cffr(models.Model):
     year = models.IntegerField()
-    stateref = models.ForeignKey(StateRef)
-    countyref = models.ForeignKey(CountyRef)
-    cffrprogramref = models.ForeignKey(CffrProgramRef)
+    state = models.ForeignKey(State)
+    county = models.ForeignKey(County)
+    cffrprogram = models.ForeignKey(CffrProgram)
     amount = models.IntegerField()
     create_date = models.DateField(auto_now_add=True)
     update_date = models.DateField(auto_now=True)
     
     class Meta:
-        unique_together = ('year', 'stateref', 'countyref', 'cffrprogramref')
+        unique_together = ('year', 'state', 'county', 'cffrprogram')

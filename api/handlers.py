@@ -132,7 +132,7 @@ class CffrHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('year', 'state_ansi', 'state_abbr', 'county_ansi', 'county_name', 'program_code')
         model = Cffr
-        fields = ('year', 'amount', ('stateref', ('state_ansi', 'state_abbr')), ('countyref', ('county_ansi', 'county_name')), ('cffrprogramref', ('program_code', 'program_name')))
+        fields = ('year', 'amount', ('state', ('state_ansi', 'state_abbr')), ('county', ('county_ansi', 'county_name')), ('cffrprogram', ('program_code', 'program_name')))
         super(CffrHandler, self).__init__(allowed_keys, model, fields)
 
 class CffrAgencyHandler(GenericHandler):
@@ -157,7 +157,7 @@ class CffrProgramHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('year', 'program_code', 'program_name')
         exclude = ('id', 'program_desc')
-        model = CffrProgramRef
+        model = CffrProgram
         super(CffrProgramHandler, self).__init__(allowed_keys, model)
         
 class ChildrenPovertyHandler(GenericHandler):

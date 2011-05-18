@@ -1,7 +1,7 @@
 from django import db
 from django.core.management.base import NoArgsCommand
 from django.db.models import Sum
-from data.models import CffrRaw, CffrProgramRef, StateRef, CountyRef, Cffr
+from data.models import CffrRaw, CffrProgram, State, County, Cffr
 
 # National Priorities Project Data Repository
 # load_cffr.py 
@@ -13,7 +13,7 @@ from data.models import CffrRaw, CffrProgramRef, StateRef, CountyRef, Cffr
 # destination model:  Cffr
 
 # HOWTO:
-# 1) Ensure that CffrRaw, CffrProgramRaw, StateRef, CountyRef is loaded and up to date
+# 1) Ensure that CffrRaw, CffrProgram, State, County is loaded and up to date
 # 2) Run as Django management command from your project path "python manage.py load_cffr"
 
 #to run the process for all years, set load_this_year to ''
@@ -24,15 +24,15 @@ class Command(NoArgsCommand):
     def handle_noargs(self, **options):
             
         def get_state(state_code):
-            state_ref_current = StateRef.objects.get(state_ansi=state_code)
+            state_ref_current = State.objects.get(state_ansi=state_code)
             return state_ref_current
             
         def get_county(state, county_code):
-            county_ref_current = CountyRef.objects.get(state_ref=state, county_ansi=county_code)
+            county_ref_current = County.objects.get(state=state, county_ansi=county_code)
             return county_ref_current
             
         def get_program(year, program_code):
-            program_ref_current = CffrProgramRef.objects.get(year=year,program_code=program_code)
+            program_ref_current = CffrProgram.objects.get(year=year,program_code=program_code)
             return program_ref_current
         
         def load_year(year_current):
@@ -71,7 +71,7 @@ class Command(NoArgsCommand):
                         print 'Record skipped. ' + str(year_current) + ' state=' + state_code + ' county=' + county_code + ' program=' + program_code
                         continue
                         
-                    record = Cffr(year=year_current, stateref=state_ref_current, countyref=county_ref_current, cffrprogramref=program_ref_current, amount=p['total'])
+                    record = Cffr(year=year_current, state=state_ref_current, county=county_ref_current, cffrprogram=program_ref_current, amount=p['total'])
                 
                     try:
                         record.save()
