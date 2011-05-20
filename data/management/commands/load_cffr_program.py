@@ -26,7 +26,7 @@ class Command(NoArgsCommand):
             # if we already have records loaded for this year, skip it
             if records_current == 0: 
                 for p in CffrProgramRaw.objects.filter(year=year_current):
-                    record = CffrProgram(year=p.year, program_code=p.program_id_code, program_name = p.program_name)
+                    record = CffrProgram(year=p.year, program_code=p.program_id_code, program_name = p.program_name.rstrip())
                     
                     try:
                         record.save()
