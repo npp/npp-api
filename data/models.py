@@ -954,3 +954,14 @@ class Cffr(models.Model):
     
     class Meta:
         unique_together = ('year', 'state', 'county', 'cffrprogram')
+        
+class CffrState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    cffrprogram = models.ForeignKey(CffrProgram)
+    amount = models.IntegerField()
+    create_date = models.DateField(auto_now_add=True)
+    update_date = models.DateField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state', 'cffrprogram')

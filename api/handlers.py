@@ -48,6 +48,9 @@ class GenericHandler(BaseHandler):
         return self.allowed_keys
 
     def read(self, request, *args, **kwargs):
+        if hasattr(self,'request'):
+            request=self.request
+            
         bound = page_limits(request.GET)
  
         params = {}
@@ -61,29 +64,22 @@ class GenericHandler(BaseHandler):
                 if key in model_fields:
                     params[str(key)] = val
                 else:
-                    #requested key is not a field the model.
+                    #requested key is not a field in the model.
                     #see if it's an attribute of a related model.
-                    #if so, format the parameter dictionary key accordingly.
-                    #(note: related attribute lookups only work if the field
-                    #being used as the key is also in the fields list)
                     found_key = key_search(key,self.fields)
                     if found_key == key:
                         params[str(key)] = val
                     elif found_key is not None:
                         params[str(found_key) + '__' + key] = val
         
-        #5/11 not sure if loop below needs to handle look-ups on attributes of related models...left if alone
         for key in kwargs: 
             if key in self.allowed_keys:
                 params[str(key)] = kwargs[key]
                 
         records = self.model.objects.all() 
-        print 'here are the params:'
-        print params
- 
+  
         # ADDED 01/05/2010 - allow a no_limit option for apps making large queries, 
         # else paginate normally
-        print self.fields
         if 'no_limit' in request.GET:
                 no_limit = True
                 records = records.filter(**params)
@@ -130,11 +126,30 @@ class BudgetCategorySubfunctionsHandler(GenericHandler):
 
 class CffrHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('year', 'state_ansi', 'state_abbr', 'county_ansi', 'county_name', 'program_code')
-        model = Cffr
-        fields = ('year', 'amount', ('state', ('state_ansi', 'state_abbr')), ('county', ('county_ansi', 'county_name')), ('cffrprogram', ('program_code', 'program_name')))
-        super(CffrHandler, self).__init__(allowed_keys, model, fields)
-
+        #for the Cffr handler, allowed keys & field names depend on the
+        #request params, so defer their definition until read() is performed
+        self.allowed_keys = ()
+        self.model = 'TBD'
+        self.fields = ()
+        
+    def read(self, request, *args, **kwargs):
+        self.request = request
+        fields = ['year', 'amount', ('cffrprogram', ('program_code', 'program_name')), ('state', ('state_ansi', 'state_abbr', 'state_name'))]
+        allowed_keys = ['year', 'program_code', 'state_abbr', 'state_ansi']
+        aggregate = self.request.GET.get('total')
+        if aggregate == 'state':
+            self.model = CffrState
+        else:
+            #note we're not handling aggregate = country or sending back
+            #any messages re: invalid values for the total param
+            fields.append(('county',('county_ansi', 'county_name')))
+            allowed_keys.append('county_ansi')
+            allowed_keys.append('county_name')
+            self.model = Cffr
+        self.fields = tuple(fields)
+        self.allowed_keys = tuple(allowed_keys)
+        return super(CffrHandler, self).read(self, *args, **kwargs)
+        
 class CffrAgencyHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('id', 'year', 'agency_code', 'agency_name')
