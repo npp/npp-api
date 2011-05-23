@@ -1,7 +1,6 @@
 # Django settings for npp project.
-
-DEBUG = False
-TEMPLATE_DEBUG = DEBUG
+import os
+PROJECT_DIR = os.path.dirname(__file__)
 
 ADMINS = (
     ("Brendan Smith", "brendan@nationalpriorities.org"),
