@@ -80,8 +80,8 @@ class CffrRaw(models.Model):
     object_type =  models.CharField(max_length=2)
     agency_code =  models.CharField(max_length=4)
     funding_sign =  models.CharField(max_length=1)
-    amount =  models.IntegerField()
-    amount_adjusted = models.IntegerField(null=True)
+    amount =  models.BigIntegerField()
+    amount_adjusted = models.BigIntegerField(null=True)
     
 class CffrAgency(models.Model):
     year = models.IntegerField()
@@ -948,7 +948,7 @@ class Cffr(models.Model):
     state = models.ForeignKey(State)
     county = models.ForeignKey(County)
     cffrprogram = models.ForeignKey(CffrProgram)
-    amount = models.IntegerField()
+    amount = models.BigIntegerField()
     create_date = models.DateField(auto_now_add=True)
     update_date = models.DateField(auto_now=True)
     
