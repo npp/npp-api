@@ -10,32 +10,13 @@
 
 <h2>Sources</h2>
 
-<p>There are four sources for CFFR data.  They are</p>
+<p>There are two sources for CFFR data.  They are</p>
 <ul>
 	<li>
 		<div>cffr</div>
 		<div>Primary CFFR Data</div>
 		<div>Allowed Keys: 'year', 'state_ansi', 'state_abbr', 'county_ansi', 'program_code', 'total'<br/>Totals are aggregated to the county level by default.  Use 'total=state' to summarize by state.</div>
 		<div>Example: <a href="/api/cffr/list.json?state_abbr=ma&program_code=10.450&year=2008&total=state">http://data.nationalpriorities.org/api/cffr/list.json?state_abbr=ma&amp;program_code=10.450&amp;year=2008&amp;total=state</a></div>
-	</li>
-	<li>
-		<div>cffragency</div>
-		<div>CFFR Agency Codes</div>
-		<div>Allowed Keys: 'id', 'year', 'agency_code', 'agency_name'</div>
-		<div>Example: <a href="/api/cffragency/list.xml?year=2008">http://data.nationalpriorities.org/api/cffragency/list.xml?year=2008</a>
-	</li>
-	<li>
-		<div>cffrgeo</div>
-		<div>CFFR Geo Codes</div>
-		<div>Allowed Keys: 'id', 'year', 'state_code', 'county_code', 'place_code', 'place_name', 'state_gu', 'type_gu', 'county_gu', 'place_gu', 'split_gu', 'congress_district'</div>
-		<div>Example: <a href="/api/cffrgeo/list.xml?state_code=40">http://data.nationalpriorities.org/api/cffrgeo/list.xml?state_code=40</a></div>
-
-	</li>
-	<li>
-		<div>cffrobjectcode</div>
-		<div>CFFR Object Codes</div>
-		<div>Allowed Keys: 'id', 'object_code', 'category'</div>
-		<div>Example: <a href="/api/cffrobjectcode/list.json">http://data.nationalpriorities.org/api/cffrobjectcode/list.json</a></div>
 	</li>
 	<li>
 		<div>cffrprogram</div>
