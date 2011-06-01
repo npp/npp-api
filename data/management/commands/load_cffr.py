@@ -17,7 +17,7 @@ from data.models import CffrRaw, CffrProgram, CffrState, State, County, Cffr
 # 2) Run as Django management command from your project path "python manage.py load_cffr"
 
 #to run the process for all years, set load_this_year to ''
-load_this_year = ''
+load_this_year = '2009'
 
 class Command(NoArgsCommand):
     
@@ -28,8 +28,26 @@ class Command(NoArgsCommand):
             return state_ref_current
             
         def get_county(**lookup):
-            county_ref_current = County.objects.get(**lookup)
+            try:
+                county_ref_current = County.objects.get(state=lookup['state'], county_ansi=lookup['county_ansi'])
+            except:
+                county_ref_current = add_county(**lookup)
             return county_ref_current
+            
+        def add_county(**lookup):            
+            #Sometimes, CFFR records come through with old county codes
+            #that aren't in the official ANSI county list. Rather than skip
+            #these records, add the missing county record.  
+            
+            #get the county name from the CFFR raw record
+            cffr_county = CffrRaw.objects.filter(state_code = lookup['state'].state_ansi,county_code = lookup['county_ansi'])
+            if cffr_county.count() > 0:
+                county_name = cffr_county[0].county_name
+            else:
+                county_name = 'Unknown'
+            record = County(state_id=lookup['state'].id, county_ansi=lookup['county_ansi'], county_name=county_name)
+            record.save()
+            return record
             
         def get_program(**lookup):
             program_ref_current = CffrProgram.objects.get(**lookup)
@@ -47,10 +65,15 @@ class Command(NoArgsCommand):
             #if we already have records loaded for this year, skip it
             if records_current == 0:
             
+                print 'starting cffr load for year ' + str(year_current) + '...'
+            
+                log = open("data/management/commands/load_cffr.log", "w")
+            
                 fields=['year', 'state_code', 'county_code', 'program_code']
                 statelookup = {}
                 countylookup = {}
                 programlookup = {}
+                
                 for p in CffrRaw.objects.filter(year=year_current).values(*fields).annotate(total=Sum('amount_adjusted')).order_by('state_code', 'county_code', 'program_code'):
                     
                     state_code = p['state_code']
@@ -60,25 +83,35 @@ class Command(NoArgsCommand):
                     try:
                         if state_saved != state_code:
                             statelookup['state_ansi'] = state_code
-                            state_ref_current = get_state(**statelookup)
+                            try:
+                                state_ref_current = get_state(**statelookup)
+                            except:
+                                skip_count = skip_count + 1
+                                log.write('Record skipped: state not found. Year = ' + str(year_current) + ' State code = ' + state_code + ' County code = ' + county_code + ' Program code = ' + program_code + '\n')
+                                continue
                             state_saved = state_code
                             countylookup['county_ansi'] = county_code
-                            countylookup['state'] = state_ref_current.id
+                            countylookup['state'] = state_ref_current
                             county_ref_current = get_county(**countylookup)
                             county_saved = county_code
                         if county_saved != county_code:
                             countylookup['county_ansi'] = county_code
-                            countylookup['state'] = state_ref_current.id
+                            countylookup['state'] = state_ref_current
                             county_ref_current = get_county(**countylookup)
                             county_saved = county_code
                         if program_saved != program_code:
                             programlookup['year'] = year_current
                             programlookup['program_code'] = program_code
-                            program_ref_current = get_program(**programlookup)
+                            try:
+                                program_ref_current = get_program(**programlookup)
+                            except:
+                                skip_count = skip_count + 1
+                                log.write('Record skipped: program not found. Year = ' + str(year_current) + ' State code = ' + state_code + ' County code = ' + county_code + ' Program code = ' + program_code + '\n')
+                                continue
+                            
                     except:
-                        #in case a CFFR record comes thru with a state, county, or program code that doesn't have a match in the corresponding reference data
                         skip_count = skip_count + 1
-                        print 'Record skipped. ' + str(year_current) + ' state=' + state_code + ' county=' + county_code + ' program=' + program_code
+                        log.write('Record skipped. ' + str(year_current) + ' state=' + state_code + ' county=' + county_code + ' program=' + program_code + '\n' )
                         continue
                         
                     record = Cffr(year=year_current, state=state_ref_current, county=county_ref_current, cffrprogram=program_ref_current, amount=p['total'])
@@ -88,14 +121,15 @@ class Command(NoArgsCommand):
                         db.reset_queries()
                         record_count = record_count + 1
                         try:
-                            print str(year_current) + ' state=' + state_code + ' county=' + county_code + ' program=' + program_code + ' amount=' + str(p['total'])
+                            log.write(str(year_current) + ' state=' + state_code + ' county=' + county_code + ' program=' + program_code + ' amount=' + str(p['total']) + '\n')
                         except:
-                            print 'cffr record loaded'
+                            log.write('cffr record loaded\n')
                     except:
-                        print 'Failed load for ' + str(year_current) + ' state=' + state_code + ' county=' + county_code + ' program=' + program_code
+                        log.write('Failed load for ' + str(year_current) + ' state=' + state_code + ' county=' + county_code + ' program=' + program_code + '\n')
                         error_count = error_count + 1
                         
                 print str(year_current) + ': ' + str(record_count) + ' records loaded. ' + str(skip_count) + ' records skipped. Number of errors was ' + str(error_count) + '.'
+                log.close()
                 
             else:
                 print str(records_current) + ' Cffr records already loaded for ' + str(year_current) + '. No ' + str(year_current) + ' will be loaded.'
@@ -108,8 +142,14 @@ class Command(NoArgsCommand):
             program_saved = ''
             
             records_current = CffrState.objects.filter(year=year_current).count()
+            
             #if we already have records loaded for this year, skip it
             if records_current == 0:
+            
+                print 'starting cffr aggregate state load for ' + str(year_current) + '...'
+                
+                log = open("data/management/commands/load_cffr.log", "a")
+                
                 fields = ['year', 'state', 'cffrprogram']
                 statelookup = {}
                 programlookup = {}
@@ -130,7 +170,7 @@ class Command(NoArgsCommand):
                             
                     except:
                         skip_count = skip_count + 1
-                        print 'Record skipped. ' + str(year_current) + ' state=' + str(state_id) + ' program=' + str(program_id)
+                        log.write('Record skipped. ' + str(year_current) + ' state=' + str(state_id) + ' program=' + str(program_id) + '\n')
                         continue
                 
                     record = CffrState(year=year_current, state=state_ref_current, cffrprogram = program_ref_current, amount=s['amount'])
@@ -140,12 +180,14 @@ class Command(NoArgsCommand):
                         db.reset_queries()
                         record_count = record_count + 1
                         try:
-                            print str(year_current) + ' state=' + state_ref_current.state_ansi + ' program=' + program_ref_current.program_code + ' amount=' + str(s['amount'])
+                            log.write(str(year_current) + ' state=' + state_ref_current.state_ansi + ' program=' + program_ref_current.program_code + ' amount=' + str(s['amount']) + '\n')
                         except:
-                            print 'cffrstate loaded'
+                            log.write('cffrstate loaded\n')
                     except:
-                        print 'Failed load for ' + str(year_current) + ' state=' + state_ref_current.state_ansi + ' program=' + program_ref_current.program_code
+                        log.write('Failed load for ' + str(year_current) + ' state=' + state_ref_current.state_ansi + ' program=' + program_ref_current.program_code + '\n')
                         error_count = error_count + 1
+                        
+                log.close()
                     
             else:
                 print str(records_current) + ' CffrState records already loaded for ' + str(year_current) + '. No ' + str(year_current) + ' will be loaded.'
