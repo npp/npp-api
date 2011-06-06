@@ -1,7 +1,7 @@
 # Django settings for npp project.
 
 DEBUG = False
-TEMPLATE_DEBUG = DEBUG
+TEMPLATE_DEBUG = False
 
 ADMINS = (
     ("Brendan Smith", "brendan@nationalpriorities.org"),
@@ -45,6 +45,8 @@ INSTALLED_APPS = (
     'django_extensions',
     'npp_api.data',
     'npp_api.api',
+    'piston',
+    'sentry.client',
 )
 
 #api reocrds per page
@@ -54,3 +56,7 @@ try:
     from local_settings import *
 except ImportError, exp:
     pass
+
+
+PISTON_DISPLAY_ERRORS = False
+PISTON_EMAIL_ERRORS = True
