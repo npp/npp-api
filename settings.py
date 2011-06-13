@@ -32,7 +32,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-)
+ )
 
 ROOT_URLCONF = 'npp_api.urls'
 
@@ -50,7 +50,38 @@ INSTALLED_APPS = (
 #api reocrds per page
 SEARCH_PAGINATE_BY = 20
 
+class IPList(list):
+
+    def __init__(self, ips):
+        try:
+            #http://software.inl.fr/trac/wiki/IPy
+            #ubuntu: apt-get install python-ipy
+            from IPy import IP
+            for ip in ips:
+                self.append(IP(ip))
+        except ImportError:
+            pass
+            
+    def __contains__(self, ip):
+        try:
+            for net in self:
+                if ip in net:
+                    return True
+        except:
+            pass
+        return False
+            
+INTERNAL_IPS = IPList(['127.0.0.1', '192.168.0.0/24', '75.144.180.37'])
+
+#import any local overrides to settings
 try:
     from local_settings import *
 except ImportError, exp:
+    pass
+    
+#if local settings wants to append any settings info, do that now
+try:
+    import local_settings
+    local_settings.modify(globals())
+except:
     pass
