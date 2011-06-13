@@ -34,10 +34,11 @@ class Command(NoArgsCommand):
             county_ref_row = County(state=state_ref_current, county_ansi=c.code, county_name=c.county)
             county_ref_row.save()
             
-            #add county row to correspond to US Undistributed state record
-            state_ref_current = State.objects.get(state_ansi='99')
-            county_ref_row = County(state=state_ref_current, county_ansi = '999', county_name = 'U.S. undistributed')
-            county_ref_row.save()
-            
             db.reset_queries() 
+            
+        #add county row to correspond to US Undistributed state record
+        state_ref_current = State.objects.get(state_ansi='99')
+        county_ref_row = County(state=state_ref_current, county_ansi = '999', county_name = 'U.S. undistributed')
+        county_ref_row.save()
+        db.reset_queries()
             

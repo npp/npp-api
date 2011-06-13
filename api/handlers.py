@@ -70,10 +70,10 @@ class GenericHandler(BaseHandler):
                     if found_key == key:
                         params[str(key)] = val
                     elif found_key is not None:
-                        params[str(found_key) + '__' + key] = val
+                        params[str(found_key + '__' + key)] = val
         
         for key in kwargs: 
-            if key in self.allowed_keys:
+            if key in self.allowed_keys: 
                 params[str(key)] = kwargs[key]
                 
         records = self.model.objects.all() 
