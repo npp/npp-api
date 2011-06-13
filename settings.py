@@ -75,12 +75,14 @@ class IPList(list):
             
 INTERNAL_IPS = IPList(['127.0.0.1', '192.168.0.0/24', '75.144.180.37'])
 
+PISTON_DISPLAY_ERRORS = False
+PISTON_EMAIL_ERRORS = True
+
 #import any local overrides to settings
 try:
     from local_settings import *
 except ImportError, exp:
     pass
-<<<<<<< HEAD
     
 #if local settings wants to append any settings info, do that now
 try:
@@ -88,9 +90,3 @@ try:
     local_settings.modify(globals())
 except:
     pass
-=======
-
-
-PISTON_DISPLAY_ERRORS = False
-PISTON_EMAIL_ERRORS = True
->>>>>>> origin/normalize
