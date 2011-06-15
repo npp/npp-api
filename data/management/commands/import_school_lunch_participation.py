@@ -19,6 +19,8 @@ import csv
 # 3) change SOURCE_FILE variable to the the path of the source file you just created
 # 4) change 'amount' column in data_SchoolLunchParticipation table to type 'bigint'
 # 5) Run as Django management command from your project path "python manage.py import_school_lunch_participation"
+#
+# SAFE TO RE-RUN OR RELOAD A YEAR: NO
 
 SOURCE_FILE = '%s/hunger/school_lunch_participation.csv' % (settings.LOCAL_DATA_ROOT)
 
@@ -40,11 +42,26 @@ class Command(NoArgsCommand):
                 year_row = row;            
             else:
                 state = row[0]
-                for j,col in enumerate(row):
-                    if j > 0:
-                        record = SchoolLunchParticipation()
-                        record.year = int(year_row[j])
-                        record.state = state
-                        record.value = clean_int(col)
-                        record.save()
-                        db.reset_queries()
+                if len(state):
+                    for j,col in enumerate(row):
+                        if j > 0:
+                            try:
+                                #if year & state already exist, update the value in case it's been updated since the last load
+                                record = SchoolLunchParticipation.objects.get(state=state, year=int(year_row[j]))
+                                record.value = clean_int(col)
+                                record.save
+                                db.reset_queries()
+                                
+                            #ideally, we'd first check for the MultipleRecordsExist error before just assuming that the .get failed 
+                            #b/c the record doesn't exists yet
+                                
+                            except:
+                                #this year & state isn't in the db yet; insert
+                                record = SchoolLunchParticipation()
+                                record.year = int(year_row[j])
+                                record.state = state
+                                record.value = clean_int(col)
+                                record.save()
+                                db.reset_queries()
+                            
+                                
