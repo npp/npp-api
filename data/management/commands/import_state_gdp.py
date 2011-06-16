@@ -1,7 +1,7 @@
 from django import db
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
-from data.models import StateGDP
+from data.models import StateGdp
 import csv
 
 # National Priorities Project Data Repository
@@ -9,7 +9,7 @@ import csv
 # Updated 6/22/2010, Joshua Ruihley, Sunlight Foundation
 
 # Imports bea.gov state GDP totals
-# source info: http://www.bea.gov/regional/gsp/ (accurate as of 6/22/2010)
+# source info: http://www.bea.gov/regional/gsp/-->GDP by state (millions of current dollars, all states & regions, all industry total)(accurate as of 6/15/2011)
 # npp csv: http://assets.nationalpriorities.org/raw_data/bea.gov/gdpbystate2.csv (updated 6/22/2010)
 # destination model:  StateGDP
 
@@ -18,6 +18,8 @@ import csv
 # 2) Convert source file to .csv with same formatting as npp csv
 # 3) change SOURCE_FILE variable to the the path of the source file you just created
 # 5) Run as Django management command from your project path "python manage.py import_state_gdp
+
+# Safe to re-run: NO. Because data is in current dollars, previous year figures will be revised.  Delete current data & reload.
 
 SOURCE_FILE = '%s/bea.gov/gdpbystate.csv' % (settings.LOCAL_DATA_ROOT)
 
@@ -47,7 +49,7 @@ class Command(NoArgsCommand):
                     if j > 5:
                         year = year_row[j]
                         value = col
-                        record = StateGDP(fips=fips, state=state, industry_code=industry_code, 
+                        record = StateGdp(fips=fips, state=state, industry_code=industry_code, 
                             industry=industry, component_code=component_code, component=component, 
                             year=year, value=value)
                         record.save()
