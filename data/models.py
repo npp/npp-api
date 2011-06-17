@@ -621,7 +621,13 @@ class StateCompletionRate(models.Model):
 class StateLaborForceParticipation(models.Model):
     state = models.CharField(max_length=32)
     year = models.IntegerField()
-    value = models.FloatField()
+    civilian_noninstitutional_pop = models.IntegerField()
+    civilian_labor_force = models.IntegerField()
+    labor_force_participation_rate = models.FloatField()
+    employment_total = models.IntegerField()
+    employment_pop_rate = models.FloatField()
+    unemployment_total = models.IntegerField()
+    unemployment_rate = models.FloatField()
     
 class StatePopulationEstimates(models.Model):
     year = models.IntegerField()
