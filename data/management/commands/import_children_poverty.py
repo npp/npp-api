@@ -9,7 +9,7 @@ import csv
 # Updated 7/28/2010, Joshua Ruihley, Sunlight Foundation
 
 # Imports Census Data on Number of Children Living in Poverty
-# source info: http://dataferrett.census.gov/TheDataWeb/launchDFA.html (accurate as of 7/28/2010)
+# source info: http://dataferrett.census.gov/TheDataWeb/launchDFA.html (accurate as of 6/15/2011)
 # npp csvs: http://assets.nationalpriorities.org/raw_data/census.gov/ferrett/children_poverty_*.csv (updated 7/28/2010)
 # destination model:  ChildrenPoverty
 
@@ -19,6 +19,8 @@ import csv
 # 3) change SOURCE_FILE variable to the the path of the source files you just created
 # 4) change 'amount' column in data_ChildrenPoverty table to type 'bigint'
 # 5) Run as Django management command from your project path "python manage.py import_children_poverty"
+
+# Safe to re-run: NO
 
 class Command(NoArgsCommand):
     
@@ -35,6 +37,7 @@ class Command(NoArgsCommand):
         def import_year_range(year, age_range):
             range_convert = age_range.replace(' ', '_')
             source_file = '%s/census.gov/ferrett/children_poverty_%s_%s.csv' % (settings.LOCAL_DATA_ROOT, year, range_convert)
+            print str(source_file)
             data_reader = csv.reader(open(source_file))     
             for i, row in enumerate(data_reader):
                 if i == 0:
@@ -44,9 +47,14 @@ class Command(NoArgsCommand):
                     record.year = year
                     record.age_range = age_range
                     for j, col in enumerate(row):
-                        setattr(record, header_row[j], col)
+                        col = col.replace(",","")
+                        try:
+                            numtest = float(col)
+                            setattr(record, header_row[j], clean_int(col))
+                        except:
+                            setattr(record, header_row[j], col)
                     record.save()
         
-        for year in range(1992,2010):  
+        for year in [2010]:  
             import_year_range(year, "0 to 5")
             import_year_range(year, "0 to 17")

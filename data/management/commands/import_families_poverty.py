@@ -9,7 +9,7 @@ import csv
 # Updated 7/28/2010, Joshua Ruihley, Sunlight Foundation
 
 # Imports Census Data on Number of Families in poverty
-# source info: http://dataferrett.census.gov/TheDataWeb/launchDFA.html (accurate as of 7/28/2010)
+# source info: http://dataferrett.census.gov/TheDataWeb/launchDFA.html (accurate as of 6/15/2011)
 # npp csv: http://assets.nationalpriorities.org/raw_data/census.gov/ferrett/families_poverty.csv (updated 7/28/2010)
 # destination model:  FamiliesPoverty
 
@@ -20,7 +20,9 @@ import csv
 # 4) change 'amount' column in data_FamiliesPoverty table to type 'bigint'
 # 5) Run as Django management command from your project path "python manage.py import_families_poverty"
 
-YEAR = 2009
+# Safe to re-run: NO
+
+YEAR = 2010
 SOURCE_FILE = '%s/census.gov/ferrett/families_poverty_%s.csv' % (settings.LOCAL_DATA_ROOT, YEAR)
 
 class Command(NoArgsCommand):
@@ -43,5 +45,10 @@ class Command(NoArgsCommand):
                 record = FamiliesPoverty()
                 record.year = YEAR
                 for j, col in enumerate(row):
-                    setattr(record, header_row[j], col)
+                    col = col.replace(",","")
+                    try:
+                        numtest = float(col)
+                        setattr(record, header_row[j], clean_int(col))
+                    except:
+                        setattr(record, header_row[j], col)
                 record.save()

@@ -9,7 +9,7 @@ import csv
 # Updated 6/29/2010, Joshua Ruihley, Sunlight Foundation
 
 # Imports census.gov State People in Poverty
-# source info: http://www.census.gov/hhes/www/poverty/data/historical/people.html (accurate as of 6/29/2010)
+# source info: http://www.census.gov/hhes/www/poverty/data/historical/people.html (accurate as of 6/15/2011)
 # npp csv: http://assets.nationalpriorities.org/raw_data/census.gov/income/people_in_poverty.csv (updated 6/29/2010)
 # destination model:  PeopleInPoverty
 
@@ -18,6 +18,8 @@ import csv
 # 2) Convert source file to .csv with same formatting as npp csv
 # 3) change SOURCE_FILE variable to the the path of the source file you just created
 # 5) Run as Django management command from your project path "python manage.py import_people_in_poverty"
+
+# Safe to re-run: NO
 
 SOURCE_FILE = '%s/census.gov/income/people_in_poverty.csv' % (settings.LOCAL_DATA_ROOT)
 
