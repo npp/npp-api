@@ -385,12 +385,6 @@ class MedicareEnrollmentHandler(GenericHandler):
         model = MedicareEnrollment
         super(MedicareEnrollmentHandler, self).__init__(allowed_keys, model)
 
-class MedianHouseholdIncome4MemberHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = MedianHouseholdIncome4Member
-        super(MedianHouseholdIncome4MemberHandler, self).__init__(allowed_keys, model)
-        
 class MigrantStudentsHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state', 'year', 'agency_name', 'agency_id')

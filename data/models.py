@@ -430,11 +430,6 @@ class MathScienceSpending(models.Model):
     agency_id = models.CharField(max_length=7)
     amount = models.IntegerField(null=True)
 
-class MedianHouseholdIncome4Member(models.Model):
-    state = models.CharField(max_length=32)
-    year = models.IntegerField()
-    value = models.IntegerField()
-    
 class MedicaidParticipation(models.Model):
     state = models.CharField(max_length=32)
     year = models.IntegerField()
