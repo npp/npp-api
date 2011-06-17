@@ -607,12 +607,6 @@ class StateRenewableEnergyHandler(GenericHandler):
         model = StateRenewableEnergy
         super(StateRenewableEnergyHandler, self).__init__(allowed_keys, model)
         
-class StateUnemploymentHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('year', 'state')
-        model = StateUnemployment
-        super(StateUnemploymentHandler, self).__init__(allowed_keys, model)
-        
 class SubfunctionsCffrHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('subfunction_number', 'cfda_program_code', 'at_code_1', 'at_code_2',

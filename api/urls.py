@@ -85,7 +85,6 @@ state_median_income_handler = Resource(StateMedianIncomeHandler)
 state_population_estimates_handler = Resource(StatePopulationEstimatesHandler)
 state_postal_codes_handler = Resource(StatePostalCodesHandler)
 state_renewable_energy_handler = Resource(StateRenewableEnergyHandler)
-state_unemployment_handler = Resource(StateUnemploymentHandler)
 summer_lunch_participation_handler = Resource(SummerLunchParticipationHandler)
 teacher_pupil_ratio_handler = Resource(TeacherPupilRatioHandler)
 title_i_funding_handler = Resource(TitleIFundingHandler)
@@ -173,7 +172,6 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^state_median_income.html$', 'direct_to_template', {'template': 'api/state_median_income.html'}),
     (r'^state_population_estimates.html$', 'direct_to_template', {'template': 'api/state_population_estimates.html'}),
     (r'^state_renewable_energy.html$', 'direct_to_template', {'template': 'api/state_renewable_energy.html'}),
-    (r'^state_unemployment.html$', 'direct_to_template', {'template': 'api/state_unemployment.html'}),
     (r'^vehicle_registrations.html$', 'direct_to_template', {'template':'api/vehicle_registrations.html'}),
     (r'^summer_lunch_participation.html$', 'direct_to_template', {'template': 'api/summer_lunch_participation.html'}),
     (r'^subfunctions_cffr.html$', 'direct_to_template', {'template': 'api/subfunctions_cffr.html'}),
@@ -353,8 +351,6 @@ urlpatterns += patterns('',
     url(r'^state_renewable_energy/list\.(?P<emitter_format>.+)', state_renewable_energy_handler),
     url(r'^state_postal_codes/$', state_postal_codes_handler),
     url(r'^state_postal_codes/list\.(?P<emitter_format>.+)', state_postal_codes_handler),
-    url(r'^state_unemployment/$', state_unemployment_handler),
-    url(r'^state_unemployment/list\.(?P<emitter_format>.+)', state_unemployment_handler),
     url(r'^vehicle_registrations/$', vehicle_registrations_handler),
     url(r'^vehicle_registrations/list\.(?P<emitter_format>.+)', vehicle_registrations_handler),
     url(r'^subfunctions_cffr/$', subfunctions_cffr_handler),
