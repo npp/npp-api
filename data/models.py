@@ -815,11 +815,6 @@ class StatePostalCodes(models.Model):
     code = models.CharField(max_length=2)
     state = models.CharField(max_length=32)
     
-class StateUnemployment(models.Model):
-    year = models.IntegerField()
-    state = models.CharField(max_length=32)
-    rate = models.FloatField()
-    
 class SubfunctionsCffr(models.Model):
     subfunction_number = models.TextField(max_length=3)
     subfunction_name = models.TextField(max_length=64)
