@@ -61,31 +61,3 @@ class Command(NoArgsCommand):
                             value = clean_num(col)
                             record = StateMedianIncome(state=state, year=year, median_income=value)
                             record.save()
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        for i, row in enumerate(data_reader):
-            if i > 0:
-                state = row[0]
-                median_income = row[1]
-                standard_error = row[2]
-                ninety_pct = row[3]
-                states_not_different = row[4]
-                states_higher = row[5]
-                states_lower = row[6]
-                start_year = row[7]
-                end_year = row[8]
-                
-                record = StateMedianIncome(state=state, median_income=median_income,
-                    standard_error=standard_error, ninety_pct=ninety_pct,
-                    states_not_different=states_not_different, states_higher=states_higher,
-                    states_lower=states_lower, start_year=start_year, end_year=end_year)
-                record.save()
