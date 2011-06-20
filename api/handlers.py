@@ -585,7 +585,7 @@ class StateLaborForceParticipationHandler(GenericHandler):
         
 class StateMedianIncomeHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('state', 'start_year', 'end_year')
+        allowed_keys = ('state', 'year')
         model = StateMedianIncome
         super(StateMedianIncomeHandler, self).__init__(allowed_keys, model)
         
