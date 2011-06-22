@@ -807,26 +807,13 @@ class StateGdpPre97(models.Model):
     value = models.IntegerField()
        
 class StateMedianIncome(models.Model):
-    start_year = models.IntegerField()
-    end_year = models.IntegerField()
+    year = models.IntegerField()
     state = models.CharField(max_length=32)
-    median_income = models.IntegerField()
-    standard_error = models.IntegerField()
-    ninety_pct = models.IntegerField()
-    states_not_different = models.IntegerField()
-    states_higher = models.IntegerField()
-    states_lower = models.IntegerField()
-    start_year = models.IntegerField()
-    end_year = models.IntegerField()
+    median_income = models.FloatField()
     
 class StatePostalCodes(models.Model):
     code = models.CharField(max_length=2)
     state = models.CharField(max_length=32)
-    
-class StateUnemployment(models.Model):
-    year = models.IntegerField()
-    state = models.CharField(max_length=32)
-    rate = models.FloatField()
     
 class SubfunctionsCffr(models.Model):
     subfunction_number = models.TextField(max_length=3)
