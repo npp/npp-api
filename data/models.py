@@ -1012,20 +1012,24 @@ class VocationalEdSpending(models.Model):
     agency_id = models.CharField(max_length=7)
     amount = models.IntegerField(null=True)
     
-class WicBenefits(models.Model):
+class WicBenefitsStateRaw(models.Model):
     place = models.CharField(max_length=64)
     state = models.CharField(max_length=32)
     type = models.CharField(max_length=32)
     year = models.IntegerField()
     value = models.FloatField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
-class WicParticipants(models.Model):
+class WicParticipationStateRaw(models.Model):
     place = models.CharField(max_length=64)
     state = models.CharField(max_length=32)
     type = models.CharField(max_length=32)
     year = models.IntegerField()
     value = models.IntegerField(null=True)
-    
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+   
 
 ### public-facing data models, including reference tables.
 ### ideally, these will in separate files someday
@@ -1088,3 +1092,23 @@ class CffrState(models.Model):
     
     class Meta:
         unique_together = ('year', 'state', 'cffrprogram')
+        
+class WicBenefitsState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    amount = models.FloatField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state')
+
+class WicParticipationState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    value = models.FloatField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state')

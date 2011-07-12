@@ -650,22 +650,20 @@ class VocationalEdSpendingHandler(GenericHandler):
         model = VocationalEdSpending
         super(VocationalEdSpendingHandler, self).__init__(allowed_keys, model)
         
-class WicBenefitsHandler(GenericHandler):
+class WicBenefitsStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('place', 'state', 'year', 'type')
-        model = WicBenefits
-        super(WicBenefitsHandler, self).__init__(allowed_keys, model)
+        allowed_keys = ('year', 'state_abbr', 'state_ansi')
+        model = WicBenefitsState
+        fields = ('year', 'amount', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(WicBenefitsStateHandler, self).__init__(allowed_keys, model,fields)
         
-class WicParticipantsHandler(GenericHandler):
+class WicParticipationStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('place', 'state', 'year', 'type')
-        model = WicParticipants
-        super(WicParticipantsHandler, self).__init__(allowed_keys, model)
-
-
-
-
-
+        allowed_keys = ('year', 'state_abbr', 'state_ansi')
+        model = WicParticipationState
+        fields = ('year', 'value', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(WicParticipationStateHandler, self).__init__(allowed_keys, model,fields)
+        
 # BRENDAN 01/05/2010
 class SCHIPHandler(GenericHandler):
     def __init__(self):
