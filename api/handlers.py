@@ -3,7 +3,12 @@ from npp_api.data.models import *
 from django.conf import settings
 from piston.doc import generate_doc
 from django.http import Http404
+from django.db import models
 
+#for usability on commonly-used, normalized look-up values
+alias_keys = {
+    'state':'state_abbr'
+}
 def page_limits(request_get):    
     page = 1
     if 'page' in request_get:
@@ -41,11 +46,32 @@ class GenericHandler(BaseHandler):
         self.allowed_keys = allowed_keys
         self.fields = fields
         self.exclude = exclude
+        
+        self.model_fields = []
+        for f in self.model._meta.fields:
+            self.model_fields.append(f.name)
 
     allowed_methods = ('GET',)
     
     def get_allowed_keys(self):
         return self.allowed_keys
+        
+    def get_actual_key(self, requested_key):
+        actual_key = ''
+        #is requested key an attribute of the handler's model?
+        try:
+            field = self.model._meta.get_field(requested_key)
+            #if requested key is a FK, disregard
+            if not isinstance(field,models.ForeignKey):
+                actual_key = requested_key
+        except:
+            found_key = key_search(requested_key,self.fields)
+            if found_key == requested_key:
+                actual_key = requested_key
+            elif found_key is not None:
+                actual_key = str(found_key + '__' + requested_key)
+        
+        return actual_key
 
     def read(self, request, *args, **kwargs):
         if hasattr(self,'request'):
@@ -55,22 +81,17 @@ class GenericHandler(BaseHandler):
  
         params = {}
         for key,val in request.GET.items():
-            if key in self.allowed_keys:
-                model_fields = []
-                #get a list of fields in the model; if our key
-                #is in it, we're good--add to parameter dictionary
-                for f in self.model._meta.fields:
-                    model_fields.append(f.name)
-                if key in model_fields:
-                    params[str(key)] = val
+            if key in self.allowed_keys or alias_keys.has_key(key):
+                actual_key = self.get_actual_key(key)
+                if actual_key:
+                    params[str(actual_key)] = val
                 else:
-                    #requested key is not a field in the model.
-                    #see if it's an attribute of a related model.
-                    found_key = key_search(key,self.fields)
-                    if found_key == key:
-                        params[str(key)] = val
-                    elif found_key is not None:
-                        params[str(found_key + '__' + key)] = val
+                    #if requested key not found in the model or one
+                    #of its related models, see if it's an alias
+                    if alias_keys.has_key(key):
+                        actual_key = self.get_actual_key(alias_keys[key])
+                        if actual_key:
+                            params[str(actual_key)] = val
         
         for key in kwargs: 
             if key in self.allowed_keys: 
