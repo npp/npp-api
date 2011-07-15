@@ -47,7 +47,6 @@ individual_education_programs_handler = Resource(IndividualEducationProgramsHand
 irs_gross_collections_handler = Resource(IrsGrossCollectionsHandler)
 kids_health_insurance_handler = Resource(KidsHealthInsuranceHandler)
 math_science_spending_handler = Resource(MathScienceSpendingHandler)
-median_household_income_4_member_handler = Resource(MedianHouseholdIncome4MemberHandler)
 medicaid_participation_handler = Resource(MedicaidParticipationHandler)
 medicare_enrollment_handler = Resource(MedicareEnrollmentHandler)
 migrant_students_handler = Resource(MigrantStudentsHandler)
@@ -86,7 +85,6 @@ state_median_income_handler = Resource(StateMedianIncomeHandler)
 state_population_estimates_handler = Resource(StatePopulationEstimatesHandler)
 state_postal_codes_handler = Resource(StatePostalCodesHandler)
 state_renewable_energy_handler = Resource(StateRenewableEnergyHandler)
-state_unemployment_handler = Resource(StateUnemploymentHandler)
 summer_lunch_participation_handler = Resource(SummerLunchParticipationHandler)
 teacher_pupil_ratio_handler = Resource(TeacherPupilRatioHandler)
 title_i_funding_handler = Resource(TitleIFundingHandler)
@@ -94,8 +92,8 @@ total_students_handler = Resource(TotalStudentsHandler)
 subfunctions_cffr_handler = Resource(SubfunctionsCffrHandler)
 vehicle_registrations_handler = Resource(VehicleRegistrationsHandler)
 vocational_ed_spending_handler = Resource(VocationalEdSpendingHandler)
-wic_benefits_handler = Resource(WicBenefitsHandler)
-wic_participants_handler = Resource(WicParticipantsHandler)
+wic_benefits_state_handler = Resource(WicBenefitsStateHandler)
+wic_participation_state_handler = Resource(WicParticipationStateHandler)
 
 urlpatterns = patterns('django.views.generic.simple',
     #documentation urls
@@ -140,7 +138,6 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^kids_health_insurance.html$', 'direct_to_template', {'template': 'api/kids_health_insurance.html'}),
     (r'^nces_school_district.html$', 'direct_to_template', {'template': 'api/nces_school_district.html'}),
     (r'^math_science_spending.html$', 'direct_to_template', {'template': 'api/math_science_spending.html'}),
-    (r'^median_household_income_4_member.html$', 'direct_to_template', {'template': 'api/median_household_income_4_member.html'}),
     (r'^medicaid_participation.html$', 'direct_to_template', {'template': 'api/medicaid_participation.html'}),
     (r'^medicare_enrollment.html$', 'direct_to_template', {'template': 'api/medicare_enrollment.html'}),
     (r'^migrant_students.html$', 'direct_to_template', {'template': 'api/migrant_students.html'}),
@@ -175,7 +172,6 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^state_median_income.html$', 'direct_to_template', {'template': 'api/state_median_income.html'}),
     (r'^state_population_estimates.html$', 'direct_to_template', {'template': 'api/state_population_estimates.html'}),
     (r'^state_renewable_energy.html$', 'direct_to_template', {'template': 'api/state_renewable_energy.html'}),
-    (r'^state_unemployment.html$', 'direct_to_template', {'template': 'api/state_unemployment.html'}),
     (r'^vehicle_registrations.html$', 'direct_to_template', {'template':'api/vehicle_registrations.html'}),
     (r'^summer_lunch_participation.html$', 'direct_to_template', {'template': 'api/summer_lunch_participation.html'}),
     (r'^subfunctions_cffr.html$', 'direct_to_template', {'template': 'api/subfunctions_cffr.html'}),
@@ -184,7 +180,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^total_students.html$', 'direct_to_template', {'template': 'api/total_students.html'}),
     (r'^vocational_ed_spending.html$', 'direct_to_template', {'template': 'api/vocational_ed_spending.html'}),
     (r'^wic_benefits.html$', 'direct_to_template', {'template': 'api/wic_benefits.html'}),
-    (r'^wic_participants.html$', 'direct_to_template', {'template': 'api/wic_participants.html'}),
+    (r'^wic_participation.html$', 'direct_to_template', {'template': 'api/wic_participation.html'}),
 )
 
 urlpatterns += patterns('',
@@ -279,8 +275,6 @@ urlpatterns += patterns('',
     url(r'^kids_health_insurance/list\.(?P<emitter_format>.+)', kids_health_insurance_handler),
     url(r'^math_science_spending/$', math_science_spending_handler),
     url(r'^math_science_spending/list\.(?P<emitter_format>.+)', math_science_spending_handler),
-    url(r'^median_household_income_4_member/$', median_household_income_4_member_handler),
-    url(r'^median_household_income_4_member/list\.(?P<emitter_format>.+)', median_household_income_4_member_handler),
     url(r'^medicaid_participation/$', medicaid_participation_handler),
     url(r'^medicaid_participation/list\.(?P<emitter_format>.+)', medicaid_participation_handler),
     url(r'^medicare_enrollment/$', medicare_enrollment_handler),
@@ -357,8 +351,6 @@ urlpatterns += patterns('',
     url(r'^state_renewable_energy/list\.(?P<emitter_format>.+)', state_renewable_energy_handler),
     url(r'^state_postal_codes/$', state_postal_codes_handler),
     url(r'^state_postal_codes/list\.(?P<emitter_format>.+)', state_postal_codes_handler),
-    url(r'^state_unemployment/$', state_unemployment_handler),
-    url(r'^state_unemployment/list\.(?P<emitter_format>.+)', state_unemployment_handler),
     url(r'^vehicle_registrations/$', vehicle_registrations_handler),
     url(r'^vehicle_registrations/list\.(?P<emitter_format>.+)', vehicle_registrations_handler),
     url(r'^subfunctions_cffr/$', subfunctions_cffr_handler),
@@ -373,8 +365,8 @@ urlpatterns += patterns('',
     url(r'^title_i_funding/list\.(?P<emitter_format>.+)', title_i_funding_handler),
     url(r'^vocational_ed_spending/$', vocational_ed_spending_handler),
     url(r'^vocational_ed_spending/list\.(?P<emitter_format>.+)', vocational_ed_spending_handler),
-    url(r'^wic_benefits/$', wic_benefits_handler),
-    url(r'^wic_benefits/list\.(?P<emitter_format>.+)', wic_benefits_handler),
-    url(r'^wic_participants/$', wic_participants_handler),
-    url(r'^wic_participants/list\.(?P<emitter_format>.+)', wic_participants_handler),
+    url(r'^wic_benefits_state/$', wic_benefits_state_handler),
+    url(r'^wic_benefits_state/list\.(?P<emitter_format>.+)', wic_benefits_state_handler),
+    url(r'^wic_participation_state/$', wic_participation_state_handler),
+    url(r'^wic_participation_state/list\.(?P<emitter_format>.+)', wic_participation_state_handler),
 )

@@ -3,7 +3,12 @@ from npp_api.data.models import *
 from django.conf import settings
 from piston.doc import generate_doc
 from django.http import Http404
+from django.db import models
 
+#for usability on commonly-used, normalized look-up values
+alias_keys = {
+    'state':'state_abbr'
+}
 def page_limits(request_get):    
     page = 1
     if 'page' in request_get:
@@ -14,31 +19,86 @@ def page_limits(request_get):
     
     return {'lower':lower_row, 'upper':upper_row}
     
+def flatten(seq, container=None):
+    if container is None:
+        container = []
+    for s in seq:
+        if hasattr(s,'__iter__'):
+            flatten(s,container)
+        else:
+            container.append(s)
+    return container
+    
+def key_search(key, fieldlist):
+    param_key = None
+    for i in fieldlist:
+        if hasattr(i, '__iter__'):
+            if key in flatten(i):
+                param_key = i[0]
+        else:
+            if key in i :
+                param_key = key
+    return param_key
+        
 class GenericHandler(BaseHandler):
-    def __init__(self, allowed_keys, model, fields=None):
+    def __init__(self, allowed_keys, model, fields=None, exclude='id'):
         self.model = model
         self.allowed_keys = allowed_keys
         self.fields = fields
+        self.exclude = exclude
+        
+        self.model_fields = []
+        for f in self.model._meta.fields:
+            self.model_fields.append(f.name)
 
     allowed_methods = ('GET',)
     
     def get_allowed_keys(self):
         return self.allowed_keys
+        
+    def get_actual_key(self, requested_key):
+        actual_key = ''
+        #is requested key an attribute of the handler's model?
+        try:
+            field = self.model._meta.get_field(requested_key)
+            #if requested key is a FK, disregard
+            if not isinstance(field,models.ForeignKey):
+                actual_key = requested_key
+        except:
+            found_key = key_search(requested_key,self.fields)
+            if found_key == requested_key:
+                actual_key = requested_key
+            elif found_key is not None:
+                actual_key = str(found_key + '__' + requested_key)
+        
+        return actual_key
 
     def read(self, request, *args, **kwargs):
+        if hasattr(self,'request'):
+            request=self.request
+            
         bound = page_limits(request.GET)
-
+ 
         params = {}
         for key,val in request.GET.items():
-            if key in self.allowed_keys:
-                params[str(key)] = val
+            if key in self.allowed_keys or alias_keys.has_key(key):
+                actual_key = self.get_actual_key(key)
+                if actual_key:
+                    params[str(actual_key)] = val
+                else:
+                    #if requested key not found in the model or one
+                    #of its related models, see if it's an alias
+                    if alias_keys.has_key(key):
+                        actual_key = self.get_actual_key(alias_keys[key])
+                        if actual_key:
+                            params[str(actual_key)] = val
         
-        for key in kwargs:
-            if key in self.allowed_keys:
+        for key in kwargs: 
+            if key in self.allowed_keys: 
                 params[str(key)] = kwargs[key]
-        
-        records = self.model.objects.all()           
-        
+                
+        records = self.model.objects.all() 
+  
         # ADDED 01/05/2010 - allow a no_limit option for apps making large queries, 
         # else paginate normally
         if 'no_limit' in request.GET:
@@ -46,10 +106,9 @@ class GenericHandler(BaseHandler):
                 records = records.filter(**params)
         else:
             records = records.filter(**params)[bound['lower']:bound['upper']]
-            
-
-        return records
         
+        return records
+
 class AlternativeFuelVehiclesHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state', 'year', 'fips_state')
@@ -85,13 +144,33 @@ class BudgetCategorySubfunctionsHandler(GenericHandler):
         allowed_keys = ('subfunction',)
         model = BudgetCategorySubfunctions
         super(BudgetCategorySubfunctionsHandler, self).__init__(allowed_keys, model)
-        
+
 class CffrHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('id', 'year', 'state_code', 'county_code', 'place_code', 'state_postal', 'congress_district', 'program_code', 'object_type', 'agency_code', 'funding_sign')
-        model = Cffr
-        super(CffrHandler, self).__init__(allowed_keys, model)
-  
+        #for the Cffr handler, allowed keys & field names depend on the
+        #request params, so defer their definition until read() is performed
+        self.allowed_keys = ()
+        self.model = 'TBD'
+        self.fields = ()
+        
+    def read(self, request, *args, **kwargs):
+        self.request = request
+        fields = ['year', 'amount', ('cffrprogram', ('program_code', 'program_name')), ('state', ('state_ansi', 'state_abbr', 'state_name'))]
+        allowed_keys = ['year', 'program_code', 'state_abbr', 'state_ansi']
+        aggregate = self.request.GET.get('total')
+        if aggregate == 'state':
+            self.model = CffrState
+        else:
+            #note we're not handling aggregate = country or sending back
+            #any messages re: invalid values for the total param
+            fields.append(('county',('county_ansi', 'county_name')))
+            allowed_keys.append('county_ansi')
+            allowed_keys.append('county_name')
+            self.model = Cffr
+        self.fields = tuple(fields)
+        self.allowed_keys = tuple(allowed_keys)
+        return super(CffrHandler, self).read(self, *args, **kwargs)
+        
 class CffrAgencyHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('id', 'year', 'agency_code', 'agency_name')
@@ -112,7 +191,8 @@ class CffrObjectCodeHandler(GenericHandler):
         
 class CffrProgramHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('id', 'year', 'program_id_code', 'program_name')
+        allowed_keys = ('year', 'program_code', 'program_name')
+        exclude = ('id', 'program_desc')
         model = CffrProgram
         super(CffrProgramHandler, self).__init__(allowed_keys, model)
         
@@ -326,12 +406,6 @@ class MedicareEnrollmentHandler(GenericHandler):
         model = MedicareEnrollment
         super(MedicareEnrollmentHandler, self).__init__(allowed_keys, model)
 
-class MedianHouseholdIncome4MemberHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = MedianHouseholdIncome4Member
-        super(MedianHouseholdIncome4MemberHandler, self).__init__(allowed_keys, model)
-        
 class MigrantStudentsHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state', 'year', 'agency_name', 'agency_id')
@@ -532,7 +606,7 @@ class StateLaborForceParticipationHandler(GenericHandler):
         
 class StateMedianIncomeHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('state', 'start_year', 'end_year')
+        allowed_keys = ('state', 'year')
         model = StateMedianIncome
         super(StateMedianIncomeHandler, self).__init__(allowed_keys, model)
         
@@ -553,12 +627,6 @@ class StateRenewableEnergyHandler(GenericHandler):
         allowed_keys = ('year', 'state')
         model = StateRenewableEnergy
         super(StateRenewableEnergyHandler, self).__init__(allowed_keys, model)
-        
-class StateUnemploymentHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('year', 'state')
-        model = StateUnemployment
-        super(StateUnemploymentHandler, self).__init__(allowed_keys, model)
         
 class SubfunctionsCffrHandler(GenericHandler):
     def __init__(self):
@@ -603,22 +671,20 @@ class VocationalEdSpendingHandler(GenericHandler):
         model = VocationalEdSpending
         super(VocationalEdSpendingHandler, self).__init__(allowed_keys, model)
         
-class WicBenefitsHandler(GenericHandler):
+class WicBenefitsStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('place', 'state', 'year', 'type')
-        model = WicBenefits
-        super(WicBenefitsHandler, self).__init__(allowed_keys, model)
+        allowed_keys = ('year', 'state_abbr', 'state_ansi')
+        model = WicBenefitsState
+        fields = ('year', 'amount', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(WicBenefitsStateHandler, self).__init__(allowed_keys, model,fields)
         
-class WicParticipantsHandler(GenericHandler):
+class WicParticipationStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('place', 'state', 'year', 'type')
-        model = WicParticipants
-        super(WicParticipantsHandler, self).__init__(allowed_keys, model)
-
-
-
-
-
+        allowed_keys = ('year', 'state_abbr', 'state_ansi')
+        model = WicParticipationState
+        fields = ('year', 'value', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(WicParticipationStateHandler, self).__init__(allowed_keys, model,fields)
+        
 # BRENDAN 01/05/2010
 class SCHIPHandler(GenericHandler):
     def __init__(self):

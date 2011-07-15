@@ -14,7 +14,7 @@ class Source(models.Model):
     def __unicode__(self):
         return self.title
     
-### data types
+### "raw" models (i.e., represent data as it is pulled in from the source)
 
 class AlternativeFuelVehicles(models.Model):
     state = models.CharField(max_length=32)
@@ -40,6 +40,12 @@ class AnsiCountyState(models.Model):
     county = models.CharField(max_length=255)
     ansi_class = models.CharField(max_length=2)
     
+class AnsiState(models.Model):
+    ansi_state = models.CharField(max_length=2)
+    state = models.CharField(max_length=2)
+    state_name = models.CharField(max_length=50)
+    gnisid = models.CharField(max_length=8)
+    
 class AtCodes(models.Model):
     code = models.CharField(max_length=1)
     assistance_type = models.CharField(max_length=64)
@@ -60,7 +66,7 @@ class BudgetCategorySubfunctions(models.Model):
     subfunction = models.TextField(max_length=3)
     npp_budget_category = models.TextField(max_length=64)
 
-class Cffr(models.Model):
+class CffrRaw(models.Model):
     year = models.IntegerField()
     state_code = models.CharField(max_length=2)
     county_code = models.CharField(max_length=3)
@@ -74,8 +80,8 @@ class Cffr(models.Model):
     object_type =  models.CharField(max_length=2)
     agency_code =  models.CharField(max_length=4)
     funding_sign =  models.CharField(max_length=1)
-    amount =  models.IntegerField()
-    amount_adjusted = models.IntegerField(null=True)
+    amount =  models.BigIntegerField()
+    amount_adjusted = models.BigIntegerField(null=True)
     
 class CffrAgency(models.Model):
     year = models.IntegerField()
@@ -100,7 +106,7 @@ class CffrObjectCode(models.Model):
     object_code = models.CharField(max_length=2)
     category = models.CharField(max_length=80)
 
-class CffrProgram(models.Model):
+class CffrProgramRaw(models.Model):
     year = models.IntegerField()
     program_id_code = models.CharField(max_length=6)
     program_name = models.CharField(max_length=74)
@@ -115,6 +121,7 @@ class ChildrenPoverty(models.Model):
     low_income_125_149_pct = models.IntegerField()
     low_income_above_150_pct = models.IntegerField()
     
+#deprecated
 class CountyPopulationEstimates(models.Model):
     year = models.IntegerField()
     geo_id = models.CharField(max_length=12)
@@ -424,11 +431,6 @@ class MathScienceSpending(models.Model):
     agency_id = models.CharField(max_length=7)
     amount = models.IntegerField(null=True)
 
-class MedianHouseholdIncome4Member(models.Model):
-    state = models.CharField(max_length=32)
-    year = models.IntegerField()
-    value = models.IntegerField()
-    
 class MedicaidParticipation(models.Model):
     state = models.CharField(max_length=32)
     year = models.IntegerField()
@@ -503,7 +505,8 @@ class PeopleInPoverty(models.Model):
     value_standard_error = models.IntegerField()
     percent = models.FloatField()
     percent_standard_error = models.FloatField()
-    
+
+#deprecated?    
 class PopulationCongressionalDistrict(models.Model):
     year = models.IntegerField()
     district = models.IntegerField()
@@ -516,6 +519,136 @@ class PopulationCongressionalDistrict(models.Model):
     other_alone = models.IntegerField()
     two_or_more_races = models.IntegerField()
     households = models.IntegerField()
+    
+class PopulationEst00Raw(models.Model):
+    sumlev = models.CharField(max_length=3)
+    state = models.CharField(max_length=2)
+    county = models.CharField(max_length=3)
+    stname = models.CharField(max_length=32)
+    ctyname = models.CharField(max_length=100)
+    year = models.CharField(max_length=2)
+    agegrp = models.CharField(max_length=2)
+    tot_pop = models.IntegerField(null=True)
+    tot_male = models.IntegerField(null=True)
+    tot_female = models.IntegerField(null=True)
+    wa_male = models.IntegerField(null=True)
+    wa_female = models.IntegerField(null=True)
+    ba_male = models.IntegerField(null=True)
+    ba_female = models.IntegerField(null=True)
+    ia_male = models.IntegerField(null=True)
+    ia_female = models.IntegerField(null=True)
+    aa_male = models.IntegerField(null=True)
+    aa_female = models.IntegerField(null=True)
+    na_male = models.IntegerField(null=True)
+    na_female = models.IntegerField(null=True)
+    tom_male = models.IntegerField(null=True)
+    tom_female = models.IntegerField(null=True)
+    wac_male = models.IntegerField(null=True)
+    wac_female = models.IntegerField(null=True)
+    bac_male = models.IntegerField(null=True)
+    bac_female = models.IntegerField(null=True)
+    iac_male = models.IntegerField(null=True)
+    iac_female = models.IntegerField(null=True)
+    aac_male = models.IntegerField(null=True)
+    aac_female = models.IntegerField(null=True)
+    nac_male = models.IntegerField(null=True)
+    nac_female = models.IntegerField(null=True)
+    nh_male = models.IntegerField(null=True)
+    nh_female = models.IntegerField(null=True)
+    nhwa_male = models.IntegerField(null=True)
+    nhwa_female = models.IntegerField(null=True)
+    nhba_male = models.IntegerField(null=True)
+    nhba_female = models.IntegerField(null=True)
+    nhia_male = models.IntegerField(null=True)
+    nhia_female = models.IntegerField(null=True)
+    nhaa_male = models.IntegerField(null=True)
+    nhaa_female = models.IntegerField(null=True)
+    nhna_male = models.IntegerField(null=True)
+    nhna_female = models.IntegerField(null=True)
+    nhtom_male = models.IntegerField(null=True)
+    nhtom_female = models.IntegerField(null=True)
+    nhwac_male = models.IntegerField(null=True)
+    nhwac_female = models.IntegerField(null=True)
+    nhbac_male = models.IntegerField(null=True)
+    nhbac_female = models.IntegerField(null=True)
+    nhiac_male = models.IntegerField(null=True)
+    nhiac_female = models.IntegerField(null=True)
+    nhaac_male = models.IntegerField(null=True)
+    nhaac_female = models.IntegerField(null=True)
+    nhnac_male = models.IntegerField(null=True)
+    nhnac_female = models.IntegerField(null=True)
+    h_male = models.IntegerField(null=True)
+    h_female = models.IntegerField(null=True)
+    hwa_male = models.IntegerField(null=True)
+    hwa_female = models.IntegerField(null=True)
+    hba_male = models.IntegerField(null=True)
+    hba_female = models.IntegerField(null=True)
+    hia_male = models.IntegerField(null=True)
+    hia_female = models.IntegerField(null=True)
+    haa_male = models.IntegerField(null=True)
+    haa_female = models.IntegerField(null=True)
+    hna_male = models.IntegerField(null=True)
+    hna_female = models.IntegerField(null=True)
+    htom_male = models.IntegerField(null=True)
+    htom_female = models.IntegerField(null=True)
+    hwac_male = models.IntegerField(null=True)
+    hwac_female = models.IntegerField(null=True)
+    hbac_male = models.IntegerField(null=True)
+    hbac_female = models.IntegerField(null=True)
+    hiac_male = models.IntegerField(null=True)
+    hiac_female = models.IntegerField(null=True)
+    haac_male = models.IntegerField(null=True)
+    haac_female = models.IntegerField(null=True)
+    hnac_male = models.IntegerField(null=True)
+    hnac_female = models.IntegerField(null=True)
+    create_date = models.DateField(auto_now_add=True)
+    update_date = models.DateField(auto_now=True)
+
+    class Meta:
+        unique_together = ('state', 'county', 'year', 'agegrp')
+        
+class PopulationEst90Raw(models.Model):
+    year = models.CharField(max_length=2)
+    state = models.CharField(max_length=2)
+    county = models.CharField(max_length=3)
+    agegrp = models.CharField(max_length=2)
+    race_gender = models.CharField(max_length=2)
+    ethnic_origin = models.CharField(max_length=1)
+    population = models.IntegerField(null=True)
+    create_date = models.DateField(auto_now_add=True)
+    update_date = models.DateField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state', 'county', 'agegrp', 'race_gender', 'ethnic_origin')
+
+class PopulationEst80Raw(models.Model):
+    year = models.IntegerField()
+    state_county = models.CharField(max_length=5)
+    race_gender = models.CharField(max_length=50)
+    age_under_5 = models.IntegerField(null=True)
+    age_5_9 = models.IntegerField(null=True)
+    age_10_14 = models.IntegerField(null=True)
+    age_15_19 = models.IntegerField(null=True)
+    age_20_24 = models.IntegerField(null=True)
+    age_25_29 = models.IntegerField(null=True)
+    age_30_34 = models.IntegerField(null=True)
+    age_35_39 = models.IntegerField(null=True)
+    age_40_44 = models.IntegerField(null=True)
+    age_45_49 = models.IntegerField(null=True)
+    age_50_54 = models.IntegerField(null=True)
+    age_55_59 = models.IntegerField(null=True)
+    age_60_64 = models.IntegerField(null=True)
+    age_65_69 = models.IntegerField(null=True)
+    age_70_74 = models.IntegerField(null=True)
+    age_75_79 = models.IntegerField(null=True)
+    age_80_84 = models.IntegerField(null=True)
+    age_over_84 = models.IntegerField(null=True)
+    create_date = models.DateField(auto_now_add=True)
+    update_date = models.DateField(auto_now=True)
+
+    class Meta:
+        unique_together = ('year', 'state_county', 'race_gender')
+    
     
 class PopulationFamilies(models.Model):
     year = models.IntegerField()
@@ -553,6 +686,7 @@ class PresidentsBudgetYear(models.Model):
     year = models.CharField(max_length=4)
     value = models.IntegerField()
     
+#deprecated
 class RacePopulation1980s(models.Model):
     fips_state = models.CharField(max_length=2)
     year = models.IntegerField()
@@ -576,7 +710,8 @@ class RacePopulation1980s(models.Model):
     age_75_79 = models.IntegerField()
     age_80_84 = models.IntegerField()
     age_85_plus = models.IntegerField()
-    
+
+#deprecated    
 class RacePopulation1990s(models.Model):
     area = models.CharField(max_length=64)
     year = models.IntegerField()
@@ -615,8 +750,15 @@ class StateCompletionRate(models.Model):
 class StateLaborForceParticipation(models.Model):
     state = models.CharField(max_length=32)
     year = models.IntegerField()
-    value = models.FloatField()
+    civilian_noninstitutional_pop = models.IntegerField()
+    civilian_labor_force = models.IntegerField()
+    labor_force_participation_rate = models.FloatField()
+    employment_total = models.IntegerField()
+    employment_pop_rate = models.FloatField()
+    unemployment_total = models.IntegerField()
+    unemployment_rate = models.FloatField()
     
+#deprecated
 class StatePopulationEstimates(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
@@ -800,26 +942,13 @@ class StateGdpPre97(models.Model):
     value = models.IntegerField()
        
 class StateMedianIncome(models.Model):
-    start_year = models.IntegerField()
-    end_year = models.IntegerField()
+    year = models.IntegerField()
     state = models.CharField(max_length=32)
-    median_income = models.IntegerField()
-    standard_error = models.IntegerField()
-    ninety_pct = models.IntegerField()
-    states_not_different = models.IntegerField()
-    states_higher = models.IntegerField()
-    states_lower = models.IntegerField()
-    start_year = models.IntegerField()
-    end_year = models.IntegerField()
+    median_income = models.FloatField()
     
 class StatePostalCodes(models.Model):
     code = models.CharField(max_length=2)
     state = models.CharField(max_length=32)
-    
-class StateUnemployment(models.Model):
-    year = models.IntegerField()
-    state = models.CharField(max_length=32)
-    rate = models.FloatField()
     
 class SubfunctionsCffr(models.Model):
     subfunction_number = models.TextField(max_length=3)
@@ -883,16 +1012,103 @@ class VocationalEdSpending(models.Model):
     agency_id = models.CharField(max_length=7)
     amount = models.IntegerField(null=True)
     
-class WicBenefits(models.Model):
+class WicBenefitsStateRaw(models.Model):
     place = models.CharField(max_length=64)
     state = models.CharField(max_length=32)
     type = models.CharField(max_length=32)
     year = models.IntegerField()
     value = models.FloatField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
-class WicParticipants(models.Model):
+class WicParticipationStateRaw(models.Model):
     place = models.CharField(max_length=64)
     state = models.CharField(max_length=32)
     type = models.CharField(max_length=32)
     year = models.IntegerField()
     value = models.IntegerField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+   
+
+### public-facing data models, including reference tables.
+### ideally, these will in separate files someday
+
+### reference models
+class CffrProgram(models.Model):
+    year = models.IntegerField()
+    program_code = models.CharField(max_length=6)
+    program_name = models.CharField(max_length=255)
+    program_desc = models.CharField(max_length=255,null=True)
+    create_date = models.DateField(auto_now_add=True)
+    update_date = models.DateField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'program_code')
+
+class State(models.Model):
+    state_ansi = models.CharField(max_length=2,unique=True)
+    state_abbr = models.CharField(max_length=2,unique=True)
+    state_name = models.CharField(max_length=50)
+    state_desc = models.CharField(max_length=255,null=True)
+    state_gnisid = models.CharField(max_length=10,null=True)
+    sort_order = models.SmallIntegerField(null=True)
+    create_date = models.DateField(auto_now_add=True)
+    update_date = models.DateField(auto_now=True)
+
+class County(models.Model):
+    state = models.ForeignKey(State)
+    county_ansi = models.CharField(max_length=3)
+    county_abbr = models.CharField(max_length=20)
+    county_name = models.CharField(max_length=100)
+    county_desc = models.CharField(max_length=255,null=True)
+    sort_order = models.SmallIntegerField(null=True)
+    create_date = models.DateField(auto_now_add=True)
+    update_date = models.DateField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('state', 'county_ansi')
+
+### the actual data
+class Cffr(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    county = models.ForeignKey(County)
+    cffrprogram = models.ForeignKey(CffrProgram)
+    amount = models.BigIntegerField()
+    create_date = models.DateField(auto_now_add=True)
+    update_date = models.DateField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state', 'county', 'cffrprogram')
+        
+class CffrState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    cffrprogram = models.ForeignKey(CffrProgram)
+    amount = models.BigIntegerField()
+    create_date = models.DateField(auto_now_add=True)
+    update_date = models.DateField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state', 'cffrprogram')
+        
+class WicBenefitsState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    amount = models.FloatField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state')
+
+class WicParticipationState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    value = models.FloatField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state')

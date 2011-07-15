@@ -1,7 +1,7 @@
 from django import db
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
-from data.models import Cffr
+from data.models import CffrRaw
 
 # National Priorities Project Data Repository
 # import_cffr_annual.py 
@@ -19,10 +19,10 @@ from data.models import Cffr
 # 4) Make sure your database has amount field set as a bigint (and not a regular int)
 # AFTER IMPORTING EVERY YEAR:
 # 5) Create indexes in database
-#   CREATE INDEX idx_state_postal ON data_cffr (state_postal)
-#   CREATE INDEX idx_year ON data_cffr (year)
+#   CREATE INDEX idx_state_postal ON data_cffrraw (state_postal)
+#   CREATE INDEX idx_year ON data_cffrraw (year)
 
-YEAR = 2009
+YEAR = 2008
 SOURCE_PATH = '%s/cffr/%s/' % (settings.LOCAL_DATA_ROOT, YEAR)
 if YEAR > 2002:
     SOURCE_FILE = '%s%s%scffcom.txt' % (SOURCE_PATH, str(YEAR)[2], str(YEAR)[3])
@@ -55,7 +55,7 @@ class Command(NoArgsCommand):
             else:
                 amount_adjusted = amount
 
-            record = Cffr(year=YEAR, state_code=state_code, county_code=county_code, 
+            record = CffrRaw(year=YEAR, state_code=state_code, county_code=county_code, 
                 place_code=place_code, state_postal=state_postal, county_name=county_name, 
                 place_name=place_name, population=population, congress_district=congress_district, 
                 program_code=program_code, object_type=object_type, agency_code=agency_code, 

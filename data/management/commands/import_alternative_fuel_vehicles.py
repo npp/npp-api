@@ -18,6 +18,8 @@ import csv
 # 2) Convert source file to .csv with same formatting as npp csv
 # 3) change SOURCE_FILE variable to the the path of the source file you just created
 # 5) Run as Django management command from your project path "python manage.py import_alternative_fuel_vehicles
+#
+# SAFE TO RE-RUN OR RELOAD A YEAR: NO
 
 SOURCE_FILE = '%s/doe.gov/attf_v2.csv' % (settings.LOCAL_DATA_ROOT)
 
@@ -25,8 +27,8 @@ class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
         data_reader = csv.reader(open(SOURCE_FILE))
-        first_year = 2003
-        last_year = 2007
+        first_year = 2004
+        last_year = 2008
         total_years = last_year - first_year + 1
 
         #populate year array
@@ -35,15 +37,19 @@ class Command(NoArgsCommand):
             years.append(first_year + h)
         
         def clean_int(value):
-            return int(value.replace(',', '').replace(' ', ''))
+            try:
+                return int(value.replace(',', '').replace(' ', ''))
+            except:
+                print 'clean_int fail for value ' + str(value)
         
         for i, row in enumerate(data_reader):
             if i > 0:
                 state = row[0]
-                for j, col in enumerate(row):
-                    if j > 0 and j < total_years + 1:
-                        year = years[j-1]
-                        value = clean_int(row[j])
+                if len(state):
+                    for j, col in enumerate(row):
+                        if j > 0 and j < total_years + 1:
+                            year = years[j-1]
+                            value = clean_int(row[j])
 
-                        record = AlternativeFuelVehicles(state=state, year=year, value=value)
-                        record.save()
+                            record = AlternativeFuelVehicles(state=state, year=year, value=value)
+                            record.save()
