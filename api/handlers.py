@@ -4,6 +4,7 @@ from django.conf import settings
 from piston.doc import generate_doc
 from django.http import Http404
 from django.db import models
+import re
 
 #for usability on commonly-used, normalized look-up values
 alias_keys = {
@@ -41,11 +42,11 @@ def key_search(key, fieldlist):
     return param_key
         
 class GenericHandler(BaseHandler):
-    def __init__(self, allowed_keys, model, fields=None, exclude='id'):
+    def __init__(self, allowed_keys, model, fields=None):
         self.model = model
         self.allowed_keys = allowed_keys
         self.fields = fields
-        self.exclude = exclude
+        #self.exclude = exclude
         
         self.model_fields = []
         for f in self.model._meta.fields:
@@ -460,6 +461,22 @@ class PeopleInPovertyHandler(GenericHandler):
         model = PeopleInPoverty
         super(PeopleInPovertyHandler, self).__init__(allowed_keys, model)
         
+class PopulationAgeCountyHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('state', 'state_abbr', 'state_ansi', 'county_ansi', 'year')
+        model = PopulationAgeCounty
+        fields = ('year', 'total', 'age_0_4','age_0_4_percent','age_5_9','age_5_9_percent','age_10_14','age_10_14_percent','age_15_19','age_15_19_percent','age_20_24','age_20_24_percent','age_25_29','age_25_29_percent','age_30_34','age_30_34_percent','age_35_39','age_35_39_percent','age_40_44','age_40_44_percent','age_45_49','age_45_49_percent','age_50_54','age_50_54_percent','age_55_59','age_55_59_percent','age_60_64','age_60_64_percent','age_65_69','age_65_69_percent','age_70_74','age_70_74_percent','age_75_79','age_75_79_percent','age_80_84','age_80_84_percent','age_85_over','age_85_over_percent','age_65_over','age_65_over_percent','age_0_19','age_0_19_percent',('state', ('state_ansi', 'state_abbr', 'state_name')), ('county', ('county_ansi', 'county_name')))
+        super(PopulationAgeCountyHandler, self).__init__(allowed_keys, model, fields)        
+
+class PopulationAgeStateHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('state', 'state_abbr', 'state_ansi', 'year')
+        model = PopulationAgeState
+        #7/11: couldn't get documented regex feature to work (below), so typing in every freaking field in the model
+        #fields = ('year', 'total', re.compile('^age_'), ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        fields = ('year', 'total', 'age_0_4','age_0_4_percent','age_5_9','age_5_9_percent','age_10_14','age_10_14_percent','age_15_19','age_15_19_percent','age_20_24','age_20_24_percent','age_25_29','age_25_29_percent','age_30_34','age_30_34_percent','age_35_39','age_35_39_percent','age_40_44','age_40_44_percent','age_45_49','age_45_49_percent','age_50_54','age_50_54_percent','age_55_59','age_55_59_percent','age_60_64','age_60_64_percent','age_65_69','age_65_69_percent','age_70_74','age_70_74_percent','age_75_79','age_75_79_percent','age_80_84','age_80_84_percent','age_85_over','age_85_over_percent','age_65_over','age_65_over_percent','age_0_19','age_0_19_percent',('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(PopulationAgeStateHandler, self).__init__(allowed_keys, model,fields)
+        
 class PopulationCongressionalDistrictHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state', 'district', 'year')
@@ -471,6 +488,34 @@ class PopulationFamiliesHandler(GenericHandler):
         allowed_keys = ('state', 'year')
         model = PopulationFamilies
         super(PopulationFamiliesHandler, self).__init__(allowed_keys, model)
+
+class PopulationGenderCountyHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('state', 'state_abbr', 'state_ansi', 'county_ansi', 'year')
+        model = PopulationGenderCounty
+        fields = ('year', 'total', 'female', 'female_percent', 'male', 'male_percent', ('state', ('state_ansi', 'state_abbr', 'state_name')), ('county', ('county_ansi', 'county_name')))
+        super(PopulationGenderCountyHandler, self).__init__(allowed_keys, model, fields)        
+
+class PopulationGenderStateHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('state', 'state_abbr', 'state_ansi', 'year')
+        model = PopulationGenderState
+        fields = ('year', 'total', 'female', 'female_percent', 'male', 'male_percent', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(PopulationGenderStateHandler, self).__init__(allowed_keys, model, fields)
+        
+class PopulationRaceCountyHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('state', 'state_abbr', 'state_ansi', 'county_ansi', 'year')
+        model = PopulationRaceCounty
+        fields = ('year', 'total', 'white_alone','white_alone_percent','white_other','white_other_percent','white_alone_hispanic','white_alone_hispanic_percent','white_other_hispanic','white_other_hispanic_percent','white_alone_nonhispanic','white_alone_nonhispanic_percent','white_other_nonhispanic','white_other_nonhispanic_percent','black_alone','black_alone_percent','black_other','black_other_percent','black_alone_hispanic','black_alone_hispanic_percent','black_other_hispanic','black_other_hispanic_percent','black_alone_nonhispanic','black_alone_nonhispanic_percent','black_other_nonhispanic','black_other_nonhispanic_percent','native_alone','native_alone_percent','native_other','native_other_percent','native_alone_hispanic','native_alone_hispanic_percent','native_other_hispanic','native_other_hispanic_percent','native_alone_nonhispanic','native_alone_nonhispanic_percent','native_other_nonhispanic','native_other_nonhispanic_percent','asian_alone','asian_alone_percent','asian_other','asian_other_percent','asian_alone_hispanic','asian_alone_hispanic_percent','asian_other_hispanic','asian_other_hispanic_percent','asian_alone_nonhispanic','asian_alone_nonhispanic_percent','asian_other_nonhispanic','asian_other_nonhispanic_percent','pacific_islander_alone','pacific_islander_alone_percent','pacific_islander_other','pacific_islander_other_percent','pacific_islander_alone_hispanic','pacific_islander_alone_hispanic_percent','pacific_islander_other_hispanic','pacific_islander_other_hispanic_percent','pacific_islander_alone_nonhispanic','pacific_islander_alone_nonhispanic_percent','pacific_islander_other_nonhispanic','pacific_islander_other_nonhispanic_percent','asian_pacific_islander_alone','asian_pacific_islander_alone_percent','other','other_percent','multiple_race','multiple_race_percent','multiple_race_hispanic','multiple_race_hispanic_percent','multiple_race_nonhispanic','multiple_race_nonhispanic_percent','hispanic','hispanic_percent','nonhispanic','nonhispanic_percent',('state', ('state_ansi', 'state_abbr', 'state_name')), ('county', ('county_ansi', 'county_name')))
+        super(PopulationRaceCountyHandler, self).__init__(allowed_keys, model, fields)  
+        
+class PopulationRaceStateHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('state', 'state_abbr', 'state_ansi', 'year')
+        model = PopulationRaceState
+        fields = ('year', 'total','white_alone','white_alone_percent','white_other','white_other_percent','white_alone_hispanic','white_alone_hispanic_percent','white_other_hispanic','white_other_hispanic_percent','white_alone_nonhispanic','white_alone_nonhispanic_percent','white_other_nonhispanic','white_other_nonhispanic_percent','black_alone','black_alone_percent','black_other','black_other_percent','black_alone_hispanic','black_alone_hispanic_percent','black_other_hispanic','black_other_hispanic_percent','black_alone_nonhispanic','black_alone_nonhispanic_percent','black_other_nonhispanic','black_other_nonhispanic_percent','native_alone','native_alone_percent','native_other','native_other_percent','native_alone_hispanic','native_alone_hispanic_percent','native_other_hispanic','native_other_hispanic_percent','native_alone_nonhispanic','native_alone_nonhispanic_percent','native_other_nonhispanic','native_other_nonhispanic_percent','asian_alone','asian_alone_percent','asian_other','asian_other_percent','asian_alone_hispanic','asian_alone_hispanic_percent','asian_other_hispanic','asian_other_hispanic_percent','asian_alone_nonhispanic','asian_alone_nonhispanic_percent','asian_other_nonhispanic','asian_other_nonhispanic_percent','pacific_islander_alone','pacific_islander_alone_percent','pacific_islander_other','pacific_islander_other_percent','pacific_islander_alone_hispanic','pacific_islander_alone_hispanic_percent','pacific_islander_other_hispanic','pacific_islander_other_hispanic_percent','pacific_islander_alone_nonhispanic','pacific_islander_alone_nonhispanic_percent','pacific_islander_other_nonhispanic','pacific_islander_other_nonhispanic_percent','asian_pacific_islander_alone','asian_pacific_islander_alone_percent','other','other_percent','multiple_race','multiple_race_percent','multiple_race_hispanic','multiple_race_hispanic_percent','multiple_race_nonhispanic','multiple_race_nonhispanic_percent','hispanic','hispanic_percent','nonhispanic','nonhispanic_percent',('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(PopulationRaceStateHandler, self).__init__(allowed_keys, model, fields)
 
 class PupilTeacherDistrictHandler(GenericHandler):
     def __init__(self):

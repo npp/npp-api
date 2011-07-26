@@ -1,0 +1,34 @@
+{% extends "api/api_base.html" %}
+
+{% block content %}
+<h1>Population Estimates by Age Group</h1>
+
+<div class="api_urls">
+	<div><span class="api_urls_header">URL Format: </div>
+	<div>http://data.nationalpriorities.org/api/&lt;source&gt;/list.&lt;format&gt;?...</div>
+</div>
+
+<h2>Sources</h2>
+
+<p>Available geography:
+<ul>
+    <li>county</li>
+    <li>state</li>
+</ul>
+</p>
+
+<ul>
+	<li>
+		<div>County Population Estimates by Age Group</div>
+		<div>Yearly census population esimates.  Reference date is July 1.</div>
+		<div>Allowed Keys: 'year', 'state', 'state_ansi', 'county_ansi' </div>
+		<div>Example: <a href="/api/population_age_county/list.json?state=pa&county=101">http://data.nationalpriorities.org/population_age_county/list.json?state=ma</a></div>
+	</li>
+	<li>
+		<div>State Population Estimates by Age Group</div>
+		<div>Yearly census population esimates.  Reference date is July 1.</div>
+		<div>Allowed Keys: 'year', 'state', 'state_ansi'</div>
+		<div>Example: <a href="/api/population_age_state/list.xml?year=2009">http://data.nationalpriorities.org/api/population_age_state/list.xml?year=2009</a></div>
+	</li>
+</ul>
+{% endblock %}

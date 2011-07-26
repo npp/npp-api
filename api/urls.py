@@ -60,6 +60,12 @@ other_federal_revenue_handler = Resource(OtherFederalRevenueHandler)
 people_in_poverty_handler = Resource(PeopleInPovertyHandler)
 population_congressional_district_handler = Resource(PopulationCongressionalDistrictHandler)
 population_families_handler = Resource(PopulationFamiliesHandler)
+population_age_county_handler = Resource(PopulationAgeCountyHandler)
+population_age_state_handler = Resource(PopulationAgeStateHandler)
+population_gender_county_handler = Resource(PopulationGenderCountyHandler)
+population_gender_state_handler = Resource(PopulationGenderStateHandler)
+population_race_county_handler = Resource(PopulationRaceCountyHandler)
+population_race_state_handler = Resource(PopulationRaceStateHandler)
 presidents_budget_handler = Resource(PresidentsBudgetHandler)
 pupil_teacher_district_handler = Resource(PupilTeacherDistrictHandler)
 race_population_1980s_handler = Resource(RacePopulation1980sHandler)
@@ -149,6 +155,9 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^people_in_poverty.html$', 'direct_to_template', {'template': 'api/people_in_poverty.html'}),
     (r'^population_congressional_district.html$', 'direct_to_template', {'template': 'api/population_congressional_district.html'}),
     (r'^population_families.html$', 'direct_to_template', {'template': 'api/population_families.html'}),
+    (r'^population_age.html$', 'direct_to_template', {'template': 'api/population_age.html'}),
+    (r'^population_gender.html$', 'direct_to_template', {'template': 'api/population_gender.html'}),
+    (r'^population_race.html$', 'direct_to_template', {'template': 'api/population_race.html'}),
     (r'^pupil_teacher_district.html$', 'direct_to_template', {'template': 'api/pupil_teacher_district.html'}),
     (r'^race_population_1980s.html$', 'direct_to_template', {'template': 'api/race_population_1980s.html'}),
     (r'^race_population_1990s.html$', 'direct_to_template', {'template': 'api/race_population_1990s.html'}),
@@ -301,6 +310,18 @@ urlpatterns += patterns('',
     url(r'^population_congressional_district/list\.(?P<emitter_format>.+)', population_congressional_district_handler),
     url(r'^population_families/$', population_families_handler),
     url(r'^population_families/list\.(?P<emitter_format>.+)', population_families_handler),
+    url(r'^population_age_county$', population_age_county_handler),
+    url(r'^population_age_county/list\.(?P<emitter_format>.+)', population_age_county_handler),
+    url(r'^population_age_state$', population_age_state_handler),
+    url(r'^population_age_state/list\.(?P<emitter_format>.+)', population_age_state_handler),
+    url(r'^population_gender_county$', population_gender_county_handler),
+    url(r'^population_gender_county/list\.(?P<emitter_format>.+)', population_gender_county_handler),
+    url(r'^population_gender_state$', population_gender_state_handler),
+    url(r'^population_gender_state/list\.(?P<emitter_format>.+)', population_gender_state_handler),
+    url(r'^population_race_county$', population_race_county_handler),
+    url(r'^population_race_county/list\.(?P<emitter_format>.+)', population_race_county_handler),
+    url(r'^population_race_state$', population_race_state_handler),
+    url(r'^population_race_state/list\.(?P<emitter_format>.+)', population_race_state_handler),
     url(r'^presidents_budget/$', presidents_budget_handler),
     url(r'^presidents_budget/list\.(?P<emitter_format>.+)', presidents_budget_handler),
     url(r'^pupil_teacher_district/$', pupil_teacher_district_handler),
