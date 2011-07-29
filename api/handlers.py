@@ -4,6 +4,7 @@ from django.conf import settings
 from piston.doc import generate_doc
 from django.http import Http404
 from django.db import models
+from django import db
 import re
 
 #for usability on commonly-used, normalized look-up values
@@ -108,6 +109,7 @@ class GenericHandler(BaseHandler):
         else:
             records = records.filter(**params)[bound['lower']:bound['upper']]
         
+        db.reset_queries()   
         return records
 
 class AlternativeFuelVehiclesHandler(GenericHandler):

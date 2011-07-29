@@ -110,8 +110,8 @@ class Command(NoArgsCommand):
         cursor.execute('''
         update data_populationgenderstate
         set 
-        female_percent = ROUND(female / total,4)
-        ,male_percent = ROUND(male / total,4)
+        female_percent = ROUND(female / total,4) * 100
+        ,male_percent = ROUND(male / total,4) * 100
         ''')
         
         transaction.commit_unless_managed()

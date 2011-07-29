@@ -214,26 +214,26 @@ class Command(NoArgsCommand):
         cursor.execute('''
         update data_populationagestate
         set 
-            age_0_4_percent = ROUND(age_0_4 / total,4)
-        ,   age_5_9_percent = ROUND(age_5_9 / total,4)
-        ,   age_10_14_percent = ROUND(age_10_14 / total,4)
-        ,   age_15_19_percent = ROUND(age_15_19 / total,4)
-        ,   age_20_24_percent = ROUND(age_20_24 / total,4)
-        ,   age_25_29_percent = ROUND(age_25_29 / total,4)
-        ,   age_30_34_percent = ROUND(age_30_34 / total,4)
-        ,   age_35_39_percent = ROUND(age_35_39 / total,4)
-        ,   age_40_44_percent = ROUND(age_40_44 / total,4)
-        ,   age_45_49_percent = ROUND(age_45_49 / total,4)
-        ,   age_50_54_percent = ROUND(age_50_54 / total,4)
-        ,   age_55_59_percent = ROUND(age_55_59 / total,4)
-        ,   age_60_64_percent = ROUND(age_60_64 / total,4)
-        ,   age_65_69_percent = ROUND(age_65_69 / total,4)
-        ,   age_70_74_percent = ROUND(age_70_74 / total,4)
-        ,   age_75_79_percent = ROUND(age_75_79 / total,4)
-        ,   age_80_84_percent = ROUND(age_80_84 / total,4)
-        ,   age_85_over_percent = ROUND(age_85_over / total,4)
-        ,   age_65_over_percent = ROUND(age_65_over / total,4)
-        ,   age_0_19_percent = ROUND(age_0_19 / total,4)
+            age_0_4_percent = ROUND(age_0_4 / total,4) * 100
+        ,   age_5_9_percent = ROUND(age_5_9 / total,4) * 100
+        ,   age_10_14_percent = ROUND(age_10_14 / total,4) * 100
+        ,   age_15_19_percent = ROUND(age_15_19 / total,4) * 100
+        ,   age_20_24_percent = ROUND(age_20_24 / total,4) * 100
+        ,   age_25_29_percent = ROUND(age_25_29 / total,4) * 100
+        ,   age_30_34_percent = ROUND(age_30_34 / total,4) * 100
+        ,   age_35_39_percent = ROUND(age_35_39 / total,4) * 100
+        ,   age_40_44_percent = ROUND(age_40_44 / total,4) * 100
+        ,   age_45_49_percent = ROUND(age_45_49 / total,4) * 100
+        ,   age_50_54_percent = ROUND(age_50_54 / total,4) * 100
+        ,   age_55_59_percent = ROUND(age_55_59 / total,4) * 100
+        ,   age_60_64_percent = ROUND(age_60_64 / total,4) * 100
+        ,   age_65_69_percent = ROUND(age_65_69 / total,4) * 100
+        ,   age_70_74_percent = ROUND(age_70_74 / total,4) * 100
+        ,   age_75_79_percent = ROUND(age_75_79 / total,4) * 100
+        ,   age_80_84_percent = ROUND(age_80_84 / total,4) * 100
+        ,   age_85_over_percent = ROUND(age_85_over / total,4) * 100
+        ,   age_65_over_percent = ROUND(age_65_over / total,4) * 100
+        ,   age_0_19_percent = ROUND(age_0_19 / total,4) * 100
         ''')
         
         transaction.commit_unless_managed()
