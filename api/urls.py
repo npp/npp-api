@@ -15,7 +15,6 @@ cffr_geo_handler = Resource(CffrGeoHandler)
 cffr_object_code_handler = Resource(CffrObjectCodeHandler)
 cffr_program_handler = Resource(CffrProgramHandler)
 children_poverty_handler = Resource(ChildrenPovertyHandler)
-county_population_estimates_handler = Resource(CountyPopulationEstimatesHandler)
 county_unemployment_handler = Resource(CountyUnemploymentHandler)
 diploma_recipient_total_handler = Resource(DiplomaRecipientTotalHandler)
 dropouts_race_handler = Resource(DropoutsRaceHandler)
@@ -68,8 +67,6 @@ population_race_county_handler = Resource(PopulationRaceCountyHandler)
 population_race_state_handler = Resource(PopulationRaceStateHandler)
 presidents_budget_handler = Resource(PresidentsBudgetHandler)
 pupil_teacher_district_handler = Resource(PupilTeacherDistrictHandler)
-race_population_1980s_handler = Resource(RacePopulation1980sHandler)
-race_population_1990s_handler = Resource(RacePopulation1990sHandler)
 retired_disabled_nilf_handler = Resource(RetiredDisabledNilfHandler)
 saipe_county_state_handler = Resource(SaipeCountyStateHandler)
 saipe_school_handler = Resource(SaipeSchoolHandler)
@@ -88,7 +85,6 @@ state_gdp_pre97_handler = Resource(StateGdpPre97Handler)
 state_emissions_handler = Resource(StateEmissionsHandler)
 state_labor_force_participation_handler = Resource(StateLaborForceParticipationHandler)
 state_median_income_handler = Resource(StateMedianIncomeHandler)
-state_population_estimates_handler = Resource(StatePopulationEstimatesHandler)
 state_postal_codes_handler = Resource(StatePostalCodesHandler)
 state_renewable_energy_handler = Resource(StateRenewableEnergyHandler)
 summer_lunch_participation_handler = Resource(SummerLunchParticipationHandler)
@@ -112,7 +108,6 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^budget_category_subfunctions.html$', 'direct_to_template', {'template': 'api/budget_category_subfunctions.html'}),
     (r'^cffr.html$', 'direct_to_template', {'template': 'api/cffr.html'}),
     (r'^children_poverty.html$', 'direct_to_template', {'template': 'api/children_poverty.html'}),
-    (r'^county_population_estimates.html$', 'direct_to_template', {'template': 'api/county_population_estimates.html'}),
     (r'^county_unemployment.html$', 'direct_to_template', {'template': 'api/county_unemployment.html'}),
     (r'^diploma_recipient_total.html$', 'direct_to_template', {'template': 'api/diploma_recipient_total.html'}),
     (r'^dropouts_race.html$', 'direct_to_template', {'template': 'api/dropouts_race.html'}),
@@ -159,8 +154,6 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^population_gender.html$', 'direct_to_template', {'template': 'api/population_gender.html'}),
     (r'^population_race.html$', 'direct_to_template', {'template': 'api/population_race.html'}),
     (r'^pupil_teacher_district.html$', 'direct_to_template', {'template': 'api/pupil_teacher_district.html'}),
-    (r'^race_population_1980s.html$', 'direct_to_template', {'template': 'api/race_population_1980s.html'}),
-    (r'^race_population_1990s.html$', 'direct_to_template', {'template': 'api/race_population_1990s.html'}),
     (r'^retired_disabled_nilf.html$', 'direct_to_template', {'template': 'api/retired_disabled_nilf.html'}),
     (r'^saipe_county_state.html$', 'direct_to_template', {'template': 'api/saipe_county_state.html'}),
     (r'^saipe_school.html$', 'direct_to_template', {'template': 'api/saipe_school.html'}),
@@ -179,7 +172,6 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^state_gdp_pre97.html$', 'direct_to_template', {'template': 'api/state_gdp_pre97.html'}),
     (r'^state_labor_force_participation.html$', 'direct_to_template', {'template': 'api/state_labor_force_participation.html'}),
     (r'^state_median_income.html$', 'direct_to_template', {'template': 'api/state_median_income.html'}),
-    (r'^state_population_estimates.html$', 'direct_to_template', {'template': 'api/state_population_estimates.html'}),
     (r'^state_renewable_energy.html$', 'direct_to_template', {'template': 'api/state_renewable_energy.html'}),
     (r'^vehicle_registrations.html$', 'direct_to_template', {'template':'api/vehicle_registrations.html'}),
     (r'^summer_lunch_participation.html$', 'direct_to_template', {'template': 'api/summer_lunch_participation.html'}),
@@ -220,8 +212,6 @@ urlpatterns += patterns('',
     url(r'^cffrprogram/list\.(?P<emitter_format>.+)', cffr_program_handler),
     url(r'^children_poverty/', children_poverty_handler),
     url(r'^children_poverty/list\.(?P<emitter_format>.+)', children_poverty_handler),
-    url(r'^county_population_estimates/$', county_population_estimates_handler),
-    url(r'^county_population_estimates/list\.(?P<emitter_format>.+)', county_population_estimates_handler),
     url(r'^county_unemployment/$', county_unemployment_handler),
     url(r'^county_unemployment/list\.(?P<emitter_format>.+)', county_unemployment_handler),
     url(r'^diploma_recipient_total/$', diploma_recipient_total_handler),
@@ -326,10 +316,6 @@ urlpatterns += patterns('',
     url(r'^presidents_budget/list\.(?P<emitter_format>.+)', presidents_budget_handler),
     url(r'^pupil_teacher_district/$', pupil_teacher_district_handler),
     url(r'^pupil_teacher_district/list\.(?P<emitter_format>.+)', pupil_teacher_district_handler),
-    url(r'^race_population_1980s/$', race_population_1980s_handler),
-    url(r'^race_population_1980s/list\.(?P<emitter_format>.+)', race_population_1980s_handler),
-    url(r'^race_population_1990s/$', race_population_1990s_handler),
-    url(r'^race_population_1990s/list\.(?P<emitter_format>.+)', race_population_1990s_handler),
     url(r'^retired_disabled_nilf/$', retired_disabled_nilf_handler),
     url(r'^retired_disabled_nilf/list\.(?P<emitter_format>.+)', retired_disabled_nilf_handler),
     url(r'^saipe_county_state/$', saipe_county_state_handler),
@@ -366,8 +352,6 @@ urlpatterns += patterns('',
     url(r'^state_labor_force_participation/list\.(?P<emitter_format>.+)', state_labor_force_participation_handler),
     url(r'^state_median_income/$', state_median_income_handler),
     url(r'^state_median_income/list\.(?P<emitter_format>.+)', state_median_income_handler),
-    url(r'^state_population_estimates/$', state_population_estimates_handler),
-    url(r'^state_population_estimates/list\.(?P<emitter_format>.+)', state_population_estimates_handler),
     url(r'^state_renewable_energy/$', state_renewable_energy_handler),
     url(r'^state_renewable_energy/list\.(?P<emitter_format>.+)', state_renewable_energy_handler),
     url(r'^state_postal_codes/$', state_postal_codes_handler),

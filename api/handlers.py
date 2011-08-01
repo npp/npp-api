@@ -205,12 +205,6 @@ class ChildrenPovertyHandler(GenericHandler):
         model = ChildrenPoverty
         super(ChildrenPovertyHandler, self).__init__(allowed_keys, model)
         
-class CountyPopulationEstimatesHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('year', 'geo_id', 'geo_id2', 'sum_level', 'geo_name')
-        model = CountyPopulationEstimates
-        super(CountyPopulationEstimatesHandler, self).__init__(allowed_keys, model)
-        
 class CountyUnemploymentHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state_fips', 'county_fips', 'year')
@@ -537,18 +531,6 @@ class PresidentsBudgetHandler(GenericHandler):
             'on_off_budget', ('years', ('year', 'value',),),)
         super(PresidentsBudgetHandler, self).__init__(allowed_keys, model, fields)
         
-class RacePopulation1980sHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('fips_state', 'year', 'race_code', 'sex')
-        model = RacePopulation1980s
-        super(RacePopulation1980sHandler, self).__init__(allowed_keys, model)
-        
-class RacePopulation1990sHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('area', 'year')
-        model = RacePopulation1990s
-        super(RacePopulation1990sHandler, self).__init__(allowed_keys, model)
-        
 class RetiredDisabledNilfHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state', 'year')
@@ -656,12 +638,6 @@ class StateMedianIncomeHandler(GenericHandler):
         allowed_keys = ('state', 'year')
         model = StateMedianIncome
         super(StateMedianIncomeHandler, self).__init__(allowed_keys, model)
-        
-class StatePopulationEstimatesHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = StatePopulationEstimates
-        super(StatePopulationEstimatesHandler, self).__init__(allowed_keys, model)
         
 class StatePostalCodesHandler(GenericHandler):
     def __init__(self):
