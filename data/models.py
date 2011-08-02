@@ -987,8 +987,8 @@ class Cffr(models.Model):
     county = models.ForeignKey(County)
     cffrprogram = models.ForeignKey(CffrProgram)
     amount = models.BigIntegerField()
-    create_date = models.DateField(auto_now_add=True)
-    update_date = models.DateField(auto_now=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
     class Meta:
         unique_together = ('year', 'state', 'county', 'cffrprogram')
@@ -998,8 +998,8 @@ class CffrState(models.Model):
     state = models.ForeignKey(State)
     cffrprogram = models.ForeignKey(CffrProgram)
     amount = models.BigIntegerField()
-    create_date = models.DateField(auto_now_add=True)
-    update_date = models.DateField(auto_now=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
     class Meta:
         unique_together = ('year', 'state', 'cffrprogram')
