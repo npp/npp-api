@@ -919,8 +919,8 @@ class CffrProgram(models.Model):
     program_code = models.CharField(max_length=6)
     program_name = models.CharField(max_length=255)
     program_desc = models.CharField(max_length=255,null=True)
-    create_date = models.DateField(auto_now_add=True)
-    update_date = models.DateField(auto_now=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
     class Meta:
         unique_together = ('year', 'program_code')
@@ -964,8 +964,8 @@ class State(models.Model):
     state_desc = models.CharField(max_length=255,null=True)
     state_gnisid = models.CharField(max_length=10,null=True)
     sort_order = models.SmallIntegerField(null=True)
-    create_date = models.DateField(auto_now_add=True)
-    update_date = models.DateField(auto_now=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
 
 class County(models.Model):
     state = models.ForeignKey(State)
@@ -974,8 +974,8 @@ class County(models.Model):
     county_name = models.CharField(max_length=100)
     county_desc = models.CharField(max_length=255,null=True)
     sort_order = models.SmallIntegerField(null=True)
-    create_date = models.DateField(auto_now_add=True)
-    update_date = models.DateField(auto_now=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
     class Meta:
         unique_together = ('state', 'county_ansi')
