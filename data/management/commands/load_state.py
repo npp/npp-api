@@ -53,6 +53,7 @@ class Command(NoArgsCommand):
         more_states['64'] = ['FM','Federated States of Micronesia']
         more_states['68'] = ['MH', 'Marshall Islands']
         more_states['70'] = ['PW', 'Palau']
+        more_states['00'] = ['US', 'United States']
         for s in more_states:
             try:
                 state_ref_row = State(state_ansi=s, state_abbr = more_states[s][0], state_name = more_states[s][1])
