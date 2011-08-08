@@ -88,6 +88,7 @@ state_median_income_handler = Resource(StateMedianIncomeHandler)
 state_postal_codes_handler = Resource(StatePostalCodesHandler)
 state_renewable_energy_handler = Resource(StateRenewableEnergyHandler)
 summer_lunch_participation_handler = Resource(SummerLunchParticipationHandler)
+tanf_participation_state_handler = Resource(TanfParticipationStateHandler)
 teacher_pupil_ratio_handler = Resource(TeacherPupilRatioHandler)
 title_i_funding_handler = Resource(TitleIFundingHandler)
 total_students_handler = Resource(TotalStudentsHandler)
@@ -176,6 +177,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^vehicle_registrations.html$', 'direct_to_template', {'template':'api/vehicle_registrations.html'}),
     (r'^summer_lunch_participation.html$', 'direct_to_template', {'template': 'api/summer_lunch_participation.html'}),
     (r'^subfunctions_cffr.html$', 'direct_to_template', {'template': 'api/subfunctions_cffr.html'}),
+    (r'^tanf_participation.html$', 'direct_to_template', {'template': 'api/tanf_participation.html'}),
     (r'^teacher_pupil_ratio.html$', 'direct_to_template', {'template': 'api/teacher_pupil_ratio.html'}),
     (r'^title_i_funding.html$', 'direct_to_template', {'template': 'api/title_i_funding.html'}),
     (r'^total_students.html$', 'direct_to_template', {'template': 'api/total_students.html'}),
@@ -364,6 +366,8 @@ urlpatterns += patterns('',
     url(r'^summer_lunch_participation/list\.(?P<emitter_format>.+)', summer_lunch_participation_handler),
     url(r'^teacher_pupil_ratio/$', teacher_pupil_ratio_handler),
     url(r'^teacher_pupil_ratio/list\.(?P<emitter_format>.+)', teacher_pupil_ratio_handler),
+    url(r'^tanf_participation_state/$', tanf_participation_state_handler),
+    url(r'^tanf_participation_state/list\.(?P<emitter_format>.+)', tanf_participation_state_handler),
     url(r'^total_students/$', total_students_handler),
     url(r'^total_students/list\.(?P<emitter_format>.+)', total_students_handler),
     url(r'^title_i_funding/$', title_i_funding_handler),

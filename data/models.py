@@ -847,6 +847,20 @@ class SummerLunchParticipation(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
     value = models.IntegerField()
+
+class TanfFamilyStateRaw(models.Model):
+    year = models.IntegerField()
+    state = models.CharField(max_length=32)
+    value = models.IntegerField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+class TanfParticipationStateRaw(models.Model):
+    year = models.IntegerField()
+    state = models.CharField(max_length=32)
+    value = models.IntegerField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
 class TeacherPupilRatio(models.Model):
     state = models.CharField(max_length=2)
@@ -1334,7 +1348,18 @@ class PopulationRaceState(models.Model):
     
     class Meta:
         unique_together = ('year', 'state')
-        
+    
+class TanfParticipationState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    person = models.IntegerField(null=True)
+    family = models.IntegerField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state')
+    
 class WicBenefitsState(models.Model):
     year = models.IntegerField()
     state = models.ForeignKey(State)

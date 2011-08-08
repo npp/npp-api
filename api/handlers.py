@@ -664,6 +664,13 @@ class SummerLunchParticipationHandler(GenericHandler):
         model = SummerLunchParticipation
         super(SummerLunchParticipationHandler, self).__init__(allowed_keys, model)
         
+class TanfParticipationStateHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('year', 'state_abbr', 'state_ansi')
+        model = TanfParticipationState
+        fields = ('year', 'person', 'family', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(TanfParticipationStateHandler, self).__init__(allowed_keys, model,fields)
+        
 class TitleIFundingHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state', 'year', 'agency_name', 'agency_id')
