@@ -518,6 +518,13 @@ class PupilTeacherDistrictHandler(GenericHandler):
         allowed_keys = ('state', 'year', 'agency_name', 'agency_id')
         model = PupilTeacherDistrict
         super(PupilTeacherDistrictHandler, self).__init__(allowed_keys, model) 
+        
+class PupilTeacherStateHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('year', 'state_abbr', 'state_ansi')
+        model = PupilTeacherState
+        fields = ('year', 'ratio', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(PupilTeacherStateHandler, self).__init__(allowed_keys, model, fields)
                
 class PresidentsBudgetHandler(GenericHandler):
     def __init__(self):
@@ -676,12 +683,6 @@ class TitleIFundingHandler(GenericHandler):
         allowed_keys = ('state', 'year', 'agency_name', 'agency_id')
         model = TitleIFunding
         super(TitleIFundingHandler, self).__init__(allowed_keys, model)
-        
-class TeacherPupilRatioHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = TeacherPupilRatio
-        super(TeacherPupilRatioHandler, self).__init__(allowed_keys, model)
         
 class TotalStudentsHandler(GenericHandler):
     def __init__(self):

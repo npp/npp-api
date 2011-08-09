@@ -67,6 +67,7 @@ population_race_county_handler = Resource(PopulationRaceCountyHandler)
 population_race_state_handler = Resource(PopulationRaceStateHandler)
 presidents_budget_handler = Resource(PresidentsBudgetHandler)
 pupil_teacher_district_handler = Resource(PupilTeacherDistrictHandler)
+pupil_teacher_state_handler = Resource(PupilTeacherStateHandler)
 retired_disabled_nilf_handler = Resource(RetiredDisabledNilfHandler)
 saipe_county_state_handler = Resource(SaipeCountyStateHandler)
 saipe_school_handler = Resource(SaipeSchoolHandler)
@@ -89,7 +90,6 @@ state_postal_codes_handler = Resource(StatePostalCodesHandler)
 state_renewable_energy_handler = Resource(StateRenewableEnergyHandler)
 summer_lunch_participation_handler = Resource(SummerLunchParticipationHandler)
 tanf_participation_state_handler = Resource(TanfParticipationStateHandler)
-teacher_pupil_ratio_handler = Resource(TeacherPupilRatioHandler)
 title_i_funding_handler = Resource(TitleIFundingHandler)
 total_students_handler = Resource(TotalStudentsHandler)
 subfunctions_cffr_handler = Resource(SubfunctionsCffrHandler)
@@ -154,7 +154,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^population_age.html$', 'direct_to_template', {'template': 'api/population_age.html'}),
     (r'^population_gender.html$', 'direct_to_template', {'template': 'api/population_gender.html'}),
     (r'^population_race.html$', 'direct_to_template', {'template': 'api/population_race.html'}),
-    (r'^pupil_teacher_district.html$', 'direct_to_template', {'template': 'api/pupil_teacher_district.html'}),
+    (r'^pupil_teacher.html$', 'direct_to_template', {'template': 'api/pupil_teacher.html'}),
     (r'^retired_disabled_nilf.html$', 'direct_to_template', {'template': 'api/retired_disabled_nilf.html'}),
     (r'^saipe_county_state.html$', 'direct_to_template', {'template': 'api/saipe_county_state.html'}),
     (r'^saipe_school.html$', 'direct_to_template', {'template': 'api/saipe_school.html'}),
@@ -178,7 +178,6 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^summer_lunch_participation.html$', 'direct_to_template', {'template': 'api/summer_lunch_participation.html'}),
     (r'^subfunctions_cffr.html$', 'direct_to_template', {'template': 'api/subfunctions_cffr.html'}),
     (r'^tanf_participation.html$', 'direct_to_template', {'template': 'api/tanf_participation.html'}),
-    (r'^teacher_pupil_ratio.html$', 'direct_to_template', {'template': 'api/teacher_pupil_ratio.html'}),
     (r'^title_i_funding.html$', 'direct_to_template', {'template': 'api/title_i_funding.html'}),
     (r'^total_students.html$', 'direct_to_template', {'template': 'api/total_students.html'}),
     (r'^vocational_ed_spending.html$', 'direct_to_template', {'template': 'api/vocational_ed_spending.html'}),
@@ -318,6 +317,8 @@ urlpatterns += patterns('',
     url(r'^presidents_budget/list\.(?P<emitter_format>.+)', presidents_budget_handler),
     url(r'^pupil_teacher_district/$', pupil_teacher_district_handler),
     url(r'^pupil_teacher_district/list\.(?P<emitter_format>.+)', pupil_teacher_district_handler),
+    url(r'^pupil_teacher_state/$', pupil_teacher_state_handler),
+    url(r'^pupil_teacher_state/list\.(?P<emitter_format>.+)', pupil_teacher_state_handler),
     url(r'^retired_disabled_nilf/$', retired_disabled_nilf_handler),
     url(r'^retired_disabled_nilf/list\.(?P<emitter_format>.+)', retired_disabled_nilf_handler),
     url(r'^saipe_county_state/$', saipe_county_state_handler),
@@ -364,8 +365,6 @@ urlpatterns += patterns('',
     url(r'^subfunctions_cffr/list\.(?P<emitter_format>.+)', subfunctions_cffr_handler),
     url(r'^summer_lunch_participation/$', summer_lunch_participation_handler),
     url(r'^summer_lunch_participation/list\.(?P<emitter_format>.+)', summer_lunch_participation_handler),
-    url(r'^teacher_pupil_ratio/$', teacher_pupil_ratio_handler),
-    url(r'^teacher_pupil_ratio/list\.(?P<emitter_format>.+)', teacher_pupil_ratio_handler),
     url(r'^tanf_participation_state/$', tanf_participation_state_handler),
     url(r'^tanf_participation_state/list\.(?P<emitter_format>.+)', tanf_participation_state_handler),
     url(r'^total_students/$', total_students_handler),

@@ -643,6 +643,13 @@ class PresidentsBudgetYear(models.Model):
     year = models.CharField(max_length=4)
     value = models.IntegerField()
     
+class PupilTeacherStateRaw(models.Model):
+    state = models.CharField(max_length=2)
+    year = models.IntegerField()
+    ratio = models.FloatField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
 class RetiredDisabledNilf(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
@@ -861,11 +868,6 @@ class TanfParticipationStateRaw(models.Model):
     value = models.IntegerField()
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
-    
-class TeacherPupilRatio(models.Model):
-    state = models.CharField(max_length=2)
-    year = models.IntegerField()
-    value = models.FloatField()
     
 class TitleIFunding(models.Model):
     year = models.IntegerField()
@@ -1348,7 +1350,17 @@ class PopulationRaceState(models.Model):
     
     class Meta:
         unique_together = ('year', 'state')
+
+class PupilTeacherState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    ratio = models.FloatField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(null=True,auto_now=True)
     
+    class Meta:
+        unique_together = ('year', 'state')
+        
 class TanfParticipationState(models.Model):
     year = models.IntegerField()
     state = models.ForeignKey(State)
