@@ -230,6 +230,19 @@ class FipsState(models.Model):
     state = models.CharField(max_length=2)
     code = models.CharField(max_length=64)
     
+class FoodSecurityStateRaw(models.Model):
+    year = models.IntegerField()
+    state = models.CharField(max_length=2)
+    household_total = models.IntegerField()
+    no_response = models.IntegerField()
+    food_secure = models.IntegerField(null=True)
+    food_secure_high = models.IntegerField(null=True)
+    food_secure_marginal = models.IntegerField(null=True)
+    food_secure_low = models.IntegerField()
+    food_secure_very_low = models.IntegerField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
 class FreeLunchEligible(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=2)
@@ -1019,6 +1032,29 @@ class CffrState(models.Model):
     
     class Meta:
         unique_together = ('year', 'state', 'cffrprogram')
+        
+class FoodSecurityState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    household_total = models.IntegerField()
+    no_response = models.IntegerField()
+    food_secure = models.IntegerField()
+    food_secure_percent = models.FloatField()
+    food_secure_high = models.IntegerField(null=True)
+    food_secure_high_percent = models.FloatField(null=True)
+    food_secure_marginal = models.IntegerField(null=True)
+    food_secure_marginal_percent = models.FloatField(null=True)
+    food_secure_low = models.IntegerField()
+    food_secure_low_percent = models.FloatField()
+    food_secure_very_low = models.IntegerField()
+    food_secure_very_low_percent = models.FloatField()
+    food_insecure = models.IntegerField()
+    food_insecure_percent = models.FloatField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state')
 
 #July 2011.  Following models (PopulationCounty & PopulationState would, in theory, hold a normalized structure of every possible year, gender, race, ethnicity, & age combination for the census population estimates.  Because it wasn't practical to load & implement this highly normalized model in the API and search tool, the population data facets are presented as individual APIs.  This is easier, but it does mean we lose the ability to combine the facets (e.g., # of hispanic black females over 65).  Leaving the proposed model here for future reference.
 #class PopulationCounty(models.Model):

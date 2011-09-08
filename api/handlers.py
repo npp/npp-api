@@ -312,6 +312,13 @@ class FipsStateHandler(GenericHandler):
         allowed_keys = ('code', 'state')
         model = FipsState
         super(FipsStateHandler, self).__init__(allowed_keys, model)
+        
+class FoodSecurityStateHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('year', 'state_abbr', 'state_ansi')
+        model = FoodSecurityState
+        fields = ('year', ('state', ('state_ansi', 'state_abbr', 'state_name')), 'household_total', 'no_response', 'food_secure', 'food_secure_percent', 'food_secure_high', 'food_secure_high_percent', 'food_secure_marginal', 'food_secure_marginal_percent', 'food_secure_low', 'food_secure_low_percent', 'food_secure_very_low', 'food_secure_very_low_percent', 'food_insecure', 'food_insecure_percent')
+        super(FoodSecurityStateHandler, self).__init__(allowed_keys, model,fields)
 
 class FreeLunchEligibleHandler(GenericHandler):
     def __init__(self):

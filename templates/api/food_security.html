@@ -1,0 +1,27 @@
+{% extends "api/api_base.html" %}
+
+{% block content %}
+<h1>Food Security</h1>
+
+<div class="api_urls">
+	<div><span class="api_urls_header">URL Format: </div>
+	<div>http://data.nationalpriorities.org/api/&lt;source&gt;/list.&lt;format&gt;?...</div>
+</div>
+
+<h2>Sources</h2>
+
+<p>Available geography:
+<ul>
+    <li>state</li>
+</ul>
+</p>
+
+<ul>
+	<li>
+		<div>Food Security by State</div>
+		<div>Data from the Food Security Supplement of the Census Bureau's annual Community Population Survey (CPS). Because CPS sample size is small (100,000), the common practice is to average serveral years worth of data when looking at trends over time.</div>
+		<div>Allowed Keys: 'year', 'state', 'state_ansi', 'county_ansi' </div>
+		<div>Example: <a href="/api/food_security_state/list.json?state=id">http://data.nationalpriorities.org/food_security_state/list.json?state=id</a></div>
+	</li>
+</ul>
+{% endblock %}

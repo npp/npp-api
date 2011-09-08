@@ -33,6 +33,7 @@ fcna_spending_handler = Resource(FcnaSpendingHandler)
 federal_impact_aid_handler = Resource(FederalImpactAidHandler)
 fips_county_congress_district_handler = Resource(FipsCountyCongressDistrictHandler)
 fips_state_handler = Resource(FipsStateHandler)
+food_security_state_handler = Resource(FoodSecurityStateHandler)
 free_lunch_eligible_handler = Resource(FreeLunchEligibleHandler)
 free_reduced_lunch_eligible_handler = Resource(FreeReducedLunchEligibleHandler)
 free_reduced_lunch_eligible_county_handler = Resource(FreeReducedLunchEligibleCountyHandler)
@@ -126,6 +127,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^fcna_spending.html$', 'direct_to_template', {'template': 'api/fcna_spending.html'}),
     (r'^federal_impact_aid.html$', 'direct_to_template', {'template': 'api/federal_impact_aid.html'}),
     (r'^fips_county_congress_district.html$', 'direct_to_template', {'template': 'api/fips_county_congress_district.html'}),
+    (r'^food_security.html$', 'direct_to_template', {'template': 'api/food_security.html'}),
     (r'^free_lunch_eligible.html$', 'direct_to_template', {'template': 'api/free_lunch_eligible.html'}),
     (r'^free_reduced_lunch_eligible.html$', 'direct_to_template', {'template': 'api/free_reduced_lunch_eligible.html'}),
     (r'^free_reduced_lunch_eligible_county.html$', 'direct_to_template', {'template': 'api/free_reduced_lunch_eligible_county.html'}),
@@ -249,6 +251,8 @@ urlpatterns += patterns('',
     url(r'^fips_county_congress_district/list\.(?P<emitter_format>.+)', fips_county_congress_district_handler),
     url(r'^fips_state/$', fips_state_handler),
     url(r'^fips_state/list\.(?P<emitter_format>.+)', fips_state_handler),
+    url(r'^food_security_state/$', food_security_state_handler),
+    url(r'^food_security_state/list\.(?P<emitter_format>.+)', food_security_state_handler),
     url(r'^free_lunch_eligible/$', free_lunch_eligible_handler),
     url(r'^free_lunch_eligible/list\.(?P<emitter_format>.+)', free_lunch_eligible_handler),
     url(r'^free_reduced_lunch_eligible/$', free_reduced_lunch_eligible_handler),
