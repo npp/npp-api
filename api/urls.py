@@ -46,6 +46,7 @@ housing_units_handler = Resource(HousingUnitsHandler)
 individual_education_programs_handler = Resource(IndividualEducationProgramsHandler)
 irs_gross_collections_handler = Resource(IrsGrossCollectionsHandler)
 kids_health_insurance_handler = Resource(KidsHealthInsuranceHandler)
+labor_underutilization_state_handler = Resource(LaborUnderutilizationStateHandler)
 math_science_spending_handler = Resource(MathScienceSpendingHandler)
 medicaid_participation_handler = Resource(MedicaidParticipationHandler)
 medicare_enrollment_handler = Resource(MedicareEnrollmentHandler)
@@ -140,6 +141,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^individual_education_programs.html$', 'direct_to_template', {'template': 'api/individual_education_programs.html'}),
     (r'^irs_gross_collections.html$', 'direct_to_template', {'template': 'api/irs_gross_collections.html'}),
     (r'^kids_health_insurance.html$', 'direct_to_template', {'template': 'api/kids_health_insurance.html'}),
+    (r'^labor_underutilization.html$', 'direct_to_template', {'template': 'api/labor_underutilization.html'}),
     (r'^nces_school_district.html$', 'direct_to_template', {'template': 'api/nces_school_district.html'}),
     (r'^math_science_spending.html$', 'direct_to_template', {'template': 'api/math_science_spending.html'}),
     (r'^medicaid_participation.html$', 'direct_to_template', {'template': 'api/medicaid_participation.html'}),
@@ -277,6 +279,8 @@ urlpatterns += patterns('',
     url(r'^irs_gross_collections/list\.(?P<emitter_format>.+)', irs_gross_collections_handler),
     url(r'^kids_health_insurance/$', kids_health_insurance_handler),
     url(r'^kids_health_insurance/list\.(?P<emitter_format>.+)', kids_health_insurance_handler),
+    url(r'^labor_underutilization_state/$', labor_underutilization_state_handler),
+    url(r'^labor_underutilization_state/list\.(?P<emitter_format>.+)',labor_underutilization_state_handler),
     url(r'^math_science_spending/$', math_science_spending_handler),
     url(r'^math_science_spending/list\.(?P<emitter_format>.+)', math_science_spending_handler),
     url(r'^medicaid_participation/$', medicaid_participation_handler),
@@ -358,9 +362,9 @@ urlpatterns += patterns('',
     url(r'^state_labor_force_participation/$', state_labor_force_participation_handler),
     url(r'^state_labor_force_participation/list\.(?P<emitter_format>.+)', state_labor_force_participation_handler),
     url(r'^state_median_income/$', state_median_income_handler),
-    url(r'^state_median_income/list\.(?P<emitter_format>.+)', state_median_income_handler),
+    url(r'^state_median_income/list\.(?P<emitter_format>.+)',state_median_income_handler),
     url(r'^state_renewable_energy/$', state_renewable_energy_handler),
-    url(r'^state_renewable_energy/list\.(?P<emitter_format>.+)', state_renewable_energy_handler),
+    url(r'^state_renewable_energy/list\.(?P<emitter_format>.+)',state_renewable_energy_handler),
     url(r'^state_postal_codes/$', state_postal_codes_handler),
     url(r'^state_postal_codes/list\.(?P<emitter_format>.+)', state_postal_codes_handler),
     url(r'^vehicle_registrations/$', vehicle_registrations_handler),

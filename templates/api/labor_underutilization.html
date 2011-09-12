@@ -1,0 +1,34 @@
+{% extends "api/api_base.html" %}
+
+{% block content %}
+<h1>Labor Underutilization</h1>
+
+<div class="api_urls">
+	<div><span class="api_urls_header">URL Format: </div>
+	<div>http://data.nationalpriorities.org/api/&lt;source&gt;/list.&lt;format&gt;?...</div>
+</div>
+
+<h2>Sources</h2>
+
+<p>Available geography:
+<ul>
+    <li>state</li>
+</ul>
+</p>
+
+<ul>
+	<li>
+		<div>Labor Underutilization by State</div>
+		<div>Alternative measures of labor underutilization for states. These are provided by the Bureau of Labor Statistics for those who want more narrowly or broadly defined measures of unemployment than the official definition (<em>i.e.</em>, those available and who have sought work in the previous four weeks).  These alternate meausre include: <ul>
+        <li>U-1: persons unemployed 15 weeks or longer, as a percent of the civilian labor force</li>
+        <li>U-2: job losers and persons who completed temporary jobs, as a percent of the civilian labor force</li>
+        <li>U-3: total unemployed, as a percent of the civilian labor force (this is the definition used for the official unemployment rate)</li>
+        <li>U-4: total unemployed plus discouraged workers, as a percent of the civilian labor force plus discouraged workers</li>
+        <li>U-5: total unemployed, plus discouraged workers, plus all other marginally attached workers, as a percent of the civilian labor force plus all marginally attached workers</li>
+        <li>U-6, total unemployed, plus all marginally attached workers, plus total employed part time for economic reasons, as a percent of the civilian labor force plus all marginally attached workers.</li>
+        </ul></div>
+		<div>Allowed Keys: 'year', 'state', 'state_ansi' </div>
+		<div>Example: <a href="/api/labor_underutilization_state/list.json?state=tx">http://data.nationalpriorities.org/labor_underutilization_state/list.json?state=tx</a></div>
+	</li>
+</ul>
+{% endblock %}
