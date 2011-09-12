@@ -394,6 +394,18 @@ class KidsHealthInsurance(models.Model):
     military_pct = models.FloatField()
     military_pct_se = models.FloatField() 
     
+class LaborUnderutilizationStateRaw(models.Model):
+    year = models.IntegerField()
+    state = models.CharField(max_length=64)
+    u1 = models.FloatField()
+    u2 = models.FloatField()
+    u3 = models.FloatField()
+    u4 = models.FloatField()
+    u5 = models.FloatField()
+    u6 = models.FloatField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
 class MathScienceSpending(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=2)
@@ -1055,6 +1067,22 @@ class FoodSecurityState(models.Model):
     
     class Meta:
         unique_together = ('year', 'state')
+        
+class LaborUnderutilizationState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    u1 = models.FloatField()
+    u2 = models.FloatField()
+    u3 = models.FloatField()
+    u4 = models.FloatField()
+    u5 = models.FloatField()
+    u6 = models.FloatField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state')
+
 
 #July 2011.  Following models (PopulationCounty & PopulationState would, in theory, hold a normalized structure of every possible year, gender, race, ethnicity, & age combination for the census population estimates.  Because it wasn't practical to load & implement this highly normalized model in the API and search tool, the population data facets are presented as individual APIs.  This is easier, but it does mean we lose the ability to combine the facets (e.g., # of hispanic black females over 65).  Leaving the proposed model here for future reference.
 #class PopulationCounty(models.Model):
