@@ -121,18 +121,6 @@ class ChildrenPoverty(models.Model):
     low_income_125_149_pct = models.IntegerField()
     low_income_above_150_pct = models.IntegerField()
     
-class CountyUnemployment(models.Model):
-    year = models.IntegerField()
-    laus_code = models.CharField(max_length=8)
-    state_fips = models.CharField(max_length=2)
-    county_fips = models.CharField(max_length=3)
-    county_name = models.CharField(max_length=255)
-    year = models.IntegerField()
-    labor_force = models.IntegerField(null=True)
-    employed = models.IntegerField(null=True)
-    unemployed = models.IntegerField(null=True)
-    unemployment_rate = models.FloatField(null=True)
-    
 class DiplomaRecipientTotal(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=2)

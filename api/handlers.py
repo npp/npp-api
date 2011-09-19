@@ -205,12 +205,6 @@ class ChildrenPovertyHandler(GenericHandler):
         model = ChildrenPoverty
         super(ChildrenPovertyHandler, self).__init__(allowed_keys, model)
         
-class CountyUnemploymentHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('state_fips', 'county_fips', 'year')
-        model = CountyUnemployment
-        super(CountyUnemploymentHandler, self).__init__(allowed_keys, model)
-        
 class DiplomaRecipientTotalHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state', 'year', 'key')
