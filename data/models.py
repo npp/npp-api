@@ -394,6 +394,19 @@ class KidsHealthInsurance(models.Model):
     military_pct = models.FloatField()
     military_pct_se = models.FloatField() 
     
+class LaborForceCountyRaw(models.Model):
+    year = models.IntegerField()
+    laus_code = models.CharField(max_length=8)
+    state_fips = models.CharField(max_length=2)
+    county_fips = models.CharField(max_length=3)
+    county_name = models.CharField(max_length=255)
+    labor_force = models.IntegerField(null=True)
+    employed = models.IntegerField(null=True)
+    unemployed = models.IntegerField(null=True)
+    unemployment_rate = models.FloatField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
 class LaborUnderutilizationStateRaw(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=64)
@@ -905,7 +918,7 @@ class TotalStudents(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=2)
     value = models.IntegerField(null=True)
-     
+
 class VehicleRegistrations(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
@@ -1068,6 +1081,21 @@ class FoodSecurityState(models.Model):
     class Meta:
         unique_together = ('year', 'state')
         
+class LaborForceCounty(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    county = models.ForeignKey(County)
+    laus_code = models.CharField(max_length=8)
+    labor_force = models.IntegerField(null=True) #is this the civilian labor force?
+    employment_total = models.IntegerField(null=True)
+    unemployment_total = models.IntegerField(null=True)
+    unemployment_rate = models.FloatField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state', 'county')
+    
 class LaborUnderutilizationState(models.Model):
     year = models.IntegerField()
     state = models.ForeignKey(State)
@@ -1435,7 +1463,7 @@ class TanfParticipationState(models.Model):
     
     class Meta:
         unique_together = ('year', 'state')
-    
+
 class WicBenefitsState(models.Model):
     year = models.IntegerField()
     state = models.ForeignKey(State)
