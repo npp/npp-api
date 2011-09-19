@@ -46,6 +46,7 @@ housing_units_handler = Resource(HousingUnitsHandler)
 individual_education_programs_handler = Resource(IndividualEducationProgramsHandler)
 irs_gross_collections_handler = Resource(IrsGrossCollectionsHandler)
 kids_health_insurance_handler = Resource(KidsHealthInsuranceHandler)
+labor_force_county_handler = Resource(LaborForceCountyHandler)
 labor_underutilization_state_handler = Resource(LaborUnderutilizationStateHandler)
 math_science_spending_handler = Resource(MathScienceSpendingHandler)
 medicaid_participation_handler = Resource(MedicaidParticipationHandler)
@@ -141,6 +142,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^individual_education_programs.html$', 'direct_to_template', {'template': 'api/individual_education_programs.html'}),
     (r'^irs_gross_collections.html$', 'direct_to_template', {'template': 'api/irs_gross_collections.html'}),
     (r'^kids_health_insurance.html$', 'direct_to_template', {'template': 'api/kids_health_insurance.html'}),
+    (r'^labor_force.html$', 'direct_to_template', {'template': 'api/labor_force.html'}),
     (r'^labor_underutilization.html$', 'direct_to_template', {'template': 'api/labor_underutilization.html'}),
     (r'^nces_school_district.html$', 'direct_to_template', {'template': 'api/nces_school_district.html'}),
     (r'^math_science_spending.html$', 'direct_to_template', {'template': 'api/math_science_spending.html'}),
@@ -279,6 +281,8 @@ urlpatterns += patterns('',
     url(r'^irs_gross_collections/list\.(?P<emitter_format>.+)', irs_gross_collections_handler),
     url(r'^kids_health_insurance/$', kids_health_insurance_handler),
     url(r'^kids_health_insurance/list\.(?P<emitter_format>.+)', kids_health_insurance_handler),
+    url(r'^labor_force_county/$', labor_force_county_handler),
+    url(r'^labor_force_county/list\.(?P<emitter_format>.+)',labor_force_county_handler),
     url(r'^labor_underutilization_state/$', labor_underutilization_state_handler),
     url(r'^labor_underutilization_state/list\.(?P<emitter_format>.+)',labor_underutilization_state_handler),
     url(r'^math_science_spending/$', math_science_spending_handler),

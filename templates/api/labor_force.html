@@ -1,0 +1,35 @@
+{% extends "api/api_base.html" %}
+
+{% block content %}
+<h1>Labor Force</h1>
+
+<div class="api_urls">
+	<div><span class="api_urls_header">URL Format: </div>
+	<div>http://data.nationalpriorities.org/api/&lt;source&gt;/list.&lt;format&gt;?...</div>
+</div>
+
+<h2>Sources</h2>
+
+<p>Available geography:
+<ul>
+    <li>county</li>
+    <li>state</li>
+</ul>
+</p>
+
+<ul>
+	<li>
+		<div>County Labor Force</div>
+		<div>Annual Labor Force data by county, including employment and unemployment totals and unemployment rate.</div>
+		<div>Allowed Keys: 'year', 'state', 'state_ansi', 'county_ansi' </div>
+		<div>Example: <a href="/api/labor_force_county/list.json?state=nv">http://data.nationalpriorities.org/api/labor_force_county/list.json?state=nv</a></div>
+	</li>
+	<li>
+		<div>State Labor Force</div>
+		<div>Annual Labor Force data by state, including employment and unemployment totals, unemployment rate, employment population ratio, and labor force participation rate.</div>
+		<div>Allowed Keys: 'year', 'state', 'state_ansi'</div>
+		<div>Example: <a href="/api/state_labor_force_participation/list.json?state=Montana&year=1999">http://data.nationalpriorities.org/api/state_labor_force_participation/list.json?state=Montana&amp;year=1999</a></div>
+	</li>
+</ul>
+
+{% endblock %}

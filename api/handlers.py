@@ -392,6 +392,13 @@ class KidsHealthInsuranceHandler(GenericHandler):
         model = KidsHealthInsurance
         super(KidsHealthInsuranceHandler, self).__init__(allowed_keys, model)
         
+class LaborForceCountyHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'county_ansi', 'county_name')
+        model = LaborForceCounty
+        fields = ('year', ('state', ('state_ansi', 'state_abbr', 'state_name')), ('county', ('county_ansi', 'county_name')), 'laus_code', 'labor_force', 'employment_total', 'unemployment_total', 'unemployment_rate')
+        super(LaborForceCountyHandler, self).__init__(allowed_keys, model,fields)
+        
 class LaborUnderutilizationStateHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('year', 'state_abbr', 'state_ansi')
