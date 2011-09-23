@@ -2,15 +2,16 @@ from django import db
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
 from data.models import ChildrenPoverty
+from django.core.exceptions import MultipleObjectsReturned
 import csv
 
 # National Priorities Project Data Repository
 # import_children_poverty.py
-# Updated 7/28/2010, Joshua Ruihley, Sunlight Foundation
 
 # Imports Census Data on Number of Children Living in Poverty
-# source info: http://dataferrett.census.gov/TheDataWeb/launchDFA.html (accurate as of 6/15/2011)
+# pre 2005 source info: http://dataferrett.census.gov/TheDataWeb/launchDFA.html (accurate as of 6/15/2011)
 # npp csvs: http://assets.nationalpriorities.org/raw_data/census.gov/ferrett/children_poverty_*.csv (updated 7/28/2010)
+# as of 9/2011 for years 2005 & greater, source switches from CPS to ACS 1 year estimates, available via Census Factfinder, e.g. http://factfinder2.census.gov/faces/tableservices/jsf/pages/productview.xhtml?pid=ACS_10_1YR_S1701&prodType=table
 # destination model:  ChildrenPoverty
 
 # HOWTO:
@@ -20,41 +21,49 @@ import csv
 # 4) change 'amount' column in data_ChildrenPoverty table to type 'bigint'
 # 5) Run as Django management command from your project path "python manage.py import_children_poverty"
 
-# Safe to re-run: NO
+# Safe to re-run: yes
+
+SOURCE_FILE = '%s/census.gov/acs/state/children_in_poverty.csv' % (settings.LOCAL_DATA_ROOT)
 
 class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
+        data_reader = csv.reader(open(SOURCE_FILE))
         
         def clean_int(value):
-            if value.strip()=='':
-                value=None
+            if value <> '':
+                value = int(value.replace(',', '').replace(' ', ''))
             else:
-                value=int(value)
+                value = None
             return value
-                
-                
-        def import_year_range(year, age_range):
-            range_convert = age_range.replace(' ', '_')
-            source_file = '%s/census.gov/ferrett/children_poverty_%s_%s.csv' % (settings.LOCAL_DATA_ROOT, year, range_convert)
-            print str(source_file)
-            data_reader = csv.reader(open(source_file))     
-            for i, row in enumerate(data_reader):
-                if i == 0:
-                    header_row = row
-                elif i > 0:
-                    record = ChildrenPoverty()
-                    record.year = year
-                    record.age_range = age_range
-                    for j, col in enumerate(row):
-                        col = col.replace(",","")
-                        try:
-                            numtest = float(col)
-                            setattr(record, header_row[j], clean_int(col))
-                        except:
-                            setattr(record, header_row[j], col)
-                    record.save()
         
-        for year in [2010]:  
-            import_year_range(year, "0 to 5")
-            import_year_range(year, "0 to 17")
+        insert_count = 0
+        update_count = 0
+        
+        for i, row in enumerate(data_reader):
+            if i == 0:
+                header_row = row;            
+            else:
+                if len(row[0]):
+                    year = row[0]
+                    state = row[1].lower()
+                    try:
+                        record = ChildrenPoverty.objects.get(year=year,state=state)
+                        update_count = update_count + 1
+                    except MultipleObjectsReturned:
+                        print 'error: multiple records exist for %s %s' % (year, state)
+                        continue
+                    except:
+                        record = ChildrenPoverty(year=year,state=state)
+                        print 'inserting %s %s' % (year, state)
+                        insert_count = insert_count + 1
+                    record.total_population = clean_int(row[2])
+                    record.value = clean_int(row[4])
+                    record.value_standard_error = clean_int(row[5])
+                    record.percent = row[6]
+                    record.percent_standard_error = row[7]
+                    record.save()
+                else:
+                    continue
+                    
+        print '%s records updated, %s inserted' % (update_count, insert_count)
