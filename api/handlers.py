@@ -201,7 +201,7 @@ class CffrProgramHandler(GenericHandler):
         
 class ChildrenPovertyHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('state', 'year', 'age_range')
+        allowed_keys = ('state', 'year')
         model = ChildrenPoverty
         super(ChildrenPovertyHandler, self).__init__(allowed_keys, model)
         

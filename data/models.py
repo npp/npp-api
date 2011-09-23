@@ -114,12 +114,14 @@ class CffrProgramRaw(models.Model):
 class ChildrenPoverty(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
-    age_range = models.CharField(max_length=16)
-    total = models.IntegerField()
-    below_income_level = models.IntegerField()
-    low_income_100_124_pct = models.IntegerField()
-    low_income_125_149_pct = models.IntegerField()
-    low_income_above_150_pct = models.IntegerField()
+    children_total = models.IntegerField()
+    children_total_moe = models.IntegerField()
+    children_poverty = models.IntegerField()
+    children_poverty_moe = models.IntegerField()
+    children_poverty_percent = models.FloatField()
+    children_poverty_percent_moe = models.FloatField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
 class DiplomaRecipientTotal(models.Model):
     year = models.IntegerField()
@@ -188,11 +190,12 @@ class ExpenditurePerPupil(models.Model):
 class FamiliesPoverty(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
-    total = models.IntegerField()
-    below_income_level = models.IntegerField()
-    low_income_100_124_pct = models.IntegerField()
-    low_income_125_149_pct = models.IntegerField()
-    low_income_above_150_pct = models.IntegerField()
+    families_total = models.IntegerField()
+    families_total_moe = models.IntegerField()
+    families_poverty_percent = models.FloatField()
+    families_poverty_percent_moe = models.FloatField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
 class FcnaSpending(models.Model):
     year = models.IntegerField()

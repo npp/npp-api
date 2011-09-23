@@ -57,12 +57,13 @@ class Command(NoArgsCommand):
                         record = ChildrenPoverty(year=year,state=state)
                         print 'inserting %s %s' % (year, state)
                         insert_count = insert_count + 1
-                    record.total_population = clean_int(row[2])
-                    record.value = clean_int(row[4])
-                    record.value_standard_error = clean_int(row[5])
-                    record.percent = row[6]
-                    record.percent_standard_error = row[7]
-                    record.save()
+                        record.children_total = clean_int(row[2])
+                        record.children_total_moe = clean_int(row[3])
+                        record.children_poverty = clean_int(row[4])
+                        record.children_poverty_moe = clean_int(row[5])
+                        record.children_poverty_percent = row[6]
+                        record.children_poverty_percent_moe = row[7]
+                        record.save()
                 else:
                     continue
                     
