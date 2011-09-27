@@ -22,7 +22,7 @@ from data.models import CffrRaw
 #   CREATE INDEX idx_state_postal ON data_cffrraw (state_postal)
 #   CREATE INDEX idx_year ON data_cffrraw (year)
 
-YEAR = 2008
+YEAR = 2010
 SOURCE_PATH = '%s/cffr/%s/' % (settings.LOCAL_DATA_ROOT, YEAR)
 if YEAR > 2002:
     SOURCE_FILE = '%s%s%scffcom.txt' % (SOURCE_PATH, str(YEAR)[2], str(YEAR)[3])
@@ -33,6 +33,8 @@ class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
         f = open(SOURCE_FILE, 'r')
+        error_count = 0
+        insert_count = 0
         for line in f:
             state_code= line[0:2]
             county_code = line[2:5]
@@ -63,6 +65,10 @@ class Command(NoArgsCommand):
             try:
                 record.save()
                 db.reset_queries()
-                print amount
+                insert_count = insert_count + 1
             except:
-                print "FAIL"
+                error_count = error_count + 1
+                print 'load failed for record %s %s %s %s %s %s %s' % (year, state_code, county_code, place_code, program_code, object_type, agency_code)
+                
+        print '%s records loaded. %s errors' % (insert_count, error_count)
+                

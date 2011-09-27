@@ -15,6 +15,8 @@ from data.models import CffrProgramRaw, CffrProgram
 # 1) Ensure that CffrProgramRaw is loaded and up to date
 # 2) Run as Django management command from your project path "python manage.py load_cffr_program"
 
+# safe to re-run: sort of--records with years that are already in the table will not be loaded
+
 class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):

@@ -20,7 +20,7 @@ from data.models import CffrAgency
 # 4) Create indexes in database
 #   CREATE INDEX idx_year ON data_cffragency (year)
 
-YEAR = 2009
+YEAR = 2010
 SOURCE_PATH = '%s/cffr/%s/' % (settings.LOCAL_DATA_ROOT, YEAR)
 SOURCE_FILE = '%s%sagen.txt' % (SOURCE_PATH, str(YEAR)[2:4])    
 

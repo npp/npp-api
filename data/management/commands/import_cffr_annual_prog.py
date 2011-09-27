@@ -23,7 +23,7 @@ from data.models import CffrProgramRaw
 # 4) Create indexes in database
 #   CREATE INDEX idx_year ON data_cffrprogramraw (year)
 
-YEAR = 2009
+YEAR = 2010
 SOURCE_PATH = '%s/cffr/%s/' % (settings.LOCAL_DATA_ROOT, YEAR)
 
 if YEAR < 1993:
@@ -42,18 +42,17 @@ class Command(NoArgsCommand):
         for line in f:
             program_id_code= line[0:6]
             program_name = line[6:79]
+            program_name = program_name.strip().replace('\x96','-') #workaround for some unicode that showed up in the downloaded file
             
-            print (YEAR, program_id_code, program_name)
             record = CffrProgramRaw(year=YEAR, program_id_code=program_id_code, program_name=program_name)
         
             try:
                 record.save()
                 db.reset_queries()
-                print record
                 record_count = record_count + 1
             except:
-                print "FAIL"
+                print 'insert failed for %s %s' % (program_id_code,program_name)
                 error_count = error_count + 1
                 
-        print str(record_count) + ' records loaded from ' + SOURCE_FILE + '. Number of errors was ' + str(error_count) + '.'
+        print '%s records loaded from %s. Number of errors was %s' % (record_count, SOURCE_FILE, error_count)
         

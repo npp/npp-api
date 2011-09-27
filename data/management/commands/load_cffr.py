@@ -18,9 +18,6 @@ from django.db import connection, transaction
 # 1) Ensure that CffrRaw, CffrProgram, State, County is loaded and up to date (especially make sure that any new program codes have been loaded to CffrProgram before running this script)
 # 2) Run as Django management command from your project path "python manage.py load_cffr"
 
-#to run the process for all years, set load_this_year to ''
-load_this_year = '1993'
-
 #class Command(NoArgsCommand):
 class Command(BaseCommand):
     args = '<year>'
