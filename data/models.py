@@ -959,7 +959,7 @@ class CffrState(models.Model):
     year = models.IntegerField()
     state = models.ForeignKey(State)
     cffrprogram = models.ForeignKey(CffrProgram)
-    amount = models.IntegerField()
+    amount = models.BigIntegerField()
     create_date = models.DateField(auto_now_add=True)
     update_date = models.DateField(auto_now=True)
     
