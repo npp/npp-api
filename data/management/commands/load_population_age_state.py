@@ -149,66 +149,6 @@ class Command(NoArgsCommand):
         group by
             p.year, s.id
         ''')
-        
-        #load 1980-1989
-        cursor.execute('''
-        insert into data_populationagestate
-        select 
-            NULL
-        ,   year
-        ,   s.id
-        ,   sum(age_under_5 + age_5_9 + age_10_14 + age_15_19 + age_20_24 + age_25_29 
-            + age_30_34 + age_35_39 + age_40_44 + age_45_49 + age_50_54 + age_55_59
-            + age_60_64 + age_65_69 + age_70_74 + age_75_79 + age_80_84 + age_over_84)
-        ,   sum(age_under_5)
-        ,   0
-        ,   sum(age_5_9)
-        ,   0
-        ,   sum(age_10_14)
-        ,   0
-        ,   sum(age_15_19)
-        ,   0
-        ,sum(age_20_24)
-        ,   0
-        ,   sum(age_25_29)
-        ,   0
-        ,   sum(age_30_34)
-        ,   0
-        ,   sum(age_35_39)
-        ,   0
-        ,   sum(age_40_44 )
-        ,   0
-        ,   sum(age_45_49)
-        ,   0
-        ,   sum(age_50_54)
-        ,   0
-        ,   sum(age_55_59)
-        ,   0
-        ,   sum(age_60_64) 
-        ,   0
-        ,   sum(age_65_69)
-        ,   0
-        ,   sum(age_70_74)
-        ,   0
-        ,   sum(age_75_79)
-        ,   0
-        ,   sum(age_80_84)
-        ,   0
-        ,   sum(age_over_84)
-        ,   0
-        ,   sum(age_65_69 + age_70_74 + age_75_79 + age_80_84 + age_over_84)
-        ,   0
-        ,   sum(age_under_5 + age_5_9 + age_10_14 + age_15_19)
-        ,   0
-        ,   now()
-        ,   now()
-        from 
-            data_populationest80raw p
-            join data_state s
-            on left(p.state_county,2) = s.state_ansi
-        group by
-            p.year, s.id
-            ''')
               
         #calculate percentages
         cursor.execute('''

@@ -85,38 +85,6 @@ class Command(NoArgsCommand):
         group by
             p.year, s.id, c.id
         ''')
-        
-        #load 1980-1989
-        cursor.execute('''
-        insert into data_populationgendercounty
-        select 
-            NULL
-        ,   year
-        ,   s.id
-        ,   c.id
-        ,   sum(age_under_5 + age_5_9 + age_10_14 + age_15_19 + age_20_24 + age_25_29 
-            + age_30_34 + age_35_39 + age_40_44 + age_45_49 + age_50_54 + age_55_59
-            + age_60_64 + age_65_69 + age_70_74 + age_75_79 + age_80_84 + age_over_84) 
-        ,   sum(case when race_gender like "%% female%%" then age_under_5 + age_5_9 + age_10_14 + age_15_19 + age_20_24 + age_25_29 
-            + age_30_34 + age_35_39 + age_40_44 + age_45_49 + age_50_54 + age_55_59
-            + age_60_64 + age_65_69 + age_70_74 + age_75_79 + age_80_84 + age_over_84 else 0 end) 
-        ,   0
-        ,   sum(case when race_gender like "%% male%%" then age_under_5 + age_5_9 + age_10_14 + age_15_19 + age_20_24 + age_25_29 
-            + age_30_34 + age_35_39 + age_40_44 + age_45_49 + age_50_54 + age_55_59
-            + age_60_64 + age_65_69 + age_70_74 + age_75_79 + age_80_84 + age_over_84 else 0 end) 
-        ,   0
-        ,   now()
-        ,   now()
-        from 
-            data_populationest80raw p
-            join data_state s
-            on left(p.state_county,2) = s.state_ansi
-            join data_county c
-            on right(p.state_county,3) = c.county_ansi
-            and c.state_id = s.id
-        group by
-            p.year, s.id, c.id
-            ''')
               
         #calculate percentages
         cursor.execute('''

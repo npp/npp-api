@@ -606,35 +606,6 @@ class PopulationEst90Raw(models.Model):
     
     class Meta:
         unique_together = ('year', 'state', 'county', 'agegrp', 'race_gender', 'ethnic_origin')
-
-class PopulationEst80Raw(models.Model):
-    year = models.IntegerField()
-    state_county = models.CharField(max_length=5)
-    race_gender = models.CharField(max_length=50)
-    age_under_5 = models.IntegerField(null=True)
-    age_5_9 = models.IntegerField(null=True)
-    age_10_14 = models.IntegerField(null=True)
-    age_15_19 = models.IntegerField(null=True)
-    age_20_24 = models.IntegerField(null=True)
-    age_25_29 = models.IntegerField(null=True)
-    age_30_34 = models.IntegerField(null=True)
-    age_35_39 = models.IntegerField(null=True)
-    age_40_44 = models.IntegerField(null=True)
-    age_45_49 = models.IntegerField(null=True)
-    age_50_54 = models.IntegerField(null=True)
-    age_55_59 = models.IntegerField(null=True)
-    age_60_64 = models.IntegerField(null=True)
-    age_65_69 = models.IntegerField(null=True)
-    age_70_74 = models.IntegerField(null=True)
-    age_75_79 = models.IntegerField(null=True)
-    age_80_84 = models.IntegerField(null=True)
-    age_over_84 = models.IntegerField(null=True)
-    create_date = models.DateField(auto_now_add=True)
-    update_date = models.DateField(auto_now=True)
-
-    class Meta:
-        unique_together = ('year', 'state_county', 'race_gender')
-    
     
 class PopulationFamilies(models.Model):
     year = models.IntegerField()
