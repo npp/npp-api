@@ -163,6 +163,7 @@ class Command(NoArgsCommand):
                 normalized_years p
                 JOIN data_state s
                 ON p.state = s.state_ansi
+            WHERE race = 0 AND ethnic_origin = 0 
             GROUP BY
                 YEAR, s.id
                ;

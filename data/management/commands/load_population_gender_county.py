@@ -55,7 +55,7 @@ class Command(NoArgsCommand):
             , 2002 AS 'year'
             FROM 
              data_populationest00raw
-             UNION
+            UNION
              SELECT
               state
             , county
@@ -167,6 +167,7 @@ class Command(NoArgsCommand):
             JOIN data_county c
             ON p.county = c.county_ansi
             AND c.state_id = s.id
+        WHERE race = 0 AND ethnic_origin = 0 
         GROUP BY
             YEAR, s.id, c.id
            ;
