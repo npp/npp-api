@@ -9,8 +9,8 @@ import csv
 # National Priorities Project Data Repository
 # import_population_est_00.py
 
-# Imports yearly census population estimates from the 2000-2009 decard
-# source info: http://www.census.gov/popest/counties/asrh/CC-EST2009-alldata.html (accurate as of 7/6/2011)
+# Imports 2000-2010 county intercensal estimates
+# source info: http://www.census.gov/popest/intercensal/county/CO-EST00INT-SEXRACEHISP.csv (accurate as of 11/2011)
 # npp csv: 
 # destination model: PopulationEst00Raw
 
@@ -36,69 +36,77 @@ class Command(NoArgsCommand):
                 value = None
             return value
             
-        @transaction.commit_on_success
-        def import_state(stateid):
+        def pad_state(value):
+            if len(value) == 1:
+                value = '%s%s' % ('0',value)
+            return value
+            
+        def pad_county(value):
+            if len(value) == 1:
+                value = '%s%s' % ('00',value)
+            elif len(value) == 2:
+                value = '%s%s' % ('0', value)
+            return value
+            
+        def clean_county_name(value):
+            value = unicode(value.strip(),errors='ignore')
+            return value
         
-            source_file = '%s/cc-est2009-alldata-%s.csv' % (SOURCE_FOLDER, stateid)
-            print source_file
-            
-            insert_count = 0
-            update_count = 0
-            
-            try:
-                with open(source_file) as f:
-                    data_reader = csv.reader(f)
-                data_reader = csv.reader(open(source_file))
-            except IOError:
-                print 'cannot open file'
-                return
-            except:
-                print 'unknown file issue'
-                return
-                
-            for i, row in enumerate(data_reader):
-                if i == 0:
-                    header_row = [x.lower() for x in row]
-                else:
-                    state = row[1]
-                    county = row[2]
-                    year = row[5]
-                    agegrp = row[6]
-                    try:
-                        record = PopulationEst00Raw.objects.get(state=state,county=county,year=year,agegrp=agegrp)
-                        update_count = update_count + 1
-                    except:
-                        record = PopulationEst00Raw()
-                        record.state = state
-                        record.county = county
-                        record.year = year
-                        record.agegrp = agegrp
-                        insert_count = insert_count + 1
-                    
-                    for j,col in enumerate(row):
-                        if j > 6:
-                            setattr(record, header_row[j], clean_int(col))
-                        elif header_row[j] == 'ctyname':
-                            setattr(record, header_row[j], unicode(col.strip(),errors='ignore'))
-                        else:
-                            setattr(record, header_row[j], col.strip())
-                            
-                    record.save()
-                    db.reset_queries()
-                    
-            f.close()
-            print 'updates = ' + str(update_count) + '; inserts = ' + str(insert_count)
-            
-        #if state_ansi list is empty, set up to process all states
-        if not len(STATE_ANSI):
-            states = AnsiState.objects.all()
-            for state in states:
-                STATE_ANSI.append(state.ansi_state)
-        
-        #for each state, find and import its corresponding file
         start_time = datetime.now()
-        for state in STATE_ANSI:
-            import_state(state)
+        source_file = '%s/CO-EST00INT-SEXRACEHISP.csv' % SOURCE_FOLDER
+        insert_count = 0
+        update_count = 0
+        
+        try:
+            with open(source_file) as f:
+                data_reader = csv.reader(f)
+            data_reader = csv.reader(open(source_file))
+        except IOError:
+            print 'cannot open file'
+            return
+        except:
+            print 'unknown file issue'
+            return
+            
+        for i, row in enumerate(data_reader):
+            if i == 0:
+                header_row = [x.lower() for x in row]
+            else:
+                state = pad_state(row[1])
+                county = pad_county(row[2])
+                gender = row[5]
+                ethnic_origin = row[6]
+                race = row[7]
+                
+                record, created = PopulationEst00Raw.objects.get_or_create(state=state,county=county,gender=gender,ethnic_origin=ethnic_origin,race=race)
+                record.sumlev = row[0]
+                record.stname = row[3]
+                record.ctyname = clean_county_name(row[4])
+                record.estimatesbase2000 = clean_int(row[8])
+                record.popestimate2000 = clean_int(row[9])
+                record.popestimate2001 = clean_int(row[10])
+                record.popestimate2002 = clean_int(row[11])
+                record.popestimate2003 = clean_int(row[12])
+                record.popestimate2004 = clean_int(row[13])
+                record.popestimate2005 = clean_int(row[14])
+                record.popestimate2006 = clean_int(row[15])
+                record.popestimate2007 = clean_int(row[16])
+                record.popestimate2008 = clean_int(row[17])
+                record.popestimate2009 = clean_int(row[18])
+                record.census2010pop = clean_int(row[19])
+                record.popestimate2010 = clean_int(row[20])
+                
+                if created:
+                    insert_count = insert_count + 1
+                else:
+                    update_count = update_count + 1
+                        
+                record.save()
+                db.reset_queries()
+                
+        f.close()
+        print 'updates = ' + str(update_count) + '; inserts = ' + str(insert_count)
+            
         elapsed_time = datetime.now() - start_time
         print 'elasped time = ' + str(elapsed_time)
         print ' '
