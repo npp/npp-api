@@ -9,40 +9,163 @@ class Command(NoArgsCommand):
     
         cursor = connection.cursor()
         
-        #load 2000-2009
+        #load 2000-2010
         cursor.execute('''
-        insert into data_populationgenderstate
-        select 
-            NULL
-            ,case
-                when p.year = 3 then 2000
-                when p.year = 4 then 2001
-                when p.year = 5 then 2002
-                when p.year = 6 then 2003
-                when p.year = 7 then 2004
-                when p.year = 8 then 2005
-                when p.year = 9 then 2006
-                when p.year = 10 then 2007
-                when p.year = 11 then 2008
-                when p.year = 12 then 2009
-            end 
-        ,   s.id
-        ,   sum(tot_pop)
-        ,   sum(tot_female)
-        ,   0
-        ,   sum(tot_male)
-        ,   0
-        ,   now()
-        ,   now()
-        from 
-            data_populationest00raw p
-            join data_state s
-            on p.state = s.state_ansi
-        where 
-            agegrp <> 0
-            and year between 3 and 12
-        group by
-            p.year, s.id
+        CREATE TEMPORARY TABLE normalized_years (
+            state CHAR(2), 
+            county CHAR(3), 
+            gender CHAR(1), 
+            ethnic_origin CHAR(1),
+            race CHAR(1), 
+            VALUE INT, 
+            YEAR INT);
+        ''')
+        
+        cursor.execute('''
+        INSERT INTO normalized_years
+            SELECT
+              state
+            , county
+            , gender
+            , ethnic_origin
+            , race
+            , popestimate2000 AS 'value'
+            , 2000 AS 'year'
+            FROM 
+             data_populationest00raw
+             UNION
+             SELECT
+              state
+            , county
+            , gender
+            , ethnic_origin
+            , race
+            , popestimate2001 AS 'value'
+            , 2001 AS 'year'                    
+            FROM 
+             data_populationest00raw
+             UNION
+             SELECT
+              state
+            , county
+            , gender
+            , ethnic_origin
+            , race
+            , popestimate2002 AS 'value'
+            , 2002 AS 'year'
+            FROM 
+             data_populationest00raw
+             UNION
+             SELECT
+              state
+            , county
+            , gender
+            , ethnic_origin
+            , race
+            , popestimate2003 AS 'value'
+            , 2003 AS 'year'
+            FROM 
+             data_populationest00raw
+             UNION
+             SELECT
+              state
+            , county
+            , gender
+            , ethnic_origin
+            , race
+            , popestimate2004 AS 'value'
+            , 2004 AS 'year'
+            FROM 
+             data_populationest00raw
+             UNION
+             SELECT
+              state
+            , county
+            , gender
+            , ethnic_origin
+            , race
+            , popestimate2005 AS 'value'
+            , 2005 AS 'year'
+            FROM 
+             data_populationest00raw
+             UNION
+             SELECT
+              state
+            , county
+            , gender
+            , ethnic_origin
+            , race
+            , popestimate2006 AS 'value'
+            , 2006 AS 'year'
+            FROM 
+             data_populationest00raw
+             UNION
+             SELECT
+              state
+            , county
+            , gender
+            , ethnic_origin
+            , race
+            , popestimate2007 AS 'value'
+            , 2007 AS 'year'
+            FROM 
+             data_populationest00raw
+             UNION
+             SELECT
+              state
+            , county
+            , gender
+            , ethnic_origin
+            , race
+            , popestimate2008 AS 'value'
+            , 2008 AS 'year'
+            FROM 
+             data_populationest00raw
+             UNION
+             SELECT
+              state
+            , county
+            , gender
+            , ethnic_origin
+            , race
+            , popestimate2009 AS 'value'
+            , 2009 AS 'year'
+            FROM 
+             data_populationest00raw
+             UNION
+             SELECT
+              state
+            , county
+            , gender
+            , ethnic_origin
+            , race
+            , popestimate2010 AS 'value'
+            , 2010 AS 'year'
+            FROM 
+             data_populationest00raw
+            ;
+            ''')
+
+        cursor.execute('''
+            insert into data_populationgenderstate
+            SELECT 
+                NULL
+            ,   YEAR
+            ,   s.id
+            ,   SUM(CASE WHEN gender = 0 THEN VALUE ELSE 0 END) AS 'total'
+            ,   SUM(CASE WHEN gender = 2 THEN VALUE ELSE 0 END) AS 'female'
+            ,   0
+            ,   SUM(CASE WHEN gender = 1 THEN VALUE ELSE 0 END) AS 'male'
+            ,   0
+            ,   NOW()
+            ,   NOW()
+            FROM 
+                normalized_years p
+                JOIN data_state s
+                ON p.state = s.state_ansi
+            GROUP BY
+                YEAR, s.id
+               ;
         ''')
         
         #load 1990-1999
