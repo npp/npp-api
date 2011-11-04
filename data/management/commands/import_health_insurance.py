@@ -9,7 +9,7 @@ import csv
 # Updated 6/21/2010, Joshua Ruihley, Sunlight Foundation
 
 # Imports Census Health Insurance Coverage Data
-# source info: http://www.census.gov/hhes/www/hlthins/ (accurate as of 6/21/2010)
+# source info: http://www.census.gov/hhes/www/hlthins/ (accurate as of 11/04/2011)
 # npp csv: http://assets.nationalpriorities.org/raw_data/health/all_hi.csv (updated 6/21/2010)
 # destination model:  HealthInsurance
 
@@ -25,12 +25,16 @@ class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
         data_reader = csv.reader(open(SOURCE_FILE))
-        
-        def clean_int(value):
-            if value <> '':
-                value = int(value.replace(',', '').replace(' ', ''))
+            
+        def clean_num(value):
+            if value.strip()=='':
+                value=None
+            elif value.find(".") <> -1:
+                value = value.replace(",","")
+                value = float(value)
             else:
-                value = None
+                value = value.replace(",","")
+                value = int(value)
             return value
 
         for i, row in enumerate(data_reader):
@@ -39,6 +43,18 @@ class Command(NoArgsCommand):
             else:
                 record = HealthInsurance()
                 for j,col in enumerate(row):
-                    setattr(record, header_row[j], col)
+                    if j == 0:
+                        setattr(record, header_row[j], col)
+                    else:
+                        setattr(record, header_row[j], clean_num(col))
+                record.all_people = record.all_people * 1000
+                record.not_covered = record.not_covered * 1000
+                record.covered = record.covered * 1000
+                record.private = record.private * 1000
+                record.private_employment = record.private_employment * 1000
+                record.direct_purchase = record.direct_purchase * 1000
+                record.govt = record.govt * 1000
+                record.medicaid = record.medicaid * 1000
+                record.medicare = record.medicare * 1000
+                record.military = record.military * 1000
                 record.save()
-                
