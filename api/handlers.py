@@ -158,7 +158,7 @@ class CffrHandler(GenericHandler):
         
     def read(self, request, *args, **kwargs):
         self.request = request
-        fields = ['year', 'amount', ('cffrprogram', ('program_code', 'program_name')), ('state', ('state_ansi', 'state_abbr', 'state_name'))]
+        fields = ['year', 'amount', 'amount_per_capita', ('cffrprogram', ('program_code', 'program_name')), ('state', ('state_ansi', 'state_abbr', 'state_name'))]
         allowed_keys = ['year', 'program_code', 'state_abbr', 'state_ansi']
         aggregate = self.request.GET.get('total')
         if aggregate == 'state':
