@@ -119,13 +119,14 @@ class Command(BaseCommand):
                 
                 #finally, aggregate raw cffr data to the county level & insert it
                 cursor.execute('''
-                INSERT INTO data_cffr (year, state_id, county_id, cffrprogram_id, amount, create_date, update_date)
+                INSERT INTO data_cffr (year, state_id, county_id, cffrprogram_id, amount, amount_per_capita, create_date, update_date)
                 SELECT
                     c.year
                 ,   s.id
                 ,   co.id
                 ,   p.id
                 ,   SUM(amount_adjusted)
+                ,   ROUND(SUM(amount_adjusted)/pop.total,2)
                 ,   NOW()
                 ,   NOW()
                 FROM
@@ -138,6 +139,9 @@ class Command(BaseCommand):
                     JOIN data_cffrprogram p
                     ON c.program_code = p.program_code
                     AND c.year = p.year
+                    LEFT JOIN data_populationgendercounty pop
+                    ON co.id = pop.county_id
+                    AND c.year = pop.year
                 WHERE
                     c.year = %s
                 GROUP BY
@@ -156,21 +160,25 @@ class Command(BaseCommand):
                 cursor = connection.cursor()
                 cursor.execute('''
                 insert into data_cffrstate (
-                    year, state_id, cffrprogram_id, amount, create_date, update_date)
+                    year, state_id, cffrprogram_id, amount, amount_per_capita, create_date, update_date)
                 select 
-                    year
-                ,   state_id
+                    c.year
+                ,   c.state_id
                 ,   cffrprogram_id
                 ,   sum(amount)
+                ,   round(sum(amount)/pop.total,2)
                 ,   now()
                 ,   now()
                 from
-                    data_cffr
+                    data_cffr c
+                    left join data_populationgenderstate pop
+                    on c.state_id = pop.state_id 
+                    and c.year = pop.year
                 where
-                    year= %s
+                    c.year = %s
                 group by
-                    year
-                ,   state_id
+                    c.year
+                ,   c.state_id
                 ,   cffrprogram_id
                 ''',[year_current])
                 

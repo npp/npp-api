@@ -22,7 +22,7 @@ from data.models import CffrRaw
 #   CREATE INDEX idx_state_postal ON data_cffrraw (state_postal)
 #   CREATE INDEX idx_year ON data_cffrraw (year)
 
-YEAR = 2010
+YEAR = 2009
 SOURCE_PATH = '%s/cffr/%s/' % (settings.LOCAL_DATA_ROOT, YEAR)
 if YEAR > 2002:
     SOURCE_FILE = '%s%s%scffcom.txt' % (SOURCE_PATH, str(YEAR)[2], str(YEAR)[3])

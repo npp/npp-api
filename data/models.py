@@ -944,6 +944,7 @@ class Cffr(models.Model):
     county = models.ForeignKey(County)
     cffrprogram = models.ForeignKey(CffrProgram)
     amount = models.BigIntegerField()
+    amount_per_capita = models.DecimalField(max_digits=20, decimal_places=2, null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     
@@ -955,6 +956,7 @@ class CffrState(models.Model):
     state = models.ForeignKey(State)
     cffrprogram = models.ForeignKey(CffrProgram)
     amount = models.BigIntegerField()
+    amount_per_capita = models.DecimalField(max_digits=20, decimal_places=2, null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     
