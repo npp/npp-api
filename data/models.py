@@ -211,6 +211,23 @@ class FederalImpactAid(models.Model):
     agency_id = models.CharField(max_length=7)
     amount = models.IntegerField(null=True)
     
+class FederalTaxCollectionStateRaw(models.Model):
+    year = models.IntegerField()
+    state = models.CharField(max_length=255)
+    total_collections = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    business_income_taxes = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    individual_total = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    individual_witheld_fica = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    individual_notwitheld_seca = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    individual_unemployment = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    individual_railroad_retirement = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    individual_estate_trust_income = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    estate_tax = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    gift_tax = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    excise_taxes = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
 class FipsCountyCongressDistrict(models.Model):
     state_code = models.CharField(max_length=2)
     county_code = models.CharField(max_length=3)
@@ -962,6 +979,23 @@ class CffrState(models.Model):
     
     class Meta:
         unique_together = ('year', 'state', 'cffrprogram')
+        
+class FederalTaxCollectionState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    total = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    business_income = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    individual_total = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    individual_witheld_fica = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    individual_notwitheld_seca = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    individual_unemployment = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    individual_railroad_retirement = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    individual_estate_trust_income = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    estate = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    gift = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    excise = models.DecimalField(max_digits=20,decimal_places=2,null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
         
 class FoodSecurityState(models.Model):
     year = models.IntegerField()
