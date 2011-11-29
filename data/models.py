@@ -996,6 +996,9 @@ class FederalTaxCollectionState(models.Model):
     excise = models.DecimalField(max_digits=20,decimal_places=2,null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state')
         
 class FoodSecurityState(models.Model):
     year = models.IntegerField()
