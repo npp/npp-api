@@ -30,6 +30,7 @@ expenditure_per_pupil_handler = Resource(ExpenditurePerPupilHandler)
 families_poverty_handler = Resource(FamiliesPovertyHandler)
 fcna_spending_handler = Resource(FcnaSpendingHandler)
 federal_impact_aid_handler = Resource(FederalImpactAidHandler)
+federal_tax_collection_state_handler = Resource(FederalTaxCollectionStateHandler)
 fips_county_congress_district_handler = Resource(FipsCountyCongressDistrictHandler)
 fips_state_handler = Resource(FipsStateHandler)
 food_security_state_handler = Resource(FoodSecurityStateHandler)
@@ -126,6 +127,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^families_poverty.html$', 'direct_to_template', {'template': 'api/families_poverty.html'}),
     (r'^fcna_spending.html$', 'direct_to_template', {'template': 'api/fcna_spending.html'}),
     (r'^federal_impact_aid.html$', 'direct_to_template', {'template': 'api/federal_impact_aid.html'}),
+    (r'^federal_tax_collection.html$', 'direct_to_template', {'template': 'api/federal_tax_collection.html'}),
     (r'^fips_county_congress_district.html$', 'direct_to_template', {'template': 'api/fips_county_congress_district.html'}),
     (r'^food_security.html$', 'direct_to_template', {'template': 'api/food_security.html'}),
     (r'^free_lunch_eligible.html$', 'direct_to_template', {'template': 'api/free_lunch_eligible.html'}),
@@ -247,6 +249,8 @@ urlpatterns += patterns('',
     url(r'^fcna_spending/list\.(?P<emitter_format>.+)', fcna_spending_handler),
     url(r'^federal_impact_aid/', federal_impact_aid_handler),
     url(r'^federal_impact_aid/list\.(?P<emitter_format>.+)', federal_impact_aid_handler),
+    url(r'^federal_tax_collection_state/', federal_tax_collection_state_handler),
+    url(r'^federal_tax_collection_state/list\.(?P<emitter_format>.+)', federal_tax_collection_state_handler),
     url(r'^fips_county_congress_district/$', fips_county_congress_district_handler),
     url(r'^fips_county_congress_district/list\.(?P<emitter_format>.+)', fips_county_congress_district_handler),
     url(r'^fips_state/$', fips_state_handler),
