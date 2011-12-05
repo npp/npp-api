@@ -12,6 +12,8 @@ budget_category_subfunctions_handler = Resource(BudgetCategorySubfunctionsHandle
 cffr_handler = Resource(CffrHandler)
 cffr_agency_handler = Resource(CffrAgencyHandler)
 cffr_geo_handler = Resource(CffrGeoHandler)
+cffr_individual_county_handler = Resource(CffrIndividualCountyHandler)
+cffr_individual_state_handler = Resource(CffrIndividualStateHandler)
 cffr_object_code_handler = Resource(CffrObjectCodeHandler)
 cffr_program_handler = Resource(CffrProgramHandler)
 children_poverty_handler = Resource(ChildrenPovertyHandler)
@@ -154,6 +156,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^new_aids_cases.html$', 'direct_to_template', {'template': 'api/new_aids_cases.html'}),
     (r'^other_federal_revenue.html$', 'direct_to_template', {'template': 'api/other_federal_revenue.html'}),
     (r'^owners_renters.html$', 'direct_to_template', {'template': 'api/owners_renters.html'}),
+    (r'^payments_individuals.html$', 'direct_to_template', {'template': 'api/payments_individuals.html'}),
     (r'^people_in_poverty.html$', 'direct_to_template', {'template': 'api/people_in_poverty.html'}),
     (r'^population_congressional_district.html$', 'direct_to_template', {'template': 'api/population_congressional_district.html'}),
     (r'^population_families.html$', 'direct_to_template', {'template': 'api/population_families.html'}),
@@ -307,6 +310,10 @@ urlpatterns += patterns('',
     url(r'^other_federal_revenue/list\.(?P<emitter_format>.+)', other_federal_revenue_handler),
     url(r'^owners_renters/$', owners_renters_handler),
     url(r'^owners_renters/list\.(?P<emitter_format>.+)', owners_renters_handler),
+    url(r'^payments_individuals_county/$', cffr_individual_county_handler),
+    url(r'^payments_individuals_county/list\.(?P<emitter_format>.+)', cffr_individual_county_handler),
+    url(r'^payments_individuals_state/$', cffr_individual_state_handler),
+    url(r'^payments_individuals_state/list\.(?P<emitter_format>.+)', cffr_individual_state_handler),
     url(r'^people_in_poverty/$', people_in_poverty_handler),
     url(r'^people_in_poverty/list\.(?P<emitter_format>.+)', people_in_poverty_handler),
     url(r'^population_congressional_district/$', population_congressional_district_handler),

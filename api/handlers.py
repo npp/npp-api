@@ -174,6 +174,20 @@ class CffrHandler(GenericHandler):
         self.allowed_keys = tuple(allowed_keys)
         return super(CffrHandler, self).read(self, *args, **kwargs)
         
+class CffrIndividualCountyHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('year', 'state_ansi', 'state_abbr', 'county_ansi')
+        fields = ('year', 'amount', 'amount_per_capita', ('state', ('state_ansi', 'state_abbr', 'state_name')),('county', ('county_ansi', 'county_name')))
+        model = CffrIndividualCounty
+        super(CffrIndividualCountyHandler, self).__init__(allowed_keys, model, fields)
+        
+class CffrIndividualStateHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('year', 'state_ansi', 'state_abbr')
+        fields = ('year', 'amount', 'amount_per_capita', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        model = CffrIndividualState
+        super(CffrIndividualStateHandler, self).__init__(allowed_keys, model, fields)
+        
 class CffrAgencyHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('id', 'year', 'agency_code', 'agency_name')
