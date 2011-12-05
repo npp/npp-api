@@ -980,6 +980,29 @@ class CffrState(models.Model):
     class Meta:
         unique_together = ('year', 'state', 'cffrprogram')
         
+class CffrIndividualCounty(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    county = models.ForeignKey(County)
+    amount = models.BigIntegerField()
+    amount_per_capita = models.DecimalField(max_digits=20, decimal_places=2, null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state', 'county')
+
+class CffrIndividualState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    amount = models.BigIntegerField()
+    amount_per_capita = models.DecimalField(max_digits=20, decimal_places=2, null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state')
+        
 class FederalTaxCollectionState(models.Model):
     year = models.IntegerField()
     state = models.ForeignKey(State)
