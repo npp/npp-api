@@ -2,7 +2,7 @@ from django import db
 #from django.core.management.base import NoArgsCommand
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Sum
-from data.models import CffrRaw, CffrProgram, CffrState, State, County, Cffr
+from data.models import CffrRaw, CffrProgram, CffrState, State, County, Cffr, CffrIndividualCounty, CffrIndividualState
 from django.db import connection, transaction
 
 # National Priorities Project Data Repository
@@ -187,12 +187,88 @@ class Command(BaseCommand):
             else:
                 print str(year_current) + ' skipped: ' + str(records_current) + ' state records already loaded for that year.'
                 
+        def load_year_individual_county(year_current):
+        
+            records_current = CffrIndividualCounty.objects.filter(year=year_current).count()
+            #if we already have records loaded for this year, skip it
+            if records_current == 0:
+            
+                cursor = connection.cursor()
+                cursor.execute('''
+                INSERT INTO data_cffrindividualcounty (year, state_id, county_id, amount, amount_per_capita, create_date, update_date)
+                SELECT
+                    c.year
+                ,   s.id
+                ,   co.id
+                ,   SUM(amount_adjusted)
+                ,   ROUND(SUM(amount_adjusted)/pop.total,2)
+                ,   NOW()
+                ,   NOW()
+                FROM
+                    data_cffrraw c
+                    JOIN data_state s
+                    ON c.state_code = s.state_ansi
+                    JOIN data_county co
+                    ON c.county_code = co.county_ansi
+                    AND s.id = co.state_id
+                    LEFT JOIN data_populationgendercounty pop
+                    ON co.id = pop.county_id
+                    AND c.year = pop.year
+                WHERE
+                    c.year = %s
+                    and c.object_type in ('do','dr')
+                GROUP BY
+                    c.year, s.id, co.id
+                ''',[year_current])
+                transaction.commit_unless_managed()
+               
+            else:
+                print str(year_current) + ' individual payment load skipped: ' + str(records_current) + ' county records already loaded for that year.'
+            
+        def load_year_individual_state(year_current):
+                
+            records_current = CffrIndividualState.objects.filter(year=year_current).count()
+            #if we already have records loaded for this year, skip it
+            if records_current == 0:
+            
+                cursor = connection.cursor()
+                cursor.execute('''
+                insert into data_cffrindividualstate (
+                    year, state_id, amount, amount_per_capita, create_date, update_date)
+                select 
+                    c.year
+                ,   c.state_id
+                ,   sum(amount)
+                ,   round(sum(amount)/pop.total,2)
+                ,   now()
+                ,   now()
+                from
+                    data_cffrindividualcounty c
+                    left join data_populationgenderstate pop
+                    on c.state_id = pop.state_id 
+                    and c.year = pop.year
+                where
+                    c.year = %s
+                group by
+                    c.year
+                ,   c.state_id
+                ''',[year_current])
+                transaction.commit_unless_managed()
+                
+            else:
+                print str(year_current) + '  individual payment load skipped: ' + str(records_current) + ' state records already loaded for that year.'
+                
         if len(args):
             for year in args:
                 load_year_county(year)
                 print str(year) + ': cffrcounty done'
                 load_year_state(year)
                 print str(year) + ': cffrstate done'
+                load_year_individual_county(year)
+                print '%s: cffrindividualcounty done' % year
+                load_year_individual_state(year)
+                print '%s: cffrindividualyear done' % year
+                
         else:
             #if no year arguments specified, load everything
             for y in CffrRaw.objects.values('year').distinct():
@@ -202,3 +278,7 @@ class Command(BaseCommand):
                     print str(year_current) + ': cffrcounty done'
                     load_year_state(year_current)
                     print str(year_current) + ': cffrstate done'
+                    load_year_individual_county(year_current)
+                    print '%s: cffrindividualcounty done'  % year_current
+                    load_year_individual_state(year_current) 
+                    print '%s: cffrindividualyear done' % year_current
