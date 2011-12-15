@@ -46,7 +46,6 @@ high_school_other_handler = Resource(HighSchoolOtherHandler)
 high_school_dropouts_handler = Resource(HighSchoolDropoutsHandler)
 housing_units_handler = Resource(HousingUnitsHandler)
 individual_education_programs_handler = Resource(IndividualEducationProgramsHandler)
-irs_gross_collections_handler = Resource(IrsGrossCollectionsHandler)
 kids_health_insurance_handler = Resource(KidsHealthInsuranceHandler)
 labor_force_county_handler = Resource(LaborForceCountyHandler)
 labor_underutilization_state_handler = Resource(LaborUnderutilizationStateHandler)
@@ -142,7 +141,6 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^high_school_other.html$', 'direct_to_template', {'template': 'api/high_school_other.html'}),
     (r'^housing_units.html$', 'direct_to_template', {'template': 'api/housing_units.html'}),
     (r'^individual_education_programs.html$', 'direct_to_template', {'template': 'api/individual_education_programs.html'}),
-    (r'^irs_gross_collections.html$', 'direct_to_template', {'template': 'api/irs_gross_collections.html'}),
     (r'^kids_health_insurance.html$', 'direct_to_template', {'template': 'api/kids_health_insurance.html'}),
     (r'^labor_force.html$', 'direct_to_template', {'template': 'api/labor_force.html'}),
     (r'^labor_underutilization.html$', 'direct_to_template', {'template': 'api/labor_underutilization.html'}),
@@ -280,8 +278,6 @@ urlpatterns += patterns('',
     url(r'^housing_units/list\.(?P<emitter_format>.+)', housing_units_handler),
     url(r'^individual_education_programs/$', individual_education_programs_handler),
     url(r'^individual_education_programs/list\.(?P<emitter_format>.+)', individual_education_programs_handler),
-    url(r'^irs_gross_collections/$', irs_gross_collections_handler),
-    url(r'^irs_gross_collections/list\.(?P<emitter_format>.+)', irs_gross_collections_handler),
     url(r'^kids_health_insurance/$', kids_health_insurance_handler),
     url(r'^kids_health_insurance/list\.(?P<emitter_format>.+)', kids_health_insurance_handler),
     url(r'^labor_force_county/$', labor_force_county_handler),

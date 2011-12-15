@@ -398,12 +398,6 @@ class IndividualEducationProgramsHandler(GenericHandler):
         model = IndividualEducationPrograms
         super(IndividualEducationProgramsHandler, self).__init__(allowed_keys, model)
         
-class IrsGrossCollectionsHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = IrsGrossCollections
-        super(IrsGrossCollectionsHandler, self).__init__(allowed_keys, model)
-        
 class KidsHealthInsuranceHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state', 'year')

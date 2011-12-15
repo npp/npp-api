@@ -346,21 +346,6 @@ class IndividualEducationPrograms(models.Model):
     agency_id = models.CharField(max_length=7)
     amount = models.IntegerField(null=True)
     
-class IrsGrossCollections(models.Model):
-    year = models.IntegerField()
-    state = models.CharField(max_length=255)
-    total_collections = models.IntegerField()
-    business_income_taxes = models.IntegerField()
-    individual_total = models.IntegerField()
-    individual_witheld_fica = models.IntegerField(null=True)
-    individual_notwitheld_seca = models.IntegerField(null=True)
-    individual_unemployment = models.IntegerField(null=True)
-    individual_railroad_retirement = models.IntegerField(null=True)
-    individual_estate_trust_income = models.IntegerField(null=True)
-    estate_tax = models.IntegerField(null=True)
-    gift_tax = models.IntegerField(null=True)
-    excise_taxes = models.IntegerField(null=True)
-    
 class KidsHealthInsurance(models.Model):
     state = models.CharField(max_length=64)
     year = models.IntegerField()
