@@ -313,9 +313,9 @@ class FederalTaxCollectionStateHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('year', 'state_abbr', 'state_ansi')
         model = FederalTaxCollectionState
-        fields = ('year', 'total', 'business_income', 'individual_total', 'individual_witheld_fica',
-            'individual_notwitheld_seca', 'individual_unemployment', 'individual_railroad_retirement',
-            'individual_estate_trust_income', 'estate', 'gift', 'excise', 
+        fields = ('year', 'total', 'business_income', 'individual_total', 'witheld_income_and_fica',
+            'notwitheld_income_and_seca', 'unemployment_insurance', 'railroad_retirement',
+            'estate_trust_income', 'estate', 'gift', 'excise', 
             ('state', ('state_ansi', 'state_abbr', 'state_name')))
         super(FederalTaxCollectionStateHandler, self).__init__(allowed_keys, model,fields)
         
