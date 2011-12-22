@@ -21,6 +21,13 @@ from django.db.models import Sum, Q
 class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
+    
+        def clean_value(value):
+            if value is not None:
+                return value
+            else:
+                return 0
+            
         state_name = ''
         total_inserts = 0
         total_updates = 0
@@ -46,15 +53,17 @@ class Command(NoArgsCommand):
             record, created = FederalTaxCollectionState.objects.get_or_create(state=state_ref_current,year=r.year)
             record.total = r.total_collections
             record.business_income = r.business_income_taxes
-            record.individual_total = r.individual_total
-            record.individual_witheld_fica = r.individual_witheld_fica
-            record.individual_notwitheld_seca = r.individual_notwitheld_seca
-            record.individual_unemployment = r.individual_unemployment
-            record.individual_railroad_retirement = r.individual_railroad_retirement
-            record.individual_estate_trust_income = r.individual_estate_trust_income
+            record.witheld_income_and_fica = r.individual_witheld_fica
+            record.notwitheld_income_and_seca = r.individual_notwitheld_seca
+            record.unemployment_insurance = r.unemployment_insurance
+            record.railroad_retirement = r.railroad_retirement
+            record.estate_trust_income = r.estate_trust_income_tax
             record.estate = r.estate_tax
             record.gift = r.gift_tax
             record.excise = r.excise_taxes
+            record.individual_total = (clean_value(r.individual_witheld_fica) + 
+                clean_value(r. individual_notwitheld_seca) + clean_value(r.estate_trust_income_tax) + 
+                clean_value(r.estate_tax) + clean_value(r.gift_tax) + clean_value(r.excise_taxes))
             if created:
                 total_inserts = total_inserts + 1
             else:
@@ -69,12 +78,11 @@ class Command(NoArgsCommand):
             .annotate(
                 total_collections=Sum('total_collections'),
                 business_income=Sum('business_income_taxes'),
-                individual_total=Sum('individual_total'),
-                individual_witheld_fica=Sum('individual_witheld_fica'),
-                individual_notwitheld_seca=Sum('individual_notwitheld_seca'),
-                individual_unemployment=Sum('individual_unemployment'),
-                individual_railroad_retirement=Sum('individual_railroad_retirement'),
-                individual_estate_trust_income=Sum('individual_estate_trust_income'),
+                witheld_income_and_fica=Sum('individual_witheld_fica'),
+                notwitheld_income_and_seca=Sum('individual_notwitheld_seca'),
+                unemployment_insurance=Sum('unemployment_insurance'),
+                railroad_retirement=Sum('railroad_retirement'),
+                estate_trust_income=Sum('estate_trust_income_tax'),
                 estate=Sum('estate_tax'),
                 gift=Sum('gift_tax'),
                 excise=Sum('excise_taxes')
@@ -83,15 +91,18 @@ class Command(NoArgsCommand):
             record, created = FederalTaxCollectionState.objects.get_or_create(state=state_ref_current,year=i['year'])
             record.total = i.get('total_collections')
             record.business_income = i.get('business_income')
-            record.individual_total = i.get('individual_total')
-            record.individual_witheld_fica = i.get('individual_witheld_fica')
-            record.individual_notwitheld_seca = i.get('individual_notwitheld_seca')
-            record.individual_unemployment = i.get('individual_unemployment')
-            record.individual_railroad_retirement = i.get('individual_railroad_retirement')
-            record.individual_estate_trust_income = i.get('individual_estate_trust_income')
+            record.witheld_income_and_fica = i.get('witheld_income_and_fica')
+            record.notwitheld_income_and_seca = i.get('notwitheld_income_and_seca')
+            record.unemployment_insurance = i.get('unemployment_insurance')
+            record.railroad_retirement = i.get('railroad_retirement')
+            record.estate_trust_income = i.get('estate_trust_income_tax')
             record.estate = i.get('estate')
             record.gift = i.get('gift')
             record.excise = i.get('excise')
+            record.individual_total = (clean_value(i.get('witheld_income_and_fica')) + 
+                clean_value(i.get('notwitheld_income_and_seca')) +
+                clean_value(i.get('estate_trust_income')) + clean_value(i.get('estate')) + 
+                clean_value(i.get('gift')) + clean_value(i.get('excise')))
             if created:
                 total_inserts = total_inserts + 1
             else:
