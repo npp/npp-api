@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'npp_api.api',
     'piston',
     'sentry.client',
+    'south',
 )
 
 #api reocrds per page
