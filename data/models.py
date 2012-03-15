@@ -428,6 +428,10 @@ class MedicareEnrollment(models.Model):
     state = models.CharField(max_length=32)
     year = models.IntegerField()
     value = models.IntegerField(null=True)
+    population = models.IntegerField(null=True)
+    percent = models.FloatField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
 class MigrantStudents(models.Model):
     year = models.IntegerField()
