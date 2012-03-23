@@ -418,6 +418,15 @@ class MathScienceSpending(models.Model):
     agency_name = models.CharField(max_length=128)
     agency_id = models.CharField(max_length=7)
     amount = models.IntegerField(null=True)
+    
+class MedianHouseholdIncomeStateRaw(models.Model):
+    year = models.IntegerField()
+    state_fips = models.CharField(max_length=2)
+    state = models.CharField(max_length=32)
+    median_household_income = models.FloatField(null=True)
+    median_household_income_moe = models.IntegerField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
 
 class MedicaidParticipation(models.Model):
     state = models.CharField(max_length=32)
@@ -773,11 +782,6 @@ class StateGdpPre97(models.Model):
     component_code = models.IntegerField()
     component = models.CharField(max_length=128)
     value = models.IntegerField()
-       
-class StateMedianIncome(models.Model):
-    year = models.IntegerField()
-    state = models.CharField(max_length=32)
-    median_income = models.FloatField()
     
 class StatePostalCodes(models.Model):
     code = models.CharField(max_length=2)
@@ -1064,7 +1068,17 @@ class LaborUnderutilizationState(models.Model):
     
     class Meta:
         unique_together = ('year', 'state')
-
+        
+class MedianIncomeState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    median_household_income = models.FloatField()
+    median_household_income_moe = models.IntegerField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state')
 
 #July 2011.  Following models (PopulationCounty & PopulationState would, in theory, hold a normalized structure of every possible year, gender, race, ethnicity, & age combination for the census population estimates.  Because it wasn't practical to load & implement this highly normalized model in the API and search tool, the population data facets are presented as individual APIs.  This is easier, but it does mean we lose the ability to combine the facets (e.g., # of hispanic black females over 65).  Leaving the proposed model here for future reference.
 #class PopulationCounty(models.Model):
