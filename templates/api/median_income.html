@@ -1,0 +1,29 @@
+{% extends "api/api_base.html" %}
+
+{% block content %}
+<h1>Median Income</h1>
+
+<div class="api_urls">
+	<div><span class="api_urls_header">URL Format: </div>
+	<div>http://data.nationalpriorities.org/api/&lt;source&gt;/list.&lt;format&gt;?...</div>
+</div>
+
+<h2>Sources</h2>
+
+<p>Available geography:
+<ul>
+    <li>state</li>
+</ul>
+</p>
+
+<div class="api_urls">
+<ul>
+	<li>
+		<div>State Median Income</div>
+		<div>Median income.</div>
+		<div>Allowed Keys: 'year', 'state', 'state_ansi'</div>
+		<div>Example: <a href="/api/median_income_state/list.json?state_abbr=LA&year=2010">http://data.nationalpriorities.org/api/median_income_state/list.json?state_abbr=LA&amp;year=2010</a></div>
+	</li>
+</ul>
+</div>
+{% endblock %}

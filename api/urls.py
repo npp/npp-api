@@ -50,6 +50,7 @@ kids_health_insurance_handler = Resource(KidsHealthInsuranceHandler)
 labor_force_county_handler = Resource(LaborForceCountyHandler)
 labor_underutilization_state_handler = Resource(LaborUnderutilizationStateHandler)
 math_science_spending_handler = Resource(MathScienceSpendingHandler)
+median_income_state_handler = Resource(MedianIncomeStateHandler)
 medicaid_participation_handler = Resource(MedicaidParticipationHandler)
 medicare_enrollment_handler = Resource(MedicareEnrollmentHandler)
 migrant_students_handler = Resource(MigrantStudentsHandler)
@@ -89,7 +90,6 @@ state_gdp_handler = Resource(StateGdpHandler)
 state_gdp_pre97_handler = Resource(StateGdpPre97Handler)
 state_emissions_handler = Resource(StateEmissionsHandler)
 state_labor_force_participation_handler = Resource(StateLaborForceParticipationHandler)
-state_median_income_handler = Resource(StateMedianIncomeHandler)
 state_postal_codes_handler = Resource(StatePostalCodesHandler)
 state_renewable_energy_handler = Resource(StateRenewableEnergyHandler)
 summer_lunch_participation_handler = Resource(SummerLunchParticipationHandler)
@@ -146,6 +146,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^labor_underutilization.html$', 'direct_to_template', {'template': 'api/labor_underutilization.html'}),
     (r'^nces_school_district.html$', 'direct_to_template', {'template': 'api/nces_school_district.html'}),
     (r'^math_science_spending.html$', 'direct_to_template', {'template': 'api/math_science_spending.html'}),
+    (r'^median_income.html$', 'direct_to_template', {'template': 'api/median_income.html'}),
     (r'^medicaid_participation.html$', 'direct_to_template', {'template': 'api/medicaid_participation.html'}),
     (r'^medicare_enrollment.html$', 'direct_to_template', {'template': 'api/medicare_enrollment.html'}),
     (r'^migrant_students.html$', 'direct_to_template', {'template': 'api/migrant_students.html'}),
@@ -179,7 +180,6 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^state_gdp.html$', 'direct_to_template', {'template': 'api/state_gdp.html'}),
     (r'^state_gdp_pre97.html$', 'direct_to_template', {'template': 'api/state_gdp_pre97.html'}),
     (r'^state_labor_force_participation.html$', 'direct_to_template', {'template': 'api/state_labor_force_participation.html'}),
-    (r'^state_median_income.html$', 'direct_to_template', {'template': 'api/state_median_income.html'}),
     (r'^state_renewable_energy.html$', 'direct_to_template', {'template': 'api/state_renewable_energy.html'}),
     (r'^vehicle_registrations.html$', 'direct_to_template', {'template':'api/vehicle_registrations.html'}),
     (r'^summer_lunch_participation.html$', 'direct_to_template', {'template': 'api/summer_lunch_participation.html'}),
@@ -286,6 +286,8 @@ urlpatterns += patterns('',
     url(r'^labor_underutilization_state/list\.(?P<emitter_format>.+)',labor_underutilization_state_handler),
     url(r'^math_science_spending/$', math_science_spending_handler),
     url(r'^math_science_spending/list\.(?P<emitter_format>.+)', math_science_spending_handler),
+    url(r'^median_income_state/$', median_income_state_handler),
+    url(r'^median_income_state/list\.(?P<emitter_format>.+)', median_income_state_handler),
     url(r'^medicaid_participation/$', medicaid_participation_handler),
     url(r'^medicaid_participation/list\.(?P<emitter_format>.+)', medicaid_participation_handler),
     url(r'^medicare_enrollment/$', medicare_enrollment_handler),
@@ -368,8 +370,6 @@ urlpatterns += patterns('',
     url(r'^state_gdp_pre97/list\.(?P<emitter_format>.+)', state_gdp_pre97_handler),
     url(r'^state_labor_force_participation/$', state_labor_force_participation_handler),
     url(r'^state_labor_force_participation/list\.(?P<emitter_format>.+)', state_labor_force_participation_handler),
-    url(r'^state_median_income/$', state_median_income_handler),
-    url(r'^state_median_income/list\.(?P<emitter_format>.+)',state_median_income_handler),
     url(r'^state_renewable_energy/$', state_renewable_energy_handler),
     url(r'^state_renewable_energy/list\.(?P<emitter_format>.+)',state_renewable_energy_handler),
     url(r'^state_postal_codes/$', state_postal_codes_handler),

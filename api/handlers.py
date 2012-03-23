@@ -423,6 +423,14 @@ class MathScienceSpendingHandler(GenericHandler):
         allowed_keys = ('state', 'year', 'agency_name', 'agency_id')
         model = MathScienceSpending
         super(MathScienceSpendingHandler, self).__init__(allowed_keys, model)
+        
+class MedianIncomeStateHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('year', 'state_abbr', 'state_ansi')
+        model = MedianIncomeState
+        fields = ('year', 'total', 'median_household_income', 'median_household_income_moe',
+            ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(MedianIncomeStateHandler, self).__init__(allowed_keys, model,fields)
 
 class MedicaidParticipationHandler(GenericHandler):
     def __init__(self):
@@ -672,12 +680,6 @@ class StateLaborForceParticipationHandler(GenericHandler):
         allowed_keys = ('state', 'year')
         model = StateLaborForceParticipation
         super(StateLaborForceParticipationHandler, self).__init__(allowed_keys, model)
-        
-class StateMedianIncomeHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = StateMedianIncome
-        super(StateMedianIncomeHandler, self).__init__(allowed_keys, model)
         
 class StatePostalCodesHandler(GenericHandler):
     def __init__(self):
