@@ -1,16 +1,20 @@
 from django import db
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
+from django.core.exceptions import MultipleObjectsReturned
 from data.models import AlternativeFuelVehicles
+from npp_api.data.utils import clean_num
 import csv
+import sys
+import os.path
 
 # National Priorities Project Data Repository
 # import_alternative_fuel_vehicles.py
 # Updated 5/17/2010, Joshua Ruihley, Sunlight Foundation
 
 # Imports Department of Energy Alternative Fuel Vehicles Total
-# source info: http://www.eia.doe.gov/cneaf/alternate/page/atftables/attf_v2.xls (accurate as of 5/17/2010)
-# npp csv: http://assets.nationalpriorities.org/raw_data/doe.gov/attf_v2.csv (updated 5/17/2010)
+# source info: http://www.eia.gov/renewable/alternative_transport_vehicles/xls/attf_V2.xls (accurate as of 4/2/2012)
+# npp csv: http://assets.nationalpriorities.org/raw_data/energy/attf_v2.csv (updated 5/17/2010)
 # destination model:  AlternativeFuelVehicles
 
 # HOWTO:
@@ -19,37 +23,35 @@ import csv
 # 3) change SOURCE_FILE variable to the the path of the source file you just created
 # 5) Run as Django management command from your project path "python manage.py import_alternative_fuel_vehicles
 #
-# SAFE TO RE-RUN OR RELOAD A YEAR: NO
-
-SOURCE_FILE = '%s/doe.gov/attf_v2.csv' % (settings.LOCAL_DATA_ROOT)
+# SAFE TO RE-RUN OR RELOAD A YEAR: YES
 
 class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
-        data_reader = csv.reader(open(SOURCE_FILE))
-        first_year = 2004
-        last_year = 2008
-        total_years = last_year - first_year + 1
-
-        #populate year array
-        years = []
-        for h in range(0, total_years):
-            years.append(first_year + h)
-        
-        def clean_int(value):
-            try:
-                return int(value.replace(',', '').replace(' ', ''))
-            except:
-                print 'clean_int fail for value ' + str(value)
-        
-        for i, row in enumerate(data_reader):
-            if i > 0:
-                state = row[0]
-                if len(state):
-                    for j, col in enumerate(row):
-                        if j > 0 and j < total_years + 1:
-                            year = years[j-1]
-                            value = clean_int(row[j])
-
-                            record = AlternativeFuelVehicles(state=state, year=year, value=value)
-                            record.save()
+        for year in range(2001, 2016):
+                source_file = '%s/energy/attf_v2_%s.csv' % (settings.LOCAL_DATA_ROOT, year)
+                if os.path.isfile(source_file):
+                    data_reader = csv.reader(open(source_file))
+                    insert_count = 0
+                    update_count = 0
+                    for i, row in enumerate(data_reader):
+                        if i == 0:
+                            year_row = row
+                        else:
+                            for j,col in enumerate(row):
+                                if j == 0:
+                                    state = col.strip()
+                                elif j > 0 and state <> '' and col.strip() <> '':
+                                    year = year_row[j]
+                                    try:
+                                        record = AlternativeFuelVehicles.objects.get(state=state,year=year)
+                                        update_count = update_count + 1
+                                    except MultipleObjectsReturned:
+                                        print '% error: multiple records exist for %s %s' % (source_file, year, state)
+                                        continue
+                                    except:
+                                        record = AlternativeFuelVehicles(year = year, state=state, value = clean_num(col))
+                                        insert_count = insert_count + 1
+                                    record.save()
+                                    db.reset_queries()
+                    print '%s import complete. %s records updated, %s inserted' % (source_file, update_count, insert_count)
