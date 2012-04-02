@@ -45,13 +45,17 @@ class Command(NoArgsCommand):
                                     year = year_row[j]
                                     try:
                                         record = AlternativeFuelVehicles.objects.get(state=state,year=year)
-                                        update_count = update_count + 1
+                                        if record.value <> clean_num(col):
+                                            record.value = clean_num(col)
+                                            record.save()
+                                            db.reset_queries()
+                                            update_count = update_count + 1
                                     except MultipleObjectsReturned:
                                         print '% error: multiple records exist for %s %s' % (source_file, year, state)
                                         continue
                                     except:
                                         record = AlternativeFuelVehicles(year = year, state=state, value = clean_num(col))
+                                        record.save()
+                                        db.reset_queries()
                                         insert_count = insert_count + 1
-                                    record.save()
-                                    db.reset_queries()
                     print '%s import complete. %s records updated, %s inserted' % (source_file, update_count, insert_count)
