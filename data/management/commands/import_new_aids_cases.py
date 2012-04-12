@@ -33,6 +33,7 @@ class Command(NoArgsCommand):
         data_reader = csv.reader(open(SOURCE_FILE))
         insert_count = 0
         update_count = 0
+        unchanged_count = 0
         for i, row in enumerate(data_reader):
             if i == 0:
                 year_row = row;            
@@ -49,6 +50,8 @@ class Command(NoArgsCommand):
                                 record.save()
                                 db.reset_queries()
                                 update_count = update_count + 1
+                            else:
+                                unchanged_count = unchanged_count + 1
                         except MultipleObjectsReturned:
                             print 'error: multiple records exist for %s %s' % (year, state)
                             continue
@@ -57,4 +60,4 @@ class Command(NoArgsCommand):
                             record.save()
                             db.reset_queries()
                             insert_count = insert_count + 1
-        print '%s import complete. %s records updated, %s inserted' % (SOURCE_FILE, update_count, insert_count)
+        print '%s import complete. %s records updated, %s inserted, %s unchanged' % (SOURCE_FILE, update_count, insert_count, unchanged_count)
