@@ -23,7 +23,7 @@ from npp_api.data.utils import clean_num
 # 3) change SOURCE_FILE variable to the the path of the source file you just created
 # 5) Run as Django management command from your project path "python manage.py import_new_aids_cases
 
-# safe to re-run:  NO
+# safe to re-run:  yes
 
 SOURCE_FILE = '%s/health/aids.csv' % (settings.LOCAL_DATA_ROOT)
 
