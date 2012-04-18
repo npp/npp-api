@@ -1,12 +1,12 @@
 {% extends "api/api_base.html" %}
 
 {% block content %}
-<h1>Annual State Energy Consumption</h1>
+<h1>Energy Consumption</h1>
 
 <div class="api_urls">
-	<div><span class="api_urls_header">URL Format: http://data.nationalpriorities.org/api/energy_consumption/list.&lt;format&gt;?...</div>
-		<div>Allowed Keys: 'id', 'msn', 'year', 'value', 'state'</div>
-		<div>Example: <a href="http://data.nationalpriorities.org/api/energy_consumption/list.json?state=WY&year=2007">http://data.nationalpriorities.org/api/energy_consumption/list.json?state=WY&amp;year=2007</a></div>
+	<div><span class="api_urls_header">URL Format: http://data.nationalpriorities.org/api/energy_consumption_state/list.&lt;format&gt;?...</div>
+		<div>Allowed Keys: 'year', 'state', 'msn'</div>
+		<div>Example: <a href=/api/energy_consumption_state/list.json?state=WY&year=2007>http://data.nationalpriorities.org/api/energy_consumption_state/list.json?state=WY&amp;year=2007</a></div>
 	</div>
 </div>
 {% endblock %}

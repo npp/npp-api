@@ -21,12 +21,6 @@ class AlternativeFuelVehicles(models.Model):
     year = models.IntegerField()
     value = models.IntegerField()
 
-class AnnualStateEnergyConsumption(models.Model):
-    state = models.CharField(max_length=2)
-    msn = models.CharField(max_length=5)
-    year = models.IntegerField()
-    value = models.FloatField(null=True)
-    
 class AnnualStateEnergyExpenditures(models.Model):
     state = models.CharField(max_length=2)
     msn = models.CharField(max_length=5)
@@ -167,6 +161,14 @@ class Employment(models.Model):
     white_unemployed = models.FloatField(null=True)
     black_unemployed = models.FloatField(null=True)
     hispanic_unemployed = models.FloatField(null=True)
+    
+class EnergyConsumptionStateRaw(models.Model):
+    state = models.CharField(max_length=2)
+    msn = models.CharField(max_length=5)
+    year = models.IntegerField()
+    value = models.FloatField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
 class EnrolledStudentsDistrict(models.Model):
     year = models.CharField(max_length=9)
@@ -456,11 +458,6 @@ class MilitaryPersonnel(models.Model):
     civilian_personnel = models.IntegerField(null=True)
     reserve_national_guard_personnel = models.IntegerField(null=True)
 
-class MsnCodes(models.Model):
-    msn = models.CharField(max_length=5)
-    description = models.TextField()
-    unit = models.CharField(max_length=255)
-    
 class NativeEdSpending(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=2)
@@ -946,6 +943,13 @@ class County(models.Model):
     
     class Meta:
         unique_together = ('state', 'county_ansi')
+        
+class Msn(models.Model):
+    msn_code = models.CharField(max_length=5)
+    msn_desc = models.CharField(max_length=255)
+    msn_unit = models.CharField(max_length=255)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
 
 ### the actual data
 class Cffr(models.Model):
@@ -995,6 +999,17 @@ class CffrIndividualState(models.Model):
     
     class Meta:
         unique_together = ('year', 'state')
+        
+class EnergyConsumptionState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    msn = models.ForeignKey(Msn)
+    value = models.FloatField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state', 'msn')
         
 class FederalTaxCollectionState(models.Model):
     year = models.IntegerField()
