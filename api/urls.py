@@ -23,7 +23,7 @@ drug_free_school_spending_handler = Resource(DrugFreeSchoolSpendingHandler)
 educational_attainment_handler = Resource(EducationalAttainmentHandler)
 ell_students_district_handler = Resource(EllStudentsDistrictHandler)
 employment_handler = Resource(EmploymentHandler)
-energy_consumption_handler = Resource(EnergyConsumptionHandler)
+energy_consumption_state_handler = Resource(EnergyConsumptionStateHandler)
 energy_expenditures_handler = Resource(EnergyExpendituresHandler)
 energy_production_estimates_handler = Resource(EnergyProductionEstimatesHandler)
 enrolled_students_district_handler = Resource(EnrolledStudentsDistrictHandler)
@@ -55,7 +55,7 @@ medicaid_participation_handler = Resource(MedicaidParticipationHandler)
 medicare_enrollment_handler = Resource(MedicareEnrollmentHandler)
 migrant_students_handler = Resource(MigrantStudentsHandler)
 military_personnel_handler = Resource(MilitaryPersonnelHandler)
-msn_code_handler = Resource(MsnCodeHandler)
+msn_handler = Resource(MsnHandler)
 native_ed_spending_handler = Resource(NativeEdSpendingHandler)
 new_aids_cases_handler = Resource(NewAidsCasesHandler)
 nces_school_district_handler = Resource(NcesSchoolDistrictHandler)
@@ -232,8 +232,8 @@ urlpatterns += patterns('',
     url(r'^ell_students_district/list\.(?P<emitter_format>.+)', ell_students_district_handler),
     url(r'^employment/$', employment_handler),
     url(r'^employment/list\.(?P<emitter_format>.+)', employment_handler),
-    url(r'^energy_consumption/$', energy_consumption_handler),
-    url(r'^energy_consumption/list\.(?P<emitter_format>.+)', energy_consumption_handler),
+    url(r'^energy_consumption_state/$', energy_consumption_state_handler),
+    url(r'^energy_consumption_state/list\.(?P<emitter_format>.+)', energy_consumption_state_handler),
     url(r'^energy_expenditures/$', energy_expenditures_handler),
     url(r'^energy_expenditures/list\.(?P<emitter_format>.+)', energy_expenditures_handler),
     url(r'^energy_production_estimates/', energy_production_estimates_handler),
@@ -296,8 +296,8 @@ urlpatterns += patterns('',
     url(r'^migrant_students/list\.(?P<emitter_format>.+)', migrant_students_handler),
     url(r'^military_personnel/$', military_personnel_handler),
     url(r'^military_personnel/list\.(?P<emitter_format>.+)', military_personnel_handler),
-    url(r'^msn_codes/$', msn_code_handler),
-    url(r'^msn_codes/list\.(?P<emitter_format>.+)', msn_code_handler),
+    url(r'^msn/$', msn_handler),
+    url(r'^msn/list\.(?P<emitter_format>.+)', msn_handler),
     url(r'^native_ed_spending/$', native_ed_spending_handler),
     url(r'^native_ed_spending/list\.(?P<emitter_format>.+)', native_ed_spending_handler),
     url(r'^nces_school_district/$', nces_school_district_handler),

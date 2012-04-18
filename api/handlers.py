@@ -249,11 +249,13 @@ class EmploymentHandler(GenericHandler):
         model = Employment
         super(EmploymentHandler, self).__init__(allowed_keys, model)
     
-class EnergyConsumptionHandler(GenericHandler):
+class EnergyConsumptionStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('id', 'msn', 'year', 'value', 'state')
-        model = AnnualStateEnergyConsumption
-        super(EnergyConsumptionHandler, self).__init__(allowed_keys, model)
+        allowed_keys = ('msn_code', 'year', 'state_abbr', 'state_name', 'state_ansi')
+        model = EnergyConsumptionState
+        fields = ('year', 'value', ('state', ('state_ansi', 'state_abbr',
+            'state_name')), ('msn', ('msn_code', 'msn_desc', 'msn_unit')))
+        super(EnergyConsumptionStateHandler, self).__init__(allowed_keys, model, fields)
 
 class EnergyExpendituresHandler(GenericHandler):
     def __init__(self):
@@ -456,11 +458,12 @@ class MilitaryPersonnelHandler(GenericHandler):
         model = MilitaryPersonnel
         super(MilitaryPersonnelHandler, self).__init__(allowed_keys, model)
         
-class MsnCodeHandler(GenericHandler):
+class MsnHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('msn', 'description', 'unit')
-        model = MsnCodes
-        super(MsnCodeHandler, self).__init__(allowed_keys, model)
+        allowed_keys = ('msn_code', 'msn_unit')
+        fields = ('msn_code', 'msn_desc', 'msn_unit')
+        model = Msn
+        super(MsnHandler, self).__init__(allowed_keys, model, fields)
         
 class NativeEdSpendingHandler(GenericHandler):
     def __init__(self):
