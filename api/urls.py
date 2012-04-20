@@ -24,8 +24,8 @@ educational_attainment_handler = Resource(EducationalAttainmentHandler)
 ell_students_district_handler = Resource(EllStudentsDistrictHandler)
 employment_handler = Resource(EmploymentHandler)
 energy_consumption_state_handler = Resource(EnergyConsumptionStateHandler)
+energy_production_state_handler = Resource(EnergyProductionStateHandler)
 energy_expenditures_handler = Resource(EnergyExpendituresHandler)
-energy_production_estimates_handler = Resource(EnergyProductionEstimatesHandler)
 enrolled_students_district_handler = Resource(EnrolledStudentsDistrictHandler)
 enrollment_race_handler = Resource(EnrollmentRaceHandler)
 expenditure_per_pupil_handler = Resource(ExpenditurePerPupilHandler)
@@ -91,7 +91,6 @@ state_gdp_pre97_handler = Resource(StateGdpPre97Handler)
 state_emissions_handler = Resource(StateEmissionsHandler)
 state_labor_force_participation_handler = Resource(StateLaborForceParticipationHandler)
 state_postal_codes_handler = Resource(StatePostalCodesHandler)
-state_renewable_energy_handler = Resource(StateRenewableEnergyHandler)
 summer_lunch_participation_handler = Resource(SummerLunchParticipationHandler)
 tanf_participation_state_handler = Resource(TanfParticipationStateHandler)
 title_i_funding_handler = Resource(TitleIFundingHandler)
@@ -120,8 +119,8 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^ell_students_district.html$', 'direct_to_template', {'template': 'api/ell_students_district.html'}),
     (r'^employment.html$', 'direct_to_template', {'template': 'api/employment.html'}),
     (r'^energy_consumption.html$', 'direct_to_template', {'template': 'api/energy_consumption.html'}),
+    (r'^energy_production.html$', 'direct_to_template', {'template': 'api/energy_production.html'}),
     (r'^energy_expenditures.html$', 'direct_to_template', {'template': 'api/energy_expenditures.html'}),
-    (r'^energy_production_estimates.html$', 'direct_to_template', {'template': 'api/energy_production_estimates.html'}),
     (r'^enrolled_students_district.html$', 'direct_to_template', {'template': 'api/enrolled_students_district.html'}),
     (r'^enrollment_race.html$', 'direct_to_template', {'template': 'api/enrollment_race.html'}),
     (r'^expenditure_per_pupil.html$', 'direct_to_template', {'template': 'api/expenditure_per_pupil.html'}),
@@ -180,7 +179,6 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^state_gdp.html$', 'direct_to_template', {'template': 'api/state_gdp.html'}),
     (r'^state_gdp_pre97.html$', 'direct_to_template', {'template': 'api/state_gdp_pre97.html'}),
     (r'^state_labor_force_participation.html$', 'direct_to_template', {'template': 'api/state_labor_force_participation.html'}),
-    (r'^state_renewable_energy.html$', 'direct_to_template', {'template': 'api/state_renewable_energy.html'}),
     (r'^vehicle_registrations.html$', 'direct_to_template', {'template':'api/vehicle_registrations.html'}),
     (r'^summer_lunch_participation.html$', 'direct_to_template', {'template': 'api/summer_lunch_participation.html'}),
     (r'^subfunctions_cffr.html$', 'direct_to_template', {'template': 'api/subfunctions_cffr.html'}),
@@ -234,10 +232,10 @@ urlpatterns += patterns('',
     url(r'^employment/list\.(?P<emitter_format>.+)', employment_handler),
     url(r'^energy_consumption_state/$', energy_consumption_state_handler),
     url(r'^energy_consumption_state/list\.(?P<emitter_format>.+)', energy_consumption_state_handler),
+    url(r'^energy_production_state/$', energy_production_state_handler),
+    url(r'^energy_production_state/list\.(?P<emitter_format>.+)', energy_production_state_handler),
     url(r'^energy_expenditures/$', energy_expenditures_handler),
     url(r'^energy_expenditures/list\.(?P<emitter_format>.+)', energy_expenditures_handler),
-    url(r'^energy_production_estimates/', energy_production_estimates_handler),
-    url(r'^energy_production_estimates/list\.(?P<emitter_format>.+)', energy_production_estimates_handler),
     url(r'^enrolled_students_district/', enrolled_students_district_handler),
     url(r'^enrolled_students_district/list\.(?P<emitter_format>.+)', enrolled_students_district_handler),
     url(r'^enrollment_race/', enrollment_race_handler),
@@ -370,8 +368,6 @@ urlpatterns += patterns('',
     url(r'^state_gdp_pre97/list\.(?P<emitter_format>.+)', state_gdp_pre97_handler),
     url(r'^state_labor_force_participation/$', state_labor_force_participation_handler),
     url(r'^state_labor_force_participation/list\.(?P<emitter_format>.+)', state_labor_force_participation_handler),
-    url(r'^state_renewable_energy/$', state_renewable_energy_handler),
-    url(r'^state_renewable_energy/list\.(?P<emitter_format>.+)',state_renewable_energy_handler),
     url(r'^state_postal_codes/$', state_postal_codes_handler),
     url(r'^state_postal_codes/list\.(?P<emitter_format>.+)', state_postal_codes_handler),
     url(r'^vehicle_registrations/$', vehicle_registrations_handler),

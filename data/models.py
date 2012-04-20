@@ -170,6 +170,14 @@ class EnergyConsumptionStateRaw(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     
+class EnergyProductionStateRaw(models.Model):
+    state = models.CharField(max_length=2)
+    msn = models.CharField(max_length=5)
+    year = models.IntegerField()
+    value = models.FloatField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
 class EnrolledStudentsDistrict(models.Model):
     year = models.CharField(max_length=9)
     state = models.CharField(max_length=2)
@@ -754,12 +762,6 @@ class StateEmissions(models.Model):
     so2 = models.IntegerField()
     nox = models.IntegerField()
     
-class StateEnergyProductionEstimates(models.Model):
-    state = models.CharField(max_length=2)
-    msn = models.CharField(max_length=5)
-    year = models.IntegerField()
-    value = models.FloatField(null=True)
-    
 class StateGdp(models.Model):
     year = models.IntegerField()
     fips = models.IntegerField()
@@ -1001,6 +1003,17 @@ class CffrIndividualState(models.Model):
         unique_together = ('year', 'state')
         
 class EnergyConsumptionState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    msn = models.ForeignKey(Msn)
+    value = models.FloatField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state', 'msn')
+        
+class EnergyProductionState(models.Model):
     year = models.IntegerField()
     state = models.ForeignKey(State)
     msn = models.ForeignKey(Msn)
