@@ -21,6 +21,7 @@ diploma_recipient_total_handler = Resource(DiplomaRecipientTotalHandler)
 dropouts_race_handler = Resource(DropoutsRaceHandler)
 drug_free_school_spending_handler = Resource(DrugFreeSchoolSpendingHandler)
 educational_attainment_handler = Resource(EducationalAttainmentHandler)
+electric_emissions_state_handler = Resource(ElectricEmissionsStateHandler)
 ell_students_district_handler = Resource(EllStudentsDistrictHandler)
 employment_handler = Resource(EmploymentHandler)
 energy_consumption_state_handler = Resource(EnergyConsumptionStateHandler)
@@ -88,7 +89,6 @@ special_ed_funding_handler = Resource(SpecialEdFundingHandler)
 state_completion_rate_handler = Resource(StateCompletionRateHandler)
 state_gdp_handler = Resource(StateGdpHandler)
 state_gdp_pre97_handler = Resource(StateGdpPre97Handler)
-state_emissions_handler = Resource(StateEmissionsHandler)
 state_labor_force_participation_handler = Resource(StateLaborForceParticipationHandler)
 state_postal_codes_handler = Resource(StatePostalCodesHandler)
 summer_lunch_participation_handler = Resource(SummerLunchParticipationHandler)
@@ -116,6 +116,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^dropouts_race.html$', 'direct_to_template', {'template': 'api/dropouts_race.html'}),
     (r'^drug_free_school_spending.html$', 'direct_to_template', {'template': 'api/drug_free_school_spending.html'}),
     (r'^educational_attainment.html$', 'direct_to_template', {'template': 'api/educational_attainment.html'}),
+    (r'^electric_emissions.html$', 'direct_to_template', {'template': 'api/electric_emissions.html'}),
     (r'^ell_students_district.html$', 'direct_to_template', {'template': 'api/ell_students_district.html'}),
     (r'^employment.html$', 'direct_to_template', {'template': 'api/employment.html'}),
     (r'^energy_consumption.html$', 'direct_to_template', {'template': 'api/energy_consumption.html'}),
@@ -174,7 +175,6 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^snap_monthly_benefits_person.html$', 'direct_to_template', {'template': 'api/snap_monthly_benefits_person.html'}),
     (r'^snap_participation_households.html$', 'direct_to_template', {'template': 'api/snap_participation_households.html'}),
     (r'^snap_participation_people.html$', 'direct_to_template', {'template': 'api/snap_participation_people.html'}),
-    (r'^state_emissions.html$', 'direct_to_template', {'template': 'api/state_emissions.html'}),
     (r'^state_completion_rate.html$', 'direct_to_template', {'template': 'api/state_completion_rate.html'}),
     (r'^state_gdp.html$', 'direct_to_template', {'template': 'api/state_gdp.html'}),
     (r'^state_gdp_pre97.html$', 'direct_to_template', {'template': 'api/state_gdp_pre97.html'}),
@@ -226,6 +226,8 @@ urlpatterns += patterns('',
     url(r'^drug_free_school_spending/list\.(?P<emitter_format>.+)', drug_free_school_spending_handler),
     url(r'^educational_attainment/$', educational_attainment_handler),
     url(r'^educational_attainment/list\.(?P<emitter_format>.+)', educational_attainment_handler),
+    url(r'^electric_emissions_state/$', electric_emissions_state_handler),
+    url(r'^electric_emissions_state/list\.(?P<emitter_format>.+)', electric_emissions_state_handler),
     url(r'^ell_students_district/$', ell_students_district_handler),
     url(r'^ell_students_district/list\.(?P<emitter_format>.+)', ell_students_district_handler),
     url(r'^employment/$', employment_handler),
@@ -358,8 +360,6 @@ urlpatterns += patterns('',
     url(r'^snap_participation_households/list\.(?P<emitter_format>.+)', snap_participation_households_handler),
     url(r'^snap_participation_people/$', snap_participation_people_handler),
     url(r'^snap_participation_people/list\.(?P<emitter_format>.+)', snap_participation_people_handler),
-    url(r'^state_emissions/$', state_emissions_handler),
-    url(r'^state_emissions/list\.(?P<emitter_format>.+)', state_emissions_handler),
     url(r'^state_completion_rate/$', state_completion_rate_handler),
     url(r'^state_completion_rate/list\.(?P<emitter_format>.+)', state_completion_rate_handler),
     url(r'^state_gdp/$', state_gdp_handler),

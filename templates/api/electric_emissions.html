@@ -1,0 +1,12 @@
+{% extends "api/api_base.html" %}
+
+{% block content %}
+<h1>Electric Emissions</h1>
+
+<div class="api_urls">
+	<div><span class="api_urls_header">URL Format: http://data.nationalpriorities.org/api/electric_emissions_state/list.&lt;format&gt;?...</div>
+		<div>Allowed Keys: 'year', 'state_abbr', 'state_ansi', 'state_name', 'producer_type', 'energy_source'</div>
+		<div>Example: <a href=/api/electric_emissions_state/list.json?state=NV&year=2010>http://data.nationalpriorities.org/api/electric_emissions_state/list.json?state=NV&amp;year=2010</a></div>
+	</div>
+</div>
+{% endblock %}
