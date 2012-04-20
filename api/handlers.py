@@ -243,6 +243,14 @@ class EducationalAttainmentHandler(GenericHandler):
         model = EducationalAttainment
         super(EducationalAttainmentHandler, self).__init__(allowed_keys, model)
         
+class ElectricEmissionsStateHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'state_name', 'producer_type', 'energy_source')
+        model = ElectricEmissionsState
+        fields = ('year', ('state', ('state_ansi', 'state_abbr',
+            'state_name')), 'producer_type', 'energy_source', 'co2', 'so2', 'nox')
+        super(ElectricEmissionsStateHandler, self).__init__(allowed_keys, model, fields)
+        
 class EmploymentHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state', 'year')
@@ -667,13 +675,7 @@ class StateCompletionRateHandler(GenericHandler):
         allowed_keys = ('state', 'year', 'key')
         model = StateCompletionRate
         super(StateCompletionRateHandler, self).__init__(allowed_keys, model)
-        
-class StateEmissionsHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('state', 'year', 'producer_type', 'energy_source')
-        model = StateEmissions
-        super(StateEmissionsHandler, self).__init__(allowed_keys, model)
-        
+      
 class StateGdpHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state', 'year')

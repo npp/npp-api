@@ -144,6 +144,17 @@ class EducationalAttainment(models.Model):
     category = models.TextField(max_length=64)
     value = models.IntegerField(null=True)
     
+class ElectricEmissionsStateRaw(models.Model):
+    year = models.IntegerField()
+    state = models.CharField(max_length=16)
+    producer_type = models.CharField(max_length=64)
+    energy_source = models.CharField(max_length=64)
+    co2 = models.BigIntegerField()
+    so2 = models.BigIntegerField()
+    nox = models.BigIntegerField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
 class EllStudentsDistrict(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=2)
@@ -753,15 +764,6 @@ class SpecialEdFunding(models.Model):
     agency_id = models.CharField(max_length=7)
     amount = models.IntegerField(null=True)
     
-class StateEmissions(models.Model):
-    year = models.IntegerField()
-    state = models.CharField(max_length=16)
-    producer_type = models.CharField(max_length=64)
-    energy_source = models.CharField(max_length=64)
-    co2 = models.IntegerField()
-    so2 = models.IntegerField()
-    nox = models.IntegerField()
-    
 class StateGdp(models.Model):
     year = models.IntegerField()
     fips = models.IntegerField()
@@ -1001,6 +1003,20 @@ class CffrIndividualState(models.Model):
     
     class Meta:
         unique_together = ('year', 'state')
+        
+class ElectricEmissionsState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    producer_type = models.CharField(max_length=64)
+    energy_source = models.CharField(max_length=64)
+    co2 = models.BigIntegerField()
+    so2 = models.BigIntegerField()
+    nox = models.BigIntegerField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state', 'producer_type', 'energy_source')
         
 class EnergyConsumptionState(models.Model):
     year = models.IntegerField()
