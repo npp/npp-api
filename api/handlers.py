@@ -256,6 +256,14 @@ class EnergyConsumptionStateHandler(GenericHandler):
         fields = ('year', 'value', ('state', ('state_ansi', 'state_abbr',
             'state_name')), ('msn', ('msn_code', 'msn_desc', 'msn_unit')))
         super(EnergyConsumptionStateHandler, self).__init__(allowed_keys, model, fields)
+        
+class EnergyProductionStateHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('msn_code', 'year', 'state_abbr', 'state_name', 'state_ansi')
+        model = EnergyProductionState
+        fields = ('year', 'value', ('state', ('state_ansi', 'state_abbr',
+            'state_name')), ('msn', ('msn_code', 'msn_desc', 'msn_unit')))
+        super(EnergyProductionStateHandler, self).__init__(allowed_keys, model, fields)
 
 class EnergyExpendituresHandler(GenericHandler):
     def __init__(self):
@@ -689,12 +697,6 @@ class StatePostalCodesHandler(GenericHandler):
         allowed_keys = ('code', 'state')
         model = StatePostalCodes
         super(StatePostalCodesHandler, self).__init__(allowed_keys, model)
-        
-class StateRenewableEnergyHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('year', 'state')
-        model = StateRenewableEnergy
-        super(StateRenewableEnergyHandler, self).__init__(allowed_keys, model)
         
 class SubfunctionsCffrHandler(GenericHandler):
     def __init__(self):
