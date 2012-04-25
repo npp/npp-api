@@ -4,12 +4,13 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import MultipleObjectsReturned
 from data.models import LaborForceCountyRaw
 import csv
+from npp_api.data.utils import clean_num
 
 # National Priorities Project Data Repository
-# import_unemployment_county.py
+# import_labor_force_county.py
 
 # Imports Bureau of Labor Statistics Annual County Labor Force Data
-# source info: http://www.bls.gov/lau/#tables (accurate as of 9/15/2011)
+# source info: http://www.bls.gov/lau/#tables --> County Data (accurate as of 9/15/2011)
 # npp csvs: http://assets.nationalpriorities.org.s3.amazonaws.com/raw_data/bls.gov/county_unemployment/laucnty<year>.csv
 # destination model:  LaborForceCountyRaw
 
@@ -30,22 +31,6 @@ class Command(BaseCommand):
     
     def handle(self, *args, **options):
 
-        def clean_int(value):
-            value = value.replace(' ', '').replace('N.A.', '')
-            if value <> '':
-                value = int(value.replace(',', ''))
-            else:
-                value = None
-            return value
-            
-        def clean_float(value):
-            value = value.replace(' ', '').replace('N.A.', '')
-            if value <> '':
-                value = float(value.replace(',', ''))
-            else:
-                value = None
-            return value
-            
         def pad_state_ansi(value):
             if len(value) == 2:
                 return value
@@ -84,10 +69,10 @@ class Command(BaseCommand):
                     county_fips = row[2]
                     county_name = row[3]
                     year = row[4]
-                    labor_force = clean_int(row[5])
-                    employed = clean_int(row[6])
-                    unemployed = clean_int(row[7])
-                    unemployment_rate = clean_float(row[8])
+                    labor_force = clean_num(row[5])
+                    employed = clean_num(row[6])
+                    unemployed = clean_num(row[7])
+                    unemployment_rate = clean_num(row[8])
                     
                     try:
                         record = LaborForceCountyRaw.objects.get(year=year,state_fips=pad_state_ansi(state_fips),county_fips=pad_county_ansi(county_fips))
@@ -108,7 +93,7 @@ class Command(BaseCommand):
                     record.save()
                     db.reset_queries()
                     
-            print '%s county labor force load complete. %s inserts and %s updates.' % (year,insert_count,update_count)
+            print '%s county labor force import complete. %s inserts and %s updates.' % (year,insert_count,update_count)
             
         if len(args):
             for year in args:
