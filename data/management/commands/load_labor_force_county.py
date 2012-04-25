@@ -15,7 +15,7 @@ from django.db import connection, transaction
 
 # Safe to re-run: no
 
-# To Do: needs validations (e.g., do rows in source table = rows in loaded table); should be preceded by a drop table command
+# To Do: needs validations (e.g., do rows in source table = rows in loaded table); should be preceded by a delete table command
 
 class Command(NoArgsCommand):
     
@@ -27,7 +27,7 @@ class Command(NoArgsCommand):
         INSERT INTO data_laborforcecounty
         SELECT 
             NULL
-        ,    l.year
+        ,   l.year
         ,   s.id
         ,   c.id
         ,   laus_code
