@@ -421,6 +421,20 @@ class LaborForceCountyRaw(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     
+class LaborForceStateRaw(models.Model):
+    area_fips = models.CharField(max_length=10)
+    area = models.CharField(max_length=50)
+    year = models.IntegerField()
+    civilian_noninstitutional_pop = models.IntegerField()
+    labor_force_total = models.IntegerField()
+    labor_force_participation_rate = models.FloatField()
+    employment_total = models.IntegerField()
+    employment_pop_rate = models.FloatField()
+    unemployment_total = models.IntegerField()
+    unemployment_rate = models.FloatField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
 class LaborUnderutilizationStateRaw(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=64)
@@ -645,17 +659,6 @@ class StateCompletionRate(models.Model):
     key = models.CharField(max_length=16)
     value = models.IntegerField(null=True)
 
-class StateLaborForceParticipation(models.Model):
-    state = models.CharField(max_length=32)
-    year = models.IntegerField()
-    civilian_noninstitutional_pop = models.IntegerField()
-    civilian_labor_force = models.IntegerField()
-    labor_force_participation_rate = models.FloatField()
-    employment_total = models.IntegerField()
-    employment_pop_rate = models.FloatField()
-    unemployment_total = models.IntegerField()
-    unemployment_rate = models.FloatField()
-    
 class StateRenewableEnergy(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
@@ -1097,6 +1100,22 @@ class LaborForceCounty(models.Model):
     
     class Meta:
         unique_together = ('year', 'state', 'county')
+        
+class LaborForceState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    civilian_noninstitutional_pop = models.IntegerField()
+    labor_force_total = models.IntegerField()
+    labor_force_participation_rate = models.FloatField()
+    employment_total = models.IntegerField()
+    employment_pop_rate = models.FloatField()
+    unemployment_total = models.IntegerField()
+    unemployment_rate = models.FloatField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state')
     
 class LaborUnderutilizationState(models.Model):
     year = models.IntegerField()

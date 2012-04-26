@@ -49,6 +49,7 @@ housing_units_handler = Resource(HousingUnitsHandler)
 individual_education_programs_handler = Resource(IndividualEducationProgramsHandler)
 kids_health_insurance_handler = Resource(KidsHealthInsuranceHandler)
 labor_force_county_handler = Resource(LaborForceCountyHandler)
+labor_force_state_handler = Resource(LaborForceStateHandler)
 labor_underutilization_state_handler = Resource(LaborUnderutilizationStateHandler)
 math_science_spending_handler = Resource(MathScienceSpendingHandler)
 median_income_state_handler = Resource(MedianIncomeStateHandler)
@@ -89,7 +90,6 @@ special_ed_funding_handler = Resource(SpecialEdFundingHandler)
 state_completion_rate_handler = Resource(StateCompletionRateHandler)
 state_gdp_handler = Resource(StateGdpHandler)
 state_gdp_pre97_handler = Resource(StateGdpPre97Handler)
-state_labor_force_participation_handler = Resource(StateLaborForceParticipationHandler)
 state_postal_codes_handler = Resource(StatePostalCodesHandler)
 summer_lunch_participation_handler = Resource(SummerLunchParticipationHandler)
 tanf_participation_state_handler = Resource(TanfParticipationStateHandler)
@@ -178,7 +178,6 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^state_completion_rate.html$', 'direct_to_template', {'template': 'api/state_completion_rate.html'}),
     (r'^state_gdp.html$', 'direct_to_template', {'template': 'api/state_gdp.html'}),
     (r'^state_gdp_pre97.html$', 'direct_to_template', {'template': 'api/state_gdp_pre97.html'}),
-    (r'^state_labor_force_participation.html$', 'direct_to_template', {'template': 'api/state_labor_force_participation.html'}),
     (r'^vehicle_registrations.html$', 'direct_to_template', {'template':'api/vehicle_registrations.html'}),
     (r'^summer_lunch_participation.html$', 'direct_to_template', {'template': 'api/summer_lunch_participation.html'}),
     (r'^subfunctions_cffr.html$', 'direct_to_template', {'template': 'api/subfunctions_cffr.html'}),
@@ -282,6 +281,8 @@ urlpatterns += patterns('',
     url(r'^kids_health_insurance/list\.(?P<emitter_format>.+)', kids_health_insurance_handler),
     url(r'^labor_force_county/$', labor_force_county_handler),
     url(r'^labor_force_county/list\.(?P<emitter_format>.+)',labor_force_county_handler),
+    url(r'^labor_force_state/$', labor_force_state_handler),
+    url(r'^labor_force_state/list\.(?P<emitter_format>.+)',labor_force_state_handler),
     url(r'^labor_underutilization_state/$', labor_underutilization_state_handler),
     url(r'^labor_underutilization_state/list\.(?P<emitter_format>.+)',labor_underutilization_state_handler),
     url(r'^math_science_spending/$', math_science_spending_handler),
@@ -366,8 +367,6 @@ urlpatterns += patterns('',
     url(r'^state_gdp/list\.(?P<emitter_format>.+)', state_gdp_handler),
     url(r'^state_gdp_pre97/$', state_gdp_pre97_handler),
     url(r'^state_gdp_pre97/list\.(?P<emitter_format>.+)', state_gdp_pre97_handler),
-    url(r'^state_labor_force_participation/$', state_labor_force_participation_handler),
-    url(r'^state_labor_force_participation/list\.(?P<emitter_format>.+)', state_labor_force_participation_handler),
     url(r'^state_postal_codes/$', state_postal_codes_handler),
     url(r'^state_postal_codes/list\.(?P<emitter_format>.+)', state_postal_codes_handler),
     url(r'^vehicle_registrations/$', vehicle_registrations_handler),

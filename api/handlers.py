@@ -421,13 +421,23 @@ class KidsHealthInsuranceHandler(GenericHandler):
         allowed_keys = ('state', 'year')
         model = KidsHealthInsurance
         super(KidsHealthInsuranceHandler, self).__init__(allowed_keys, model)
-        
+
 class LaborForceCountyHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'county_ansi', 'county_name')
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'state_name', 'county_ansi', 'county_name')
         model = LaborForceCounty
         fields = ('year', ('state', ('state_ansi', 'state_abbr', 'state_name')), ('county', ('county_ansi', 'county_name')), 'laus_code', 'labor_force', 'employment_total', 'unemployment_total', 'unemployment_rate')
         super(LaborForceCountyHandler, self).__init__(allowed_keys, model,fields)
+        
+class LaborForceStateHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'state_name')
+        model = LaborForceState
+        fields = ('year', ('state', ('state_ansi', 'state_abbr', 'state_name')),
+            'civilian_noninstitutional_pop', 'labor_force_total',
+            'labor_force_participation_rate', 'employment_total',
+            'employment_pop_rate', 'unemployment_total', 'unemployment_rate')
+        super(LaborForceStateHandler, self).__init__(allowed_keys, model,fields)
         
 class LaborUnderutilizationStateHandler(GenericHandler):
     def __init__(self):
@@ -688,12 +698,6 @@ class StateGdpPre97Handler(GenericHandler):
         model = StateGdp
         super(StateGdpPre97Handler, self).__init__(allowed_keys, model)
 
-class StateLaborForceParticipationHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = StateLaborForceParticipation
-        super(StateLaborForceParticipationHandler, self).__init__(allowed_keys, model)
-        
 class StatePostalCodesHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('code', 'state')
