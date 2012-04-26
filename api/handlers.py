@@ -426,7 +426,7 @@ class LaborForceCountyHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('year', 'state_abbr', 'state_ansi', 'state_name', 'county_ansi', 'county_name')
         model = LaborForceCounty
-        fields = ('year', ('state', ('state_ansi', 'state_abbr', 'state_name')), ('county', ('county_ansi', 'county_name')), 'laus_code', 'labor_force', 'employment_total', 'unemployment_total', 'unemployment_rate')
+        fields = ('year', ('state', ('state_ansi', 'state_abbr', 'state_name')), ('county', ('county_ansi', 'county_name')), 'laus_code', 'labor_force_total', 'employment_total', 'unemployment_total', 'unemployment_rate')
         super(LaborForceCountyHandler, self).__init__(allowed_keys, model,fields)
         
 class LaborForceStateHandler(GenericHandler):

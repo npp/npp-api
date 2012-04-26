@@ -1091,7 +1091,7 @@ class LaborForceCounty(models.Model):
     state = models.ForeignKey(State)
     county = models.ForeignKey(County)
     laus_code = models.CharField(max_length=8)
-    labor_force = models.IntegerField(null=True) #is this the civilian labor force?
+    labor_force_total = models.IntegerField(null=True) #is this the civilian labor force?
     employment_total = models.IntegerField(null=True)
     unemployment_total = models.IntegerField(null=True)
     unemployment_rate = models.FloatField(null=True)

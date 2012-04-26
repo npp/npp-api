@@ -31,12 +31,12 @@ class Command(NoArgsCommand):
         ,   s.id
         ,   c.id
         ,   laus_code
-        ,   labor_force
         ,   employed
         ,   unemployed
         ,   unemployment_rate
         ,   NOW()
         ,   NOW()
+        ,   labor_force
         FROM
             data_laborforcecountyraw l
             JOIN data_state s
