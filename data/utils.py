@@ -6,8 +6,9 @@ def get_percent(numer,denom):
     return Decimal(str(float(numer)/denom*100)).quantize(Decimal('1.01'))
     
 def clean_num(value):
+    value = value.strip()
     try:
-        if value.strip()=='':
+        if value=='':
             value=None
         elif value.find(".") <> -1:
             value = value.replace(",","")
