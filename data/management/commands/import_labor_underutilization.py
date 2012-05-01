@@ -12,7 +12,7 @@ import csv
 # import_labor_underutilization
 
 # Imports alternative measures of labor underutilization from the Bureau of Labor Statistics
-# source info: yearly files on http://www.bls.gov/lau/stalt.htm (accurate as of 9/21/11)
+# source info: yearly files on http://www.bls.gov/lau/stalt.htm (accurate as of 5/1/12)
 # npp csv: 
 # destination model:  LaborUnderutilizationStateRaw
 
@@ -24,7 +24,7 @@ import csv
 # Safe to re-run: YES..will re-load data as necessary
 
 URL = 'http://www.bls.gov/lau/'
-YEARS = [2003,2004,2005,2006,2007,2008,2009,2010]
+YEARS = [2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015]
 SAVE_FILE = '%s/bls.gov/' % (settings.LOCAL_DATA_ROOT)
 
 class Command(NoArgsCommand):
@@ -49,8 +49,12 @@ class Command(NoArgsCommand):
             else:
                 url = '%sstalt%s%s.htm' % (URL,str(year)[-2:],'q4')
         
-            print '%s - scraping labor underutilization: %s' % (year,url)
-            page = urllib2.urlopen(url)
+            try:
+                page = urllib2.urlopen(url)
+                print '%s - scraping labor underutilization: %s' % (year,url)
+            except:
+                print 'No labor underutilization page for %s. full URL is %s' % (year,url)
+                continue
             
             #underemployment table should have an id of 'alternmeas' + the year,
             #so just parse that portion of the page
