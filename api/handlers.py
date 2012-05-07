@@ -626,11 +626,12 @@ class SaipeCountyStateHandler(GenericHandler):
         model = SaipeCountyState
         super(SaipeCountyStateHandler, self).__init__(allowed_keys, model)
         
-class SchipEnrollmentHandler(GenericHandler):
+class SchipEnrollmentStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = SchipEnrollment
-        super(SchipEnrollmentHandler, self).__init__(allowed_keys, model)
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'state_name')
+        model = SchipEnrollmentState
+        fields = ('year', 'value', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(SchipEnrollmentStateHandler, self).__init__(allowed_keys, model, fields)
 
 class SchoolBreakfastParticipationHandler(GenericHandler):
     def __init__(self):

@@ -648,10 +648,12 @@ class RetiredDisabledNilf(models.Model):
     disabled_not_in_labor_force = models.IntegerField()
     other_not_in_labor_force = models.IntegerField()
     
-class SchipEnrollment(models.Model):
+class SchipEnrollmentStateRaw(models.Model):
     state = models.CharField(max_length=32)
     year = models.IntegerField()
     value = models.IntegerField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
 class StateCompletionRate(models.Model):
     state = models.CharField(max_length=2)
@@ -1484,6 +1486,16 @@ class PupilTeacherState(models.Model):
     class Meta:
         unique_together = ('year', 'state')
         
+class SchipEnrollmentState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    value = models.IntegerField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+        
+    class Meta:
+        unique_together = ('year', 'state')
+
 class TanfParticipationState(models.Model):
     year = models.IntegerField()
     state = models.ForeignKey(State)

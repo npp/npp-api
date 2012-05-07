@@ -78,7 +78,7 @@ pupil_teacher_state_handler = Resource(PupilTeacherStateHandler)
 retired_disabled_nilf_handler = Resource(RetiredDisabledNilfHandler)
 saipe_county_state_handler = Resource(SaipeCountyStateHandler)
 saipe_school_handler = Resource(SaipeSchoolHandler)
-schip_enrollment_handler = Resource(SchipEnrollmentHandler)
+schip_enrollment_state_handler = Resource(SchipEnrollmentStateHandler)
 school_breakfast_participation_handler = Resource(SchoolBreakfastParticipationHandler)
 school_lunch_participation_handler = Resource(SchoolLunchParticipationHandler)
 snap_benefits_recipients_handler = Resource(SnapBenefitsRecipientsHandler)
@@ -343,8 +343,8 @@ urlpatterns += patterns('',
     url(r'^saipe_county_state/list\.(?P<emitter_format>.+)', saipe_county_state_handler),
     url(r'^saipe_school/$', saipe_school_handler),
     url(r'^saipe_school/list\.(?P<emitter_format>.+)', saipe_school_handler),
-    url(r'^schip_enrollment/$', schip_enrollment_handler),
-    url(r'^schip_enrollment/list\.(?P<emitter_format>.+)', schip_enrollment_handler),
+    url(r'^schip_enrollment_state/$', schip_enrollment_state_handler),
+    url(r'^schip_enrollment_state/list\.(?P<emitter_format>.+)', schip_enrollment_state_handler),
     url(r'^school_breakfast_participation/$', school_breakfast_participation_handler),
     url(r'^school_breakfast_participation/list\.(?P<emitter_format>.+)', school_breakfast_participation_handler),
     url(r'^school_lunch_participation/$', school_lunch_participation_handler),
