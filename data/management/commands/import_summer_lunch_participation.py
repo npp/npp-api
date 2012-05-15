@@ -2,17 +2,17 @@ from django import db
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
 from django.core.exceptions import MultipleObjectsReturned
-from data.models import SummerLunchParticipation
+from data.models import SummerLunchParticipationStateRaw
+from npp_api.data.utils import clean_num
 import csv
 
 # National Priorities Project Data Repository
 # import_summer_lunch_participation.py
-# Updated 7/27/2010, Joshua Ruihley, Sunlight Foundation
 
 # Imports USDA State Level Summer Lunch Participation Data
-# source info: http://www.fns.usda.gov/pd/04sffypart.htm (accurate as of 6/15/2011)
+# source info: http://www.fns.usda.gov/pd/04sffypart.htm (accurate as of 5/15/2012)
 # npp csv: http://assets.nationalpriorities.org/raw_data/hunger/summer_lunch_participation.csv (updated 7/27/2010)
-# destination model:  SummerLunchParticipation
+# destination model:  SummerLunchParticipationStateRaw
 
 # HOWTO:
 # 1) Download source files from url listed above
@@ -21,23 +21,18 @@ import csv
 # 4) change 'amount' column in data_SummerLunchParticipation table to type 'bigint'
 # 5) Run as Django management command from your project path "python manage.py import_summer_lunch_participation"
 #
-# SAFE TO RE-RUN OR RELOAD A YEAR: YES (if year/state record is already
-# loaded, program will update the value rather than insert a new record)
+# SAFE TO RE-RUN OR RELOAD A YEAR: YES 
 
 SOURCE_FILE = '%s/hunger/summer_lunch_participation.csv' % (settings.LOCAL_DATA_ROOT)
 
 class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
-        
-        def clean_int(value):
-            if value.strip()=='':
-                value=None
-            else:
-                value=int(value)
-            return value
-            
+
         data_reader = csv.reader(open(SOURCE_FILE))
+        insert_count = 0
+        update_count = 0
+        unchanged_count = 0
         
         for i, row in enumerate(data_reader):
             if i == 0:
@@ -49,23 +44,28 @@ class Command(NoArgsCommand):
                         if j > 0:
                             try:
                                 #if year & state already exist, update the value (previous years' data is often revised)
-                                record = SummerLunchParticipation.objects.get(state=state, year=int(year_row[j]))
-                                current_value = clean_int(col)
+                                record = SummerLunchParticipationStateRaw.objects.get(state=state, year=int(year_row[j]))
+                                current_value = clean_num(col)
                                 if record.value != current_value:
-                                    print str(year_row[j]) + ' ' + state + ' updating from ' + str(record.value) + ' to ' + str(current_value)
                                     record.value = current_value
                                     record.save()
+                                    update_count = update_count + 1
+                                else:
+                                    unchanged_count = unchanged_count + 1
                                 
                             except MultipleObjectsReturned:
-                                print 'error: multiple records exist for ' + str(year_row[j]) + ' ' + state
+                                print 'error: multiple records exist for %s %s' % (year_row[j], state)
                                 continue
                                 
                             except:
                                 #this year & state isn't in the db yet; insert
-                                record = SummerLunchParticipation()
+                                record = SummerLunchParticipationStateRaw()
                                 record.year = int(year_row[j])
                                 record.state = state
-                                record.value = clean_int(col)
+                                record.value = clean_num(col)
                                 record.save()
+                                insert_count = insert_count + 1
                              
         db.reset_queries()
+        print 'summer lunch participation import complete. %s inserted, %s updated, %s unchanged' % (
+            insert_count, update_count, unchanged_count)

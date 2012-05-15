@@ -1,12 +1,18 @@
 {% extends "api/api_base.html" %}
 
 {% block content %}
-<h1>Summer Lunch Participation by State</h1>
+<h1>Summer Lunch Participation</h1>
+
+<p>Available geography:
+<ul>
+    <li>state</li>
+</ul>
+</p>
 
 <div class="api_urls">
-	<div><span class="api_urls_header">URL Format: http://data.nationalpriorities.org/api/summer_lunch_participation/list.&lt;format&gt;?...</div>
-		<div>Allowed Keys: 'state', 'year'</div>
-		<div>Example: <a href="/api/summer_lunch_participation/list.json?state=South Carolina&year=2009">http://data.nationalpriorities.org/api/summer_lunch_participation/list.json?state=South Carolina&amp;year=2009</a></div>
+	<div><span class="api_urls_header">URL Format: http://data.nationalpriorities.org/api/summer_lunch_participation_state/list.&lt;format&gt;?...</div>
+		<div>Allowed Keys: 'state', 'state_abbr', 'state_ansi', 'state_name', 'year'</div>
+		<div>Example: <a href="/api/summer_lunch_participation_state/list.json?state=CA&year=2010">http://data.nationalpriorities.org/api/summer_lunch_participation_state/list.json?state=CA&amp;year=2010</a></div>
 	</div>
 </div>
 {% endblock %}

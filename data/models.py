@@ -811,10 +811,12 @@ class SubfunctionsCffr(models.Model):
     at_code_7 = models.TextField(max_length=1, null=True)
     at_code_8 = models.TextField(max_length=1, null=True)
     
-class SummerLunchParticipation(models.Model):
+class SummerLunchParticipationStateRaw(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
     value = models.IntegerField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
 
 class TanfFamilyStateRaw(models.Model):
     year = models.IntegerField()
@@ -1514,6 +1516,16 @@ class SchoolLunchParticipationState(models.Model):
     year = models.IntegerField()
     state = models.ForeignKey(State)
     value = models.IntegerField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('year', 'state')
+        
+class SummerLunchParticipationState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    value = models.IntegerField()
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     

@@ -91,7 +91,7 @@ state_completion_rate_handler = Resource(StateCompletionRateHandler)
 state_gdp_handler = Resource(StateGdpHandler)
 state_gdp_pre97_handler = Resource(StateGdpPre97Handler)
 state_postal_codes_handler = Resource(StatePostalCodesHandler)
-summer_lunch_participation_handler = Resource(SummerLunchParticipationHandler)
+summer_lunch_participation_state_handler = Resource(SummerLunchParticipationStateHandler)
 tanf_participation_state_handler = Resource(TanfParticipationStateHandler)
 title_i_funding_handler = Resource(TitleIFundingHandler)
 total_students_handler = Resource(TotalStudentsHandler)
@@ -373,8 +373,8 @@ urlpatterns += patterns('',
     url(r'^vehicle_registrations/list\.(?P<emitter_format>.+)', vehicle_registrations_handler),
     url(r'^subfunctions_cffr/$', subfunctions_cffr_handler),
     url(r'^subfunctions_cffr/list\.(?P<emitter_format>.+)', subfunctions_cffr_handler),
-    url(r'^summer_lunch_participation/$', summer_lunch_participation_handler),
-    url(r'^summer_lunch_participation/list\.(?P<emitter_format>.+)', summer_lunch_participation_handler),
+    url(r'^summer_lunch_participation_state/$', summer_lunch_participation_state_handler),
+    url(r'^summer_lunch_participation_state/list\.(?P<emitter_format>.+)', summer_lunch_participation_state_handler),
     url(r'^tanf_participation_state/$', tanf_participation_state_handler),
     url(r'^tanf_participation_state/list\.(?P<emitter_format>.+)', tanf_participation_state_handler),
     url(r'^total_students/$', total_students_handler),

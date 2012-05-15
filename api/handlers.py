@@ -714,11 +714,12 @@ class SubfunctionsCffrHandler(GenericHandler):
         model = SubfunctionsCffr
         super(SubfunctionsCffrHandler, self).__init__(allowed_keys, model)
         
-class SummerLunchParticipationHandler(GenericHandler):
+class SummerLunchParticipationStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = SummerLunchParticipation
-        super(SummerLunchParticipationHandler, self).__init__(allowed_keys, model)
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'state_name')
+        model = SummerLunchParticipationState
+        fields = ('year', 'value', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(SummerLunchParticipationStateHandler, self).__init__(allowed_keys, model, fields)
         
 class TanfParticipationStateHandler(GenericHandler):
     def __init__(self):
