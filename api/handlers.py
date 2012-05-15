@@ -639,11 +639,12 @@ class SchoolBreakfastParticipationHandler(GenericHandler):
         model = SchoolBreakfastParticipation
         super(SchoolBreakfastParticipationHandler, self).__init__(allowed_keys, model)
         
-class SchoolLunchParticipationHandler(GenericHandler):
+class SchoolLunchParticipationStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = SchoolLunchParticipation
-        super(SchoolLunchParticipationHandler, self).__init__(allowed_keys, model)
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'state_name')
+        model = SchoolLunchParticipationState
+        fields = ('year', 'value', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(SchoolLunchParticipationStateHandler, self).__init__(allowed_keys, model, fields)
         
 class ShelterPopulationHandler(GenericHandler):
     def __init__(self):

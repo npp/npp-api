@@ -729,10 +729,12 @@ class SchoolBreakfastParticipation(models.Model):
     state = models.CharField(max_length=32)
     value = models.IntegerField()
     
-class SchoolLunchParticipation(models.Model):
+class SchoolLunchParticipationStateRaw(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
     value = models.IntegerField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
 class ShelterPopulation(models.Model):
     year = models.IntegerField()
@@ -1493,6 +1495,16 @@ class SchipEnrollmentState(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
         
+    class Meta:
+        unique_together = ('year', 'state')
+
+class SchoolLunchParticipationState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    value = models.IntegerField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
     class Meta:
         unique_together = ('year', 'state')
 
