@@ -3,8 +3,8 @@ from django.core.management.base import NoArgsCommand
 from data.models import State, SchoolLunchParticipationStateRaw, SchoolLunchParticipationState
 
 # National Priorities Project Data Repository
-# load_median_income.py 
-# Created 03/23/2012
+# load_school_lunch_participation   
+# Created 05/15/2012
 
 # Populates School Lunch Participation used by the API
 # source model(s): SchoolLunchParticipationStateRaw, State
