@@ -79,7 +79,7 @@ retired_disabled_nilf_handler = Resource(RetiredDisabledNilfHandler)
 saipe_county_state_handler = Resource(SaipeCountyStateHandler)
 saipe_school_handler = Resource(SaipeSchoolHandler)
 schip_enrollment_state_handler = Resource(SchipEnrollmentStateHandler)
-school_breakfast_participation_handler = Resource(SchoolBreakfastParticipationHandler)
+school_breakfast_participation_state_handler = Resource(SchoolBreakfastParticipationStateHandler)
 school_lunch_participation_state_handler = Resource(SchoolLunchParticipationStateHandler)
 snap_benefits_recipients_handler = Resource(SnapBenefitsRecipientsHandler)
 snap_monthly_benefits_person_handler = Resource(SnapMonthlyBenefitsPersonHandler)
@@ -345,8 +345,8 @@ urlpatterns += patterns('',
     url(r'^saipe_school/list\.(?P<emitter_format>.+)', saipe_school_handler),
     url(r'^schip_enrollment_state/$', schip_enrollment_state_handler),
     url(r'^schip_enrollment_state/list\.(?P<emitter_format>.+)', schip_enrollment_state_handler),
-    url(r'^school_breakfast_participation/$', school_breakfast_participation_handler),
-    url(r'^school_breakfast_participation/list\.(?P<emitter_format>.+)', school_breakfast_participation_handler),
+    url(r'^school_breakfast_participation_state/$', school_breakfast_participation_state_handler),
+    url(r'^school_breakfast_participation_state/list\.(?P<emitter_format>.+)', school_breakfast_participation_state_handler),
     url(r'^school_lunch_participation_state/$', school_lunch_participation_state_handler),
     url(r'^school_lunch_participation_state/list\.(?P<emitter_format>.+)', school_lunch_participation_state_handler),
     url(r'^shelter_population/$', shelter_population_handler),

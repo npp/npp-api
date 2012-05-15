@@ -1,12 +1,18 @@
 {% extends "api/api_base.html" %}
 
 {% block content %}
-<h1>School Breakfast Participation by State</h1>
+<h1>School Breakfast Participation</h1>
+
+<p>Available geography:
+<ul>
+    <li>state</li>
+</ul>
+</p>
 
 <div class="api_urls">
-	<div><span class="api_urls_header">URL Format: http://data.nationalpriorities.org/api/school_breakfast_participation/list.&lt;format&gt;?...</div>
+	<div><span class="api_urls_header">URL Format: http://data.nationalpriorities.org/api/school_breakfast_participation_state/list.&lt;format&gt;?...</div>
 		<div>Allowed Keys: 'state', 'year'</div>
-		<div>Example: <a href="/api/school_breakfast_participation/list.json?state=South Carolina&year=2009">http://data.nationalpriorities.org/api/school_breakfast_participation/list.json?state=South Carolina&amp;year=2009</a></div>
+		<div>Example: <a href="/api/school_breakfast_participation_state/list.json?state=MD&year=2011">http://data.nationalpriorities.org/api/school_breakfast_participation_state/list.json?state=MD&amp;year=2011</a></div>
 	</div>
 </div>
 {% endblock %}

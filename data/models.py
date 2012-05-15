@@ -724,10 +724,12 @@ class SaipeCountyState(models.Model):
     state_postal_abbreviation = models.CharField(max_length=2)
     file_tag = models.CharField(max_length=22)
     
-class SchoolBreakfastParticipation(models.Model):
+class SchoolBreakfastParticipationStateRaw(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
     value = models.IntegerField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
 class SchoolLunchParticipationStateRaw(models.Model):
     year = models.IntegerField()
@@ -1495,6 +1497,16 @@ class SchipEnrollmentState(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
         
+    class Meta:
+        unique_together = ('year', 'state')
+        
+class SchoolBreakfastParticipationState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    value = models.IntegerField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
     class Meta:
         unique_together = ('year', 'state')
 

@@ -633,11 +633,12 @@ class SchipEnrollmentStateHandler(GenericHandler):
         fields = ('year', 'value', ('state', ('state_ansi', 'state_abbr', 'state_name')))
         super(SchipEnrollmentStateHandler, self).__init__(allowed_keys, model, fields)
 
-class SchoolBreakfastParticipationHandler(GenericHandler):
+class SchoolBreakfastParticipationStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = SchoolBreakfastParticipation
-        super(SchoolBreakfastParticipationHandler, self).__init__(allowed_keys, model)
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'state_name')
+        model = SchoolBreakfastParticipationState
+        fields = ('year', 'value', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(SchoolBreakfastParticipationStateHandler, self).__init__(allowed_keys, model, fields)
         
 class SchoolLunchParticipationStateHandler(GenericHandler):
     def __init__(self):
