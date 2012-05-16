@@ -659,23 +659,26 @@ class SnapBenefitsRecipientsHandler(GenericHandler):
         model = SnapBenefitsRecipients
         super(SnapBenefitsRecipientsHandler, self).__init__(allowed_keys, model)
         
-class SnapMonthlyBenefitsPersonHandler(GenericHandler):
+class SnapMonthlyBenefitsPersonStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = SnapMonthlyBenefitsPerson
-        super(SnapMonthlyBenefitsPersonHandler, self).__init__(allowed_keys, model)
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'state_name')
+        model = SnapMonthlyBenefitsPersonState
+        fields = ('year', 'value', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(SnapMonthlyBenefitsPersonStateHandler, self).__init__(allowed_keys, model, fields)
         
-class SnapParticipationHouseholdsHandler(GenericHandler):
+class SnapParticipationHouseholdsStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = SnapParticipationHouseholds
-        super(SnapParticipationHouseholdsHandler, self).__init__(allowed_keys, model)
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'state_name')
+        model = SnapParticipationHouseholdsState
+        fields = ('year', 'value', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(SnapParticipationHouseholdsStateHandler, self).__init__(allowed_keys, model, fields)
         
-class SnapParticipationPeopleHandler(GenericHandler):
+class SnapParticipationPeopleStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = SnapParticipationPeople
-        super(SnapParticipationPeopleHandler, self).__init__(allowed_keys, model)
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'state_name')
+        model = SnapParticipationPeopleState
+        fields = ('year', 'value', ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(SnapParticipationPeopleStateHandler, self).__init__(allowed_keys, model, fields)
         
 class SpecialEdFundingHandler(GenericHandler):
     def __init__(self):

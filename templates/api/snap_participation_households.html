@@ -1,12 +1,18 @@
 {% extends "api/api_base.html" %}
 
 {% block content %}
-<h1>Number of Households Participating in Foodstamp Program by State</h1>
+<h1>Number of Households Participating in Foodstamp Program</h1>
+
+<p>Available geography:
+<ul>
+    <li>state</li>
+</ul>
+</p>
 
 <div class="api_urls">
-	<div><span class="api_urls_header">URL Format: http://data.nationalpriorities.org/api/snap_participation_households/list.&lt;format&gt;?...</div>
-		<div>Allowed Keys: 'state', 'year'</div>
-		<div>Example: <a href="/api/snap_participation_households/list.json?state=South Carolina&year=2009">http://data.nationalpriorities.org/api/snap_participation_households/list.json?state=South Carolina&amp;year=2009</a></div>
+	<div><span class="api_urls_header">URL Format: http://data.nationalpriorities.org/api/snap_participation_households_state/list.&lt;format&gt;?...</div>
+		<div>Allowed Keys: 'state', 'state_abbr', 'state_ansi', 'state_name', 'year'</div>
+		<div>Example: <a href="/api/snap_participation_households_state/list.json?year=2011">http://data.nationalpriorities.org/api/snap_participation_households_state/list.json?year=2011</a></div>
 	</div>
 </div>
 {% endblock %}

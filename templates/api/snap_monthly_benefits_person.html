@@ -1,12 +1,18 @@
 {% extends "api/api_base.html" %}
 
 {% block content %}
-<h1>SNAP (Foodstamp) Monthly Benefits per Person by State</h1>
+<h1>SNAP (Foodstamp) Monthly Benefits per Person</h1>
+
+<p>Available geography:
+<ul>
+    <li>state</li>
+</ul>
+</p>
 
 <div class="api_urls">
-	<div><span class="api_urls_header">URL Format: http://data.nationalpriorities.org/api/snap_monthly_benefits_person/list.&lt;format&gt;?...</div>
-		<div>Allowed Keys: 'state', 'year'</div>
-		<div>Example: <a href="/api/snap_monthly_benefits_person/list.json?state=South Carolina&year=2009">http://data.nationalpriorities.org/api/snap_monthly_benefits_person/list.json?state=South Carolina&amp;year=2009</a></div>
+	<div><span class="api_urls_header">URL Format: http://data.nationalpriorities.org/api/snap_monthly_benefits_person_state/list.&lt;format&gt;?...</div>
+		<div>Allowed Keys: 'state', 'state_abbr', 'state_ansi', 'state_name', 'year'</div>
+		<div>Example: <a href="/api/snap_monthly_benefits_person_state/list.json?state=MD">http://data.nationalpriorities.org/api/snap_monthly_benefits_person_state/list.json?state=MD</a></div>
 	</div>
 </div>
 {% endblock %}

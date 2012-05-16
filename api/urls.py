@@ -82,9 +82,9 @@ schip_enrollment_state_handler = Resource(SchipEnrollmentStateHandler)
 school_breakfast_participation_state_handler = Resource(SchoolBreakfastParticipationStateHandler)
 school_lunch_participation_state_handler = Resource(SchoolLunchParticipationStateHandler)
 snap_benefits_recipients_handler = Resource(SnapBenefitsRecipientsHandler)
-snap_monthly_benefits_person_handler = Resource(SnapMonthlyBenefitsPersonHandler)
-snap_participation_households_handler = Resource(SnapParticipationHouseholdsHandler)
-snap_participation_people_handler = Resource(SnapParticipationPeopleHandler)
+snap_monthly_benefits_person_state_handler = Resource(SnapMonthlyBenefitsPersonStateHandler)
+snap_participation_households_state_handler = Resource(SnapParticipationHouseholdsStateHandler)
+snap_participation_people_state_handler = Resource(SnapParticipationPeopleStateHandler)
 shelter_population_handler = Resource(ShelterPopulationHandler)
 special_ed_funding_handler = Resource(SpecialEdFundingHandler)
 state_completion_rate_handler = Resource(StateCompletionRateHandler)
@@ -355,12 +355,12 @@ urlpatterns += patterns('',
     url(r'^special_ed_funding/list\.(?P<emitter_format>.+)', special_ed_funding_handler),
     url(r'^snap_benefits_recipients/$', snap_benefits_recipients_handler),
     url(r'^snap_benefits_recipients/list\.(?P<emitter_format>.+)', snap_benefits_recipients_handler),
-    url(r'^snap_monthly_benefits_person/$', snap_monthly_benefits_person_handler),
-    url(r'^snap_monthly_benefits_person/list\.(?P<emitter_format>.+)', snap_monthly_benefits_person_handler),
-    url(r'^snap_participation_households/$', snap_participation_households_handler),
-    url(r'^snap_participation_households/list\.(?P<emitter_format>.+)', snap_participation_households_handler),
-    url(r'^snap_participation_people/$', snap_participation_people_handler),
-    url(r'^snap_participation_people/list\.(?P<emitter_format>.+)', snap_participation_people_handler),
+    url(r'^snap_monthly_benefits_person_state/$', snap_monthly_benefits_person_state_handler),
+    url(r'^snap_monthly_benefits_person_state/list\.(?P<emitter_format>.+)', snap_monthly_benefits_person_state_handler),
+    url(r'^snap_participation_households_state/$', snap_participation_households_state_handler),
+    url(r'^snap_participation_households_state/list\.(?P<emitter_format>.+)', snap_participation_households_state_handler),
+    url(r'^snap_participation_people_state/$', snap_participation_people_state_handler),
+    url(r'^snap_participation_people_state/list\.(?P<emitter_format>.+)', snap_participation_people_state_handler),
     url(r'^state_completion_rate/$', state_completion_rate_handler),
     url(r'^state_completion_rate/list\.(?P<emitter_format>.+)', state_completion_rate_handler),
     url(r'^state_gdp/$', state_gdp_handler),
