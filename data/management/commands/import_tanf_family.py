@@ -3,13 +3,14 @@ from django.conf import settings
 from django.core.management.base import NoArgsCommand
 from django.core.exceptions import MultipleObjectsReturned
 from data.models import TanfFamilyStateRaw
+from npp_api.data.utils import clean_num
 import csv
 
 # National Priorities Project Data Repository
 # import_tanf_family.py
 
 # Imports year TANF family participation estimates
-# source info: http://www.acf.hhs.gov/programs/ofa/data-reports/index.htm (accurate as of 8/5/2011)
+# source info: http://www.acf.hhs.gov/programs/ofa/data-reports/index.htm (accurate as of 5/17/2012)
 # npp csv: http://assets.nationalpriorities.org/raw_data/hhs.gov/tanf_family.csv (updated )
 # destination model:  TanfFamilyStateRaw
 
@@ -17,7 +18,7 @@ import csv
 # 1) Download source file from url listed above
 # 2) Convert source file to .csv with same formatting as npp csv 
 # 3) change SOURCE_FILE variable to the the path of the source file you just created
-# 4) Run as Django management command from your project path "python manage.py import_tanf_family
+# 4) Run as Django management command from your project path "python manage.py import_tanf_family"
 
 # Safe to re-run: YES
 
@@ -26,16 +27,11 @@ SOURCE_FILE = '%s/hhs.gov/tanf_family.csv' % (settings.LOCAL_DATA_ROOT)
 class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
-    
-        def clean_num(value):
-            if value.strip()=='':
-                value=None
-            else:
-                value = value.replace(",","")
-                value = int(value)
-            return value
             
         data_reader = csv.reader(open(SOURCE_FILE))
+        insert_count = 0
+        update_count = 0
+        unchanged_count = 0
         
         for i, row in enumerate(data_reader):
             if i == 0:
@@ -49,15 +45,24 @@ class Command(NoArgsCommand):
                             year = year_row[j]
                             try:
                                 record = TanfFamilyStateRaw.objects.get(year=year,state=state)
+                                current_value = clean_num(col)
+                                if record.value != current_value:
+                                    record.value = current_value
+                                    record.save()
+                                    update_count = update_count + 1
+                                else:
+                                    unchanged_count = unchanged_count + 1
                             except MultipleObjectsReturned:
-                                print 'error: multiple records exist for ' + str(year_row[j]) + ' ' + state
+                                print 'error: multiple records exist for %s %s' % (year_row[j], state)
                                 continue
                             except:
                                 record = TanfFamilyStateRaw()
                                 record.year = year
                                 record.state = state
+                                record.value = clean_num(col)
+                                record.save()
+                                insert_count = insert_count + 1
                                 
-                            value = clean_num(col)
-                            record.value = value
-                            record.save()
-                            db.reset_queries()
+        db.reset_queries()
+        print 'tanf family participation import complete. %s inserted, %s updated, %s unchanged' % (
+            insert_count, update_count, unchanged_count)

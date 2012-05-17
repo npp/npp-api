@@ -13,7 +13,7 @@ from data.models import State, TanfParticipationStateRaw, TanfFamilyStateRaw, Ta
 
 # HOWTO:
 # 1) Ensure that State is loaded and up to date
-# 2) Run as Django management command from your project path "python manage.py load_tanf_participation_state
+# 2) Run as Django management command from your project path "python manage.py load_tanf_participation_state"
 
 # Safe to rerun: yes
 
@@ -35,6 +35,8 @@ class Command(NoArgsCommand):
                         t.state = 'United States'
                     if t.state.lower().find('dist') >= 0:
                         t.state = 'District of Columbia'
+                    if t.state.lower().find('virgin islands') >= 0:
+                        t.state = 'U.S. Virgin Islands'
                     state_ref_current = State.objects.get(state_name=t.state)
                 except:
                     print 'Skipping record. Unable to find state: ' + t.state
@@ -74,6 +76,8 @@ class Command(NoArgsCommand):
                         t.state = 'United States'
                     if t.state.lower().find('dist') >= 0:
                         t.state = 'District of Columbia'
+                    if t.state.lower().find('virgin islands') >= 0:
+                        t.state = 'U.S. Virgin Islands'
                     state_ref_current = State.objects.get(state_name=t.state)
                 except:
                     print 'Skipping record. Unable to find state: ' + t.state
