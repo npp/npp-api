@@ -757,14 +757,14 @@ class VocationalEdSpendingHandler(GenericHandler):
         
 class WicBenefitsStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('year', 'state_abbr', 'state_ansi')
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'state_name')
         model = WicBenefitsState
         fields = ('year', 'amount', ('state', ('state_ansi', 'state_abbr', 'state_name')))
         super(WicBenefitsStateHandler, self).__init__(allowed_keys, model,fields)
         
 class WicParticipationStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('year', 'state_abbr', 'state_ansi')
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'state_name')
         model = WicParticipationState
         fields = ('year', 'value', ('state', ('state_ansi', 'state_abbr', 'state_name')))
         super(WicParticipationStateHandler, self).__init__(allowed_keys, model,fields)
