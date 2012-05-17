@@ -1,6 +1,7 @@
 from django import db
 from django.core.management.base import NoArgsCommand
 from data.models import State, SnapMonthlyBenefitsPersonStateRaw, SnapMonthlyBenefitsPersonState
+from npp_api.data.utils import clean_state_name
 
 # National Priorities Project Data Repository
 # load_snap_monthly_benefits_person_state
@@ -31,12 +32,11 @@ class Command(NoArgsCommand):
         for r in raw:
         
             if r.state != state_name:
+                clean_state = clean_state_name(r.state)
                 try:
-                    if r.state.lower().find('virgin islands') > -1:
-                        r.state = 'U.S. Virgin Islands'
-                    state_ref_current = State.objects.get(state_name=r.state)
+                    state_ref_current = State.objects.get(state_name=clean_state)
                 except:
-                    print 'Skipping record. Unable to find state: %s' % r.state
+                    print 'Skipping record. Unable to find state: ' + clean_state
                     continue
                 state_name = r.state
             

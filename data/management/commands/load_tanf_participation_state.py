@@ -1,6 +1,7 @@
 from django import db
 from django.core.management.base import NoArgsCommand
 from data.models import State, TanfParticipationStateRaw, TanfFamilyStateRaw, TanfParticipationState
+from npp_api.data.utils import clean_state_name
 
 # National Priorities Project Data Repository
 # load_tanf_participation_state.py 
@@ -30,16 +31,11 @@ class Command(NoArgsCommand):
         for t in person:
         
             if t.state != state_name:
+                clean_state = clean_state_name(t.state)
                 try:
-                    if t.state.lower().find('u.s') >= 0 or t.state.lower().find('total') >= 0:
-                        t.state = 'United States'
-                    if t.state.lower().find('dist') >= 0:
-                        t.state = 'District of Columbia'
-                    if t.state.lower().find('virgin islands') >= 0:
-                        t.state = 'U.S. Virgin Islands'
-                    state_ref_current = State.objects.get(state_name=t.state)
+                    state_ref_current = State.objects.get(state_name=clean_state)
                 except:
-                    print 'Skipping record. Unable to find state: ' + t.state
+                    print 'Skipping record. Unable to find state: ' + clean_state
                     continue
                 state_name = t.state
                 
@@ -71,16 +67,11 @@ class Command(NoArgsCommand):
         for t in family:
         
             if t.state != state_name:
+                clean_state = clean_state_name(t.state)
                 try:
-                    if t.state.lower().find('u.s') >= 0 or t.state.lower().find('total') >= 0:
-                        t.state = 'United States'
-                    if t.state.lower().find('dist') >= 0:
-                        t.state = 'District of Columbia'
-                    if t.state.lower().find('virgin islands') >= 0:
-                        t.state = 'U.S. Virgin Islands'
-                    state_ref_current = State.objects.get(state_name=t.state)
+                    state_ref_current = State.objects.get(state_name=clean_state)
                 except:
-                    print 'Skipping record. Unable to find state: ' + t.state
+                    print 'Skipping record. Unable to find state: ' + clean_state
                     continue
                 state_name = t.state
                 
