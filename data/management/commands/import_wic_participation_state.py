@@ -2,14 +2,14 @@ from django import db
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
 from data.models import WicParticipationStateRaw
+from npp_api.data.utils import clean_num
 import csv
 
 # National Priorities Project Data Repository
 # import_wic_participation_state.py
-# Updated 7/27/2010, Joshua Ruihley, Sunlight Foundation
 
 # Imports USDA SNAP Benefits per Person by State
-# source info: http://www.fns.usda.gov/pd/26wifypart.htm (accurate as of 7/12/2011)
+# source info: http://www.fns.usda.gov/pd/26wifypart.htm (accurate as of 5/17/2012)
 # npp csv: http://assets.nationalpriorities.org/raw_data/hunger/wic_participants.csv (updated 7/27/2010)
 # destination model:  WicParticipationStateRaw
 
@@ -26,21 +26,11 @@ SOURCE_FILE = '%s/hunger/wic_participants.csv' % (settings.LOCAL_DATA_ROOT)
 class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
-        
-        def clean_int(value):
-            if value.strip()=='':
-                value=None
-            else:
-                try:
-                    value=int(value.replace(',', '').replace(' ', '')) 
-                except:
-                    value=None
-            return value
-            
+
         data_reader = csv.reader(open(SOURCE_FILE))
-        
         insert_count = 0
         update_count = 0
+        unchanged_count = 0
         
         for i, row in enumerate(data_reader):
             if i == 0:
@@ -52,15 +42,7 @@ class Command(NoArgsCommand):
                 place = place.replace('Dept', 'Department')
                 
                 if place[0] != ' ':
-                    if place == 'Virgin Islands':
-                        state = 'U.S. Virgin Islands'
-                    elif place == 'Northern Marianas':
-                        state = 'Northern Mariana Islands'
-                    elif place.lower() == 'total':
-                        state = 'United States'
-                        place = 'United States'
-                    else:
-                        state = row[0]
+                    state = row[0]
                     type = 'Total'
                 else:
                     place = place.lstrip()
@@ -69,17 +51,24 @@ class Command(NoArgsCommand):
                     if j > 0:
                         year = year_row[j]
                         try:
-                            record = WicParticipationStateRaw.objects.get(state=state,place=place,year=year)
-                            update_count = update_count + 1
+                            record = WicParticipationStateRaw.objects.get(
+                                state=state,place=place,year=year)
+                            current_value = clean_num(col)
+                            if record.value != current_value:
+                                record.value = current_value
+                                record.save()
+                                update_count = update_count + 1
+                            else:
+                                unchanged_count = unchanged_count + 1
                         except:
                             record = WicParticipationStateRaw()
                             record.state = state
                             record.place = place
                             record.type = type
                             record.year = year
+                            record.value = clean_num(col)
+                            record.save()
                             insert_count = insert_count + 1
-                        record.value = clean_int(col)
-                        record.save()
-                        db.reset_queries()
-                        
-        print 'Records updated = ' + str(update_count) + '. Records inserted = ' + str(insert_count)
+        db.reset_queries()
+        print 'wic participation import complete. %s inserted, %s updated, %s unchanged' % (
+            insert_count, update_count, unchanged_count)
