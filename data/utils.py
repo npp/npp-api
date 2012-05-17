@@ -29,5 +29,7 @@ def clean_state_name(state):
         state = 'District of Columbia'
     elif state_name.find('virgin islands') > -1:
         state = 'U.S. Virgin Islands'
-        
+    elif state_name.find('northern marianas') > -1:
+        state = 'Northern Mariana Islands'
+    
     return state
