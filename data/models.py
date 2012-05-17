@@ -827,14 +827,14 @@ class SummerLunchParticipationStateRaw(models.Model):
 class TanfFamilyStateRaw(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
-    value = models.IntegerField()
+    value = models.IntegerField(null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     
 class TanfParticipationStateRaw(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
-    value = models.IntegerField()
+    value = models.IntegerField(null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     
