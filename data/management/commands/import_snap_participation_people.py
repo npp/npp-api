@@ -48,7 +48,7 @@ class Command(NoArgsCommand):
                                 if record.value != current_value:
                                     record.value = current_value
                                     record.save()
-                                    update_count = insert_count + 1
+                                    update_count = update_count + 1
                                 else:
                                     unchanged_count = unchanged_count + 1
                                 
