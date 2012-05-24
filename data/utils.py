@@ -1,3 +1,4 @@
+import math
 from decimal import *
 
 def get_percent(numer,denom):
@@ -33,3 +34,33 @@ def clean_state_name(state):
         state = 'Northern Mariana Islands'
     
     return state
+    
+def clean_moe(moe):
+    #if the margin of error is empty, return a null; else preserve
+    #its contents (foe example, the annotations that the census
+    #bureau often includes)
+    if len(moe):
+        try:
+            value = Decimal(moe)
+        except:
+            value = moe
+    else:
+        value=None
+    return value
+    
+def get_proportion_moe(num, denom, nummoe, denommoe):
+    #using procedure specified in Census Bureau's ACS documentation, calculate
+    #the margin of error for a derived proportion.
+    
+    #moe of ***** is a controlled estimate, so there is no margin of error
+    if str(nummoe).find('*****') > -1:
+        nummoe = 0
+    if str(denommoe).find('*****') > -1:
+        denommoe = 0
+        
+    p = num/denom
+    p2 = p**2
+    nummoe2 = Decimal(nummoe)**2
+    denommoe2 = Decimal(denommoe)**2
+    pmoe = (math.sqrt(nummoe2 - (p2 * denommoe2)))/denom
+    return Decimal(str(pmoe))
