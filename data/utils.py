@@ -12,7 +12,7 @@ def clean_num(value):
             value=None
         elif value.find(".") <> -1:
             value = value.replace(",","")
-            value = float(value)
+            value = Decimal(value)
         else:
             value = value.replace(",","")
             value = int(value)
