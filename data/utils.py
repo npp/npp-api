@@ -1,10 +1,11 @@
+from __future__ import division
 import math
 from decimal import *
 
 def get_percent(numer,denom):
     thiscontext = Context(rounding=ROUND_HALF_UP)
     setcontext(thiscontext)
-    return Decimal(str(float(numer)/denom*100)).quantize(Decimal('1.01'))
+    return Decimal(str(numer/denom*100)).quantize(Decimal('1.01'))
     
 def clean_num(value):
     value = value.strip()
@@ -54,13 +55,13 @@ def get_proportion_moe(num, denom, nummoe, denommoe):
     
     #moe of ***** is a controlled estimate, so there is no margin of error
     if str(nummoe).find('*****') > -1:
-        nummoe = 0
+        nummoe = 0.0
     if str(denommoe).find('*****') > -1:
-        denommoe = 0
+        denommoe = 0.0
         
     p = num/denom
     p2 = p**2
-    nummoe2 = Decimal(nummoe)**2
-    denommoe2 = Decimal(denommoe)**2
+    nummoe2 = nummoe**2
+    denommoe2 = denommoe**2
     pmoe = (math.sqrt(nummoe2 - (p2 * denommoe2)))/denom
     return Decimal(str(pmoe))
