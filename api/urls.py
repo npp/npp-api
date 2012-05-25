@@ -45,7 +45,7 @@ head_start_enrollment_handler = Resource(HeadStartEnrollmentHandler)
 health_insurance_handler = Resource(HealthInsuranceHandler)
 high_school_other_handler = Resource(HighSchoolOtherHandler)
 high_school_dropouts_handler = Resource(HighSchoolDropoutsHandler)
-housing_units_handler = Resource(HousingUnitsHandler)
+housing_occupancy_state_handler = Resource(HousingOccupancyStateHandler)
 individual_education_programs_handler = Resource(IndividualEducationProgramsHandler)
 kids_health_insurance_handler = Resource(KidsHealthInsuranceHandler)
 labor_force_county_handler = Resource(LaborForceCountyHandler)
@@ -61,7 +61,6 @@ msn_handler = Resource(MsnHandler)
 native_ed_spending_handler = Resource(NativeEdSpendingHandler)
 new_aids_cases_handler = Resource(NewAidsCasesHandler)
 nces_school_district_handler = Resource(NcesSchoolDistrictHandler)
-owners_renters_handler = Resource(OwnersRentersHandler)
 other_federal_revenue_handler = Resource(OtherFederalRevenueHandler)
 people_in_poverty_handler = Resource(PeopleInPovertyHandler)
 population_congressional_district_handler = Resource(PopulationCongressionalDistrictHandler)
@@ -139,7 +138,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^health_insurance.html$', 'direct_to_template', {'template': 'api/health_insurance.html'}),
     (r'^high_school_dropouts.html$', 'direct_to_template', {'template': 'api/high_school_dropouts.html'}),
     (r'^high_school_other.html$', 'direct_to_template', {'template': 'api/high_school_other.html'}),
-    (r'^housing_units.html$', 'direct_to_template', {'template': 'api/housing_units.html'}),
+    (r'^housing_occupancy.html$', 'direct_to_template', {'template': 'api/housing_occupancy.html'}),
     (r'^individual_education_programs.html$', 'direct_to_template', {'template': 'api/individual_education_programs.html'}),
     (r'^kids_health_insurance.html$', 'direct_to_template', {'template': 'api/kids_health_insurance.html'}),
     (r'^labor_force.html$', 'direct_to_template', {'template': 'api/labor_force.html'}),
@@ -154,7 +153,6 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^native_ed_spending.html$', 'direct_to_template', {'template': 'api/native_ed_spending.html'}),
     (r'^new_aids_cases.html$', 'direct_to_template', {'template': 'api/new_aids_cases.html'}),
     (r'^other_federal_revenue.html$', 'direct_to_template', {'template': 'api/other_federal_revenue.html'}),
-    (r'^owners_renters.html$', 'direct_to_template', {'template': 'api/owners_renters.html'}),
     (r'^payments_individuals.html$', 'direct_to_template', {'template': 'api/payments_individuals.html'}),
     (r'^people_in_poverty.html$', 'direct_to_template', {'template': 'api/people_in_poverty.html'}),
     (r'^population_congressional_district.html$', 'direct_to_template', {'template': 'api/population_congressional_district.html'}),
@@ -273,8 +271,8 @@ urlpatterns += patterns('',
     url(r'^high_school_dropouts/list\.(?P<emitter_format>.+)', high_school_dropouts_handler),
     url(r'^high_school_other/$', high_school_other_handler),
     url(r'^high_school_other/list\.(?P<emitter_format>.+)', high_school_other_handler),
-    url(r'^housing_units/$', housing_units_handler),
-    url(r'^housing_units/list\.(?P<emitter_format>.+)', housing_units_handler),
+    url(r'^housing_occupancy_state/$', housing_occupancy_state_handler),
+    url(r'^housing_occupancy_state/list\.(?P<emitter_format>.+)', housing_occupancy_state_handler),
     url(r'^individual_education_programs/$', individual_education_programs_handler),
     url(r'^individual_education_programs/list\.(?P<emitter_format>.+)', individual_education_programs_handler),
     url(r'^kids_health_insurance/$', kids_health_insurance_handler),
@@ -307,8 +305,6 @@ urlpatterns += patterns('',
     url(r'^new_aids_cases/list\.(?P<emitter_format>.+)', new_aids_cases_handler),
     url(r'^other_federal_revenue/$', other_federal_revenue_handler),
     url(r'^other_federal_revenue/list\.(?P<emitter_format>.+)', other_federal_revenue_handler),
-    url(r'^owners_renters/$', owners_renters_handler),
-    url(r'^owners_renters/list\.(?P<emitter_format>.+)', owners_renters_handler),
     url(r'^payments_individuals_county/$', cffr_individual_county_handler),
     url(r'^payments_individuals_county/list\.(?P<emitter_format>.+)', cffr_individual_county_handler),
     url(r'^payments_individuals_state/$', cffr_individual_state_handler),

@@ -404,12 +404,20 @@ class HighSchoolOtherHandler(GenericHandler):
         model = HighSchoolOther
         super(HighSchoolOtherHandler, self).__init__(allowed_keys, model)
                 
-class HousingUnitsHandler(GenericHandler):
+class HousingOccupancyStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = HousingUnits
-        super(HousingUnitsHandler, self).__init__(allowed_keys, model)
-        
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'state_name')
+        model = HousingOccupancyState
+        fields = ('year', ('state', ('state_ansi', 'state_abbr', 'state_name')),
+            'total_units', 'total_units_moe', 'occupied_units', 'occupied_units_moe', 'occupied_units_percent',
+            'occupied_units_percent_moe', 'vacant_units', 'vacant_units_moe', 'vacant_units_percent',
+            'vacant_units_percent_moe', 'owner_occupied', 'owner_occupied_moe', 
+            'owner_occupied_percent','owner_occupied_percent_moe', 'owner_vacancy_rate',
+            'owner_vacancy_rate_moe', 'renter_occupied', 'renter_occupied_moe', 
+           'renter_occupied_percent', 'renter_occupied_percent_moe', 'renter_vacancy_rate',
+            'renter_vacancy_rate_moe')
+        super(HousingOccupancyStateHandler, self).__init__(allowed_keys, model, fields)
+
 class IndividualEducationProgramsHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state', 'year', 'agency_name', 'agency_id')
@@ -514,12 +522,6 @@ class OtherFederalRevenueHandler(GenericHandler):
         allowed_keys = ('state', 'year', 'agency_name', 'agency_id')
         model = OtherFederalRevenue
         super(OtherFederalRevenueHandler, self).__init__(allowed_keys, model)
-        
-class OwnersRentersHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = OwnersRenters
-        super(OwnersRentersHandler, self).__init__(allowed_keys, model)
         
 class PeopleInPovertyHandler(GenericHandler):
     def __init__(self):

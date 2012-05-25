@@ -1,0 +1,30 @@
+{% extends "api/api_base.html" %}
+
+{% block content %}
+<h1>Housing Occupancy
+</h1>
+<p>
+Housing units, occupancy rates, and owners/renters.
+</p>
+
+<div class="api_urls">
+	<div><span class="api_urls_header">URL Format: </div>
+	<div>http://data.nationalpriorities.org/api/&lt;source&gt;/list.&lt;format&gt;?...</div>
+</div>
+
+<h2>Sources</h2>
+
+<p>Available geography:
+<ul>
+    <li>state</li>
+</ul>
+</p>
+
+<ul>
+	<li>
+		<div>State Housing Occupancy</div>
+		<div>Allowed Keys: 'year', 'state', 'state_ansi', 'state_name'</div>
+		<div>Example: <a href="/api/housing_occupancy_state/list.json?state=az">http://data.nationalpriorities.org/housing_occupancy_state/list.json?state=az</a></div>
+	</li>
+</ul>
+{% endblock %}
