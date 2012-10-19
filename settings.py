@@ -4,7 +4,7 @@ DEBUG = False
 TEMPLATE_DEBUG = False
 
 ADMINS = (
-    ("Brendan Smith", "brendan@nationalpriorities.org"),
+    ("Jason Leveille", "jason@nationalpriorities.org"),
     ("Becky Sweger", "bsweger@nationalpriorities.org"),
 )
 
