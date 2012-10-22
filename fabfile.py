@@ -10,7 +10,7 @@ env.prod_dir = '/var/www/vhosts/data.nationalpriorities.org/api/npp_api'
 
 def deploy_prod():
     with cd(env.prod_dir):
-        run('git pull')
+        run('git checkout master && git pull')
         sudo('sudo chown -R www-data:www-data *')
         sudo('touch ../conf/api.wsgi')
 
