@@ -4,12 +4,13 @@ from os import path
 
 #env.user = 'root'
 #env.shell= '/bin/bash'
-env.hosts = ['data.nationalpriorities.org']
+env.hosts = ['173.255.224.113:3000']
 env.prod_dir = '/var/www/vhosts/data.nationalpriorities.org/api/npp_api'
 
 
 def deploy_prod():
     with cd(env.prod_dir):
-        sudo('git pull', user='www-data')
-        sudo('touch ../conf/api.wsgi', user="www-data")
+        run('git pull')
+        sudo('sudo chown -R www-data:www-data *')
+        sudo('touch ../conf/api.wsgi')
 
