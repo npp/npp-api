@@ -10,7 +10,7 @@ import csv
 
 # Imports census.gov State People in Poverty
 # pre-2005 source info: http://www.census.gov/hhes/www/poverty/data/historical/people.html (accurate as of 6/15/2011)
-# as of 9/2011 for years 2005 & greater, source switches from CPS to ACS 1 year estimates, available via Census Factfinder, e.g. http://factfinder2.census.gov/faces/tableservices/jsf/pages/productview.xhtml?pid=ACS_10_1YR_S1701&prodType=table
+# as of 9/2011 for years 2005 & greater, source switches from CPS to ACS 1 year estimates table S1701, available via Census Factfinder, e.g. http://factfinder2.census.gov/faces/tableservices/jsf/pages/productview.xhtml?pid=ACS_10_1YR_S1701&prodType=table
 # npp csv: http://assets.nationalpriorities.org/raw_data/census.gov/income/people_in_poverty.csv (updated 6/29/2010)
 # destination model:  PeopleInPoverty
 
