@@ -1,7 +1,7 @@
 from django import db
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
-from data.models import FamiliesPoverty
+from data.models import FamiliesPovertyStateRaw
 from django.core.exceptions import MultipleObjectsReturned
 import csv
 
@@ -48,13 +48,13 @@ class Command(NoArgsCommand):
                     year = row[0]
                     state = row[1].lower()
                     try:
-                        record = FamiliesPoverty.objects.get(year=year,state=state)
+                        record = FamiliesPovertyStateRaw.objects.get(year=year,state=state)
                         update_count = update_count + 1
                     except MultipleObjectsReturned:
                         print 'error: multiple records exist for %s %s' % (year, state)
                         continue
                     except:
-                        record = FamiliesPoverty(year=year,state=state)
+                        record = FamiliesPovertyStateRaw(year=year,state=state)
                         print 'inserting %s %s' % (year, state)
                         insert_count = insert_count + 1
                         record.families_total = clean_int(row[2])
