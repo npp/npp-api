@@ -543,15 +543,6 @@ class OtherFederalRevenue(models.Model):
     agency_id = models.CharField(max_length=7)
     amount = models.IntegerField(null=True)
     
-class OwnersRenters(models.Model):
-    state = models.CharField(max_length=32)
-    year = models.IntegerField()
-    total = models.IntegerField()
-    not_in_universe = models.IntegerField()
-    owned = models.IntegerField()
-    rented = models.IntegerField()
-    rented_no_cash = models.IntegerField()
-    
 class PeoplePovertyStateRaw(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
