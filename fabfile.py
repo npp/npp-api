@@ -1,6 +1,6 @@
 from __future__ import with_statement
 from fabric.api import *
-from tools.services import imports, apache, deploy, mysql, nginx
+from tools.services import apache, deploy, imports, loads, mysql, nginx
 
 env.roledefs = {
     'prod': ['data.nationalpriorities.org:3000'],
