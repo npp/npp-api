@@ -1,32 +1,49 @@
 from tools.services import (start_service, stop_service, status_service,
                             reload_service, force_reload_service, restart_service)
 from fabric.api import task
-from fabric.decorators import roles
 
 SERVICE = 'apache2'
 
 @task
 def start():
+    '''
+    fab staging apache.start
+    '''
     start_service(SERVICE)
 
 @task
 def stop():
+    '''
+    fab staging apache.stop
+    '''
     stop_service(SERVICE)
 
 @task
 def status():
+    '''
+    fab staging apache.status
+    '''
     status_service(SERVICE)
 
 @task
 def reload():
+    '''
+    fab staging apache.reload
+    '''
     reload_service(SERVICE)
 
 @task
 def force_reload():
+    '''
+    fab staging apache.force_reload
+    '''
     force_reload_service(SERVICE)
 
 @task
 def restart():
+    '''
+    fab staging apache.restart          Will display status when restart complete
+    '''
     restart_service(SERVICE)
     status()
 

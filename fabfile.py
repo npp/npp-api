@@ -10,6 +10,9 @@ env.shell = "/bin/bash -c"
 
 @task
 def prod():
+    '''
+    Sets environment variables for production.  Useage: fab prod taskname
+    '''
     env.hosts.extend(env.roledefs['prod'])
     env.settings = 'production'
     env.project_name = 'data.nationalpriorities.org'
@@ -18,6 +21,9 @@ def prod():
 
 @task
 def staging():
+    '''
+    Sets environment variables for staging.  Useage: fab staging taskname
+    '''
     env.hosts.extend(env.roledefs['staging'])
     env.settings = 'staging'
     env.project_name = 'staging.data.nationalpriorities.org'
