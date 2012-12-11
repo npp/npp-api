@@ -30,4 +30,4 @@ def setup():
     env.bin_path = '%(env_path)s/bin' % env
     env.conf_path = '%(project_path)s/conf' % env
     env.log_path = '%(project_path)s/logs' % env
-    env.repo_path = '%(project_path)s/npp_api' % env\
+    env.repo_path = '%(project_path)s/npp_api' % env
