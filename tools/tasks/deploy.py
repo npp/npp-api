@@ -6,14 +6,14 @@ from fabric.decorators import roles
 @task
 def deploy(branch="master"):
     '''
-    fab staging deploy OR fab staging deploy:branchname
+    fab staging deploy.deploy OR fab staging deploy.deploy:branchname
     '''
     if confirm("Are you sure you want to deploy to %s" % env.host):
         pre()
         with cd(env.repo_path):
             sudo('git checkout %s' % branch, user='www-data'),
             sudo('git pull', user='www-data')
-            sudo('touch %(conf_path)s/front-end.wsgi' % env)
+            sudo('touch %(conf_path)s/*.wsgi' % env)
         post()
 
 def pre():
