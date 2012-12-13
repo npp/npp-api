@@ -1,4 +1,4 @@
-from tools.services import (start_service, stop_service, status_service,
+from tools.tasks import (start_service, stop_service, status_service,
                             reload_service, force_reload_service, restart_service)
 from fabric.api import task
 

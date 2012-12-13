@@ -1,5 +1,5 @@
 from fabric.api import *
-from tools.services import run_command
+from tools.tasks import run_command
 
 @task
 def imports(taskname=None):
