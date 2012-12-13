@@ -3,7 +3,11 @@ from fabric.context_managers import cd
 from fabric.contrib.console import confirm
 from fabric.decorators import roles
 
+@task
 def deploy(branch="master"):
+    '''
+    fab staging deploy OR fab staging deploy:branchname
+    '''
     if confirm("Are you sure you want to deploy to %s" % env.host):
         pre()
         with cd(env.repo_path):
