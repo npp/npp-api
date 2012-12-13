@@ -105,18 +105,18 @@ class CffrProgramRaw(models.Model):
     program_id_code = models.CharField(max_length=6)
     program_name = models.CharField(max_length=74)
     
-class ChildrenPoverty(models.Model):
+class ChildrenPovertyStateRaw(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
     children_total = models.IntegerField()
     children_total_moe = models.IntegerField()
     children_poverty = models.IntegerField()
     children_poverty_moe = models.IntegerField()
-    children_poverty_percent = models.FloatField()
-    children_poverty_percent_moe = models.FloatField()
+    children_poverty_percent = models.DecimalField(max_digits=5,decimal_places=2)
+    children_poverty_percent_moe = models.DecimalField(max_digits=5,decimal_places=2)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
-    
+       
 class DiplomaRecipientTotal(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=2)
@@ -208,16 +208,16 @@ class ExpenditurePerPupil(models.Model):
     agency_id = models.CharField(max_length=7)
     amount = models.IntegerField(null=True)
     
-class FamiliesPoverty(models.Model):
+class FamiliesPovertyStateRaw(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
     families_total = models.IntegerField()
     families_total_moe = models.IntegerField()
-    families_poverty_percent = models.FloatField()
-    families_poverty_percent_moe = models.FloatField()
+    families_poverty_percent = models.DecimalField(max_digits=5,decimal_places=2)
+    families_poverty_percent_moe = models.DecimalField(max_digits=5,decimal_places=2)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
-    
+ 
 class FcnaSpending(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=2)
@@ -543,23 +543,16 @@ class OtherFederalRevenue(models.Model):
     agency_id = models.CharField(max_length=7)
     amount = models.IntegerField(null=True)
     
-class OwnersRenters(models.Model):
-    state = models.CharField(max_length=32)
-    year = models.IntegerField()
-    total = models.IntegerField()
-    not_in_universe = models.IntegerField()
-    owned = models.IntegerField()
-    rented = models.IntegerField()
-    rented_no_cash = models.IntegerField()
-    
-class PeopleInPoverty(models.Model):
+class PeoplePovertyStateRaw(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=32)
     total_population = models.IntegerField()
     value = models.IntegerField()
     value_standard_error = models.IntegerField()
-    percent = models.FloatField()
-    percent_standard_error = models.FloatField()
+    percent = models.DecimalField(max_digits=5,decimal_places=2)
+    percent_standard_error = models.DecimalField(max_digits=5,decimal_places=2)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
 
 #deprecated?    
 class PopulationCongressionalDistrict(models.Model):
@@ -1045,6 +1038,18 @@ class CffrIndividualState(models.Model):
     class Meta:
         unique_together = ('year', 'state')
         
+class ChildrenPovertyState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    children_total = models.IntegerField()
+    children_total_moe = models.IntegerField()
+    children_poverty = models.IntegerField()
+    children_poverty_moe = models.IntegerField()
+    children_poverty_percent = models.DecimalField(max_digits=5,decimal_places=2)
+    children_poverty_percent_moe = models.DecimalField(max_digits=5,decimal_places=2)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+
 class ElectricEmissionsState(models.Model):
     year = models.IntegerField()
     state = models.ForeignKey(State)
@@ -1080,6 +1085,16 @@ class EnergyProductionState(models.Model):
     
     class Meta:
         unique_together = ('year', 'state', 'msn')
+        
+class FamiliesPovertyState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    families_total = models.IntegerField()
+    families_total_moe = models.IntegerField()
+    families_poverty_percent = models.DecimalField(max_digits=5,decimal_places=2)
+    families_poverty_percent_moe = models.DecimalField(max_digits=5,decimal_places=2)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
         
 class FederalTaxCollectionState(models.Model):
     year = models.IntegerField()
@@ -1211,6 +1226,17 @@ class MedianIncomeState(models.Model):
     
     class Meta:
         unique_together = ('year', 'state')
+        
+class PeoplePovertyState(models.Model):
+    year = models.IntegerField()
+    state = models.ForeignKey(State)
+    total_population = models.IntegerField()
+    value = models.IntegerField()
+    value_standard_error = models.IntegerField()
+    percent = models.DecimalField(max_digits=5,decimal_places=2)
+    percent_standard_error = models.DecimalField(max_digits=5,decimal_places=2)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
 
 #July 2011.  Following models (PopulationCounty & PopulationState would, in theory, hold a normalized structure of every possible year, gender, race, ethnicity, & age combination for the census population estimates.  Because it wasn't practical to load & implement this highly normalized model in the API and search tool, the population data facets are presented as individual APIs.  This is easier, but it does mean we lose the ability to combine the facets (e.g., # of hispanic black females over 65).  Leaving the proposed model here for future reference.
 #class PopulationCounty(models.Model):

@@ -16,7 +16,7 @@ cffr_individual_county_handler = Resource(CffrIndividualCountyHandler)
 cffr_individual_state_handler = Resource(CffrIndividualStateHandler)
 cffr_object_code_handler = Resource(CffrObjectCodeHandler)
 cffr_program_handler = Resource(CffrProgramHandler)
-children_poverty_handler = Resource(ChildrenPovertyHandler)
+children_poverty_state_handler = Resource(ChildrenPovertyStateHandler)
 diploma_recipient_total_handler = Resource(DiplomaRecipientTotalHandler)
 dropouts_race_handler = Resource(DropoutsRaceHandler)
 drug_free_school_spending_handler = Resource(DrugFreeSchoolSpendingHandler)
@@ -30,7 +30,7 @@ energy_expenditures_handler = Resource(EnergyExpendituresHandler)
 enrolled_students_district_handler = Resource(EnrolledStudentsDistrictHandler)
 enrollment_race_handler = Resource(EnrollmentRaceHandler)
 expenditure_per_pupil_handler = Resource(ExpenditurePerPupilHandler)
-families_poverty_handler = Resource(FamiliesPovertyHandler)
+families_poverty_state_handler = Resource(FamiliesPovertyStateHandler)
 fcna_spending_handler = Resource(FcnaSpendingHandler)
 federal_impact_aid_handler = Resource(FederalImpactAidHandler)
 federal_tax_collection_state_handler = Resource(FederalTaxCollectionStateHandler)
@@ -62,7 +62,7 @@ native_ed_spending_handler = Resource(NativeEdSpendingHandler)
 new_aids_cases_handler = Resource(NewAidsCasesHandler)
 nces_school_district_handler = Resource(NcesSchoolDistrictHandler)
 other_federal_revenue_handler = Resource(OtherFederalRevenueHandler)
-people_in_poverty_handler = Resource(PeopleInPovertyHandler)
+people_poverty_state_handler = Resource(PeoplePovertyStateHandler)
 population_congressional_district_handler = Resource(PopulationCongressionalDistrictHandler)
 population_families_handler = Resource(PopulationFamiliesHandler)
 population_age_county_handler = Resource(PopulationAgeCountyHandler)
@@ -154,7 +154,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^new_aids_cases.html$', 'direct_to_template', {'template': 'api/new_aids_cases.html'}),
     (r'^other_federal_revenue.html$', 'direct_to_template', {'template': 'api/other_federal_revenue.html'}),
     (r'^payments_individuals.html$', 'direct_to_template', {'template': 'api/payments_individuals.html'}),
-    (r'^people_in_poverty.html$', 'direct_to_template', {'template': 'api/people_in_poverty.html'}),
+    (r'^people_poverty.html$', 'direct_to_template', {'template': 'api/people_poverty.html'}),
     (r'^population_congressional_district.html$', 'direct_to_template', {'template': 'api/population_congressional_district.html'}),
     (r'^population_families.html$', 'direct_to_template', {'template': 'api/population_families.html'}),
     (r'^population_age.html$', 'direct_to_template', {'template': 'api/population_age.html'}),
@@ -213,8 +213,8 @@ urlpatterns += patterns('',
     url(r'^cffrobjectcode/list\.(?P<emitter_format>.+)', cffr_object_code_handler), 
     url(r'^cffrprogram/$', cffr_program_handler),
     url(r'^cffrprogram/list\.(?P<emitter_format>.+)', cffr_program_handler),
-    url(r'^children_poverty/', children_poverty_handler),
-    url(r'^children_poverty/list\.(?P<emitter_format>.+)', children_poverty_handler),
+    url(r'^children_poverty_state/', children_poverty_state_handler),
+    url(r'^children_poverty_state/list\.(?P<emitter_format>.+)', children_poverty_state_handler),
     url(r'^diploma_recipient_total/$', diploma_recipient_total_handler),
     url(r'^diploma_recipient_total/list\.(?P<emitter_format>.+)', diploma_recipient_total_handler),
     url(r'^dropouts_race/$', dropouts_race_handler),
@@ -241,8 +241,8 @@ urlpatterns += patterns('',
     url(r'^enrollment_race/list\.(?P<emitter_format>.+)', enrollment_race_handler),
     url(r'^expenditure_per_pupil/$', expenditure_per_pupil_handler),
     url(r'^expenditure_per_pupil/list\.(?P<emitter_format>.+)', expenditure_per_pupil_handler),
-    url(r'^families_poverty/', families_poverty_handler),
-    url(r'^families_poverty/list\.(?P<emitter_format>.+)', families_poverty_handler),
+    url(r'^families_poverty_state/', families_poverty_state_handler),
+    url(r'^families_poverty_state/list\.(?P<emitter_format>.+)', families_poverty_state_handler),
     url(r'^fcna_spending/', fcna_spending_handler),
     url(r'^fcna_spending/list\.(?P<emitter_format>.+)', fcna_spending_handler),
     url(r'^federal_impact_aid/', federal_impact_aid_handler),
@@ -309,8 +309,8 @@ urlpatterns += patterns('',
     url(r'^payments_individuals_county/list\.(?P<emitter_format>.+)', cffr_individual_county_handler),
     url(r'^payments_individuals_state/$', cffr_individual_state_handler),
     url(r'^payments_individuals_state/list\.(?P<emitter_format>.+)', cffr_individual_state_handler),
-    url(r'^people_in_poverty/$', people_in_poverty_handler),
-    url(r'^people_in_poverty/list\.(?P<emitter_format>.+)', people_in_poverty_handler),
+    url(r'^people_poverty_state/$', people_poverty_state_handler),
+    url(r'^people_poverty_state/list\.(?P<emitter_format>.+)', people_poverty_state_handler),
     url(r'^population_congressional_district/$', population_congressional_district_handler),
     url(r'^population_congressional_district/list\.(?P<emitter_format>.+)', population_congressional_district_handler),
     url(r'^population_families/$', population_families_handler),

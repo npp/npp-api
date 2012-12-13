@@ -14,7 +14,31 @@ import csv
 
 # HOWTO:
 # 1) Use Census Factfinder site (url above) to get ACS 1 year estimates, table DP04. Download the csv version.
-# 2) Create a new housing_occupancy csv using data from the DP04 download.
+# 2) Create a new housing_occupancy csv using data from the DP04 download (info below)
+# Mapping for model names to ACS column names
+# total units = HC01_VC03
+# total units moe = HC02_vc03
+# occupied units = HC01_VC04
+# occupied units moe HC02_VC04
+# occupied units % HC03_VC04
+# occumpied units % moe HC04_VC04
+# vacant units HC01_VC05
+# vacant units moe HC02_VC05
+# vacant units percent HC03_VC05
+# vacant units percent moe HC04_VC05
+# owner vacancy rate HC01_VC07
+# owner vacancy rate moe HC02_VC07
+# renter vacancy rate HC01_VC08
+# renter vacancy rate moe HC02_VC08
+# owner occupied HC01_VC63
+# owner occupied moe HC02_VC63
+# owner occupied % HC03_VC63
+# owner occupied % moe HC04_VC63
+# renter occupied HC01_VC64
+# renter occupied moe HC02_VC64
+# renter occupied % HC03_VC64
+# renter occupied % moe HC04_VC64
+
 # 3) change SOURCE_FILE variable to the the path of the source file you just created
 # 4) Run as Django management command from your project path "python manage.py import_household_occupancy"
 

@@ -213,11 +213,15 @@ class CffrProgramHandler(GenericHandler):
         model = CffrProgram
         super(CffrProgramHandler, self).__init__(allowed_keys, model)
         
-class ChildrenPovertyHandler(GenericHandler):
+class ChildrenPovertyStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = ChildrenPoverty
-        super(ChildrenPovertyHandler, self).__init__(allowed_keys, model)
+        allowed_keys = ('state', 'state_abbr', 'state_ansi', 'year')
+        fields = ('year', 'children_total', 'children_total_moe',
+            'children_poverty', 'children_poverty_moe',
+            'children_poverty_percent', 'children_poverty_percent_moe',
+            ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        model = ChildrenPovertyState
+        super(ChildrenPovertyStateHandler, self).__init__(allowed_keys, model, fields)
         
 class DiplomaRecipientTotalHandler(GenericHandler):
     def __init__(self):
@@ -309,11 +313,14 @@ class ExpenditurePerPupilHandler(GenericHandler):
         model = ExpenditurePerPupil
         super(ExpenditurePerPupilHandler, self).__init__(allowed_keys, model)
         
-class FamiliesPovertyHandler(GenericHandler):
+class FamiliesPovertyStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = FamiliesPoverty
-        super(FamiliesPovertyHandler, self).__init__(allowed_keys, model)
+        allowed_keys = ('state', 'state_abbr', 'state_ansi', 'year')
+        fields = ('year', 'families_total', 'families_total_moe',
+            'families_poverty_percent', 'families_poverty_percent_moe',
+            ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        model = FamiliesPovertyState
+        super(FamiliesPovertyStateHandler, self).__init__(allowed_keys, model, fields)
         
 class FcnaSpendingHandler(GenericHandler):
     def __init__(self):
@@ -523,11 +530,15 @@ class OtherFederalRevenueHandler(GenericHandler):
         model = OtherFederalRevenue
         super(OtherFederalRevenueHandler, self).__init__(allowed_keys, model)
         
-class PeopleInPovertyHandler(GenericHandler):
+class PeoplePovertyStateHandler(GenericHandler):
     def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = PeopleInPoverty
-        super(PeopleInPovertyHandler, self).__init__(allowed_keys, model)
+        allowed_keys = ('state', 'state_abbr', 'state_ansi', 'year')
+        model = PeoplePovertyState
+        fields = ('year', 'total_population', 'value',
+            'value_standard_error', 'percent',
+            'percent_standard_error',
+            ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(PeoplePovertyStateHandler, self).__init__(allowed_keys, model, fields)
         
 class PopulationAgeCountyHandler(GenericHandler):
     def __init__(self):

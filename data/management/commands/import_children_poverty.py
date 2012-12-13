@@ -1,7 +1,7 @@
 from django import db
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
-from data.models import ChildrenPoverty
+from data.models import ChildrenPovertyStateRaw
 from django.core.exceptions import MultipleObjectsReturned
 import csv
 
@@ -11,7 +11,7 @@ import csv
 # Imports Census Data on Number of Children Living in Poverty
 # pre 2005 source info: http://dataferrett.census.gov/TheDataWeb/launchDFA.html (accurate as of 6/15/2011)
 # npp csvs: http://assets.nationalpriorities.org/raw_data/census.gov/ferrett/children_poverty_*.csv (updated 7/28/2010)
-# as of 9/2011 for years 2005 & greater, source switches from CPS to ACS 1 year estimates, available via Census Factfinder, e.g. http://factfinder2.census.gov/faces/tableservices/jsf/pages/productview.xhtml?pid=ACS_10_1YR_S1701&prodType=table
+# as of 9/2011 for years 2005 & greater, source switches from CPS to ACS 1 year estimates table S1701, available via Census Factfinder, e.g. http://factfinder2.census.gov/faces/tableservices/jsf/pages/productview.xhtml?pid=ACS_10_1YR_S1701&prodType=table
 # destination model:  ChildrenPoverty
 
 # HOWTO:
@@ -48,13 +48,13 @@ class Command(NoArgsCommand):
                     year = row[0]
                     state = row[1].lower()
                     try:
-                        record = ChildrenPoverty.objects.get(year=year,state=state)
+                        record = ChildrenPovertyStateRaw.objects.get(year=year,state=state)
                         update_count = update_count + 1
                     except MultipleObjectsReturned:
                         print 'error: multiple records exist for %s %s' % (year, state)
                         continue
                     except:
-                        record = ChildrenPoverty(year=year,state=state)
+                        record = ChildrenPovertyStateRaw(year=year,state=state)
                         print 'inserting %s %s' % (year, state)
                         insert_count = insert_count + 1
                         record.children_total = clean_int(row[2])
