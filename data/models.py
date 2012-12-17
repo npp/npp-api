@@ -595,6 +595,35 @@ class PopulationEst00Raw(models.Model):
     
     class Meta:
         unique_together = ('state', 'county', 'gender', 'ethnic_origin', 'race')
+        
+class PopulationEst10Raw(models.Model):
+    sumlev = models.CharField(max_length=3)
+    state = models.CharField(max_length=2)
+    county = models.CharField(max_length=3)
+    stname = models.CharField(max_length=32)
+    ctyname = models.CharField(max_length=100)
+    gender = models.CharField(max_length=1)
+    ethnic_origin = models.CharField(max_length=1)
+    race = models.CharField(max_length=1)
+    census2010pop = models.IntegerField(null=True)
+    estimatesbase2010 = models.IntegerField(null=True)
+    popestimate2010 = models.IntegerField(null=True)
+    popestimate2011 = models.IntegerField(null=True)
+    popestimate2012 = models.IntegerField(null=True)
+    popestimate2013 = models.IntegerField(null=True)
+    popestimate2014 = models.IntegerField(null=True)
+    popestimate2015 = models.IntegerField(null=True)
+    popestimate2016 = models.IntegerField(null=True)
+    popestimate2017 = models.IntegerField(null=True)
+    popestimate2018 = models.IntegerField(null=True)
+    popestimate2019 = models.IntegerField(null=True)
+    census2020pop = models.IntegerField(null=True)
+    popestimate2020 = models.IntegerField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('state', 'county', 'gender', 'ethnic_origin', 'race')
     
 class PopulationEst90Raw(models.Model):
     year = models.CharField(max_length=2)
@@ -1377,9 +1406,9 @@ class PopulationGenderCounty(models.Model):
     county = models.ForeignKey(County)
     total = models.IntegerField()
     female = models.IntegerField()
-    female_percent = models.FloatField()
+    female_percent = models.DecimalField(max_digits=5,decimal_places=2)
     male = models.IntegerField()
-    male_percent = models.FloatField()
+    male_percent = models.DecimalField(max_digits=5,decimal_places=2)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(null=True,auto_now=True)
     
@@ -1391,9 +1420,9 @@ class PopulationGenderState(models.Model):
     state = models.ForeignKey(State)
     total = models.IntegerField()
     female = models.IntegerField()
-    female_percent = models.FloatField()
+    female_percent = models.DecimalField(max_digits=5,decimal_places=2)
     male = models.IntegerField()
-    male_percent = models.FloatField()
+    male_percent = models.DecimalField(max_digits=5,decimal_places=2)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     

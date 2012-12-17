@@ -36,6 +36,10 @@ def clean_state_name(state):
     
     return state
     
+def clean_county_name(county):
+    county = unicode(county.strip(),errors='ignore')
+    return county
+    
 def clean_moe(moe):
     #if the margin of error is empty, return a null; else preserve
     #its contents (foe example, the annotations that the census
@@ -65,3 +69,15 @@ def get_proportion_moe(num, denom, nummoe, denommoe):
     denommoe2 = denommoe**2
     pmoe = (math.sqrt(nummoe2 - (p2 * denommoe2)))/denom
     return Decimal(str(pmoe))
+    
+def pad_state(fips):
+    if len(fips) == 1:
+        fips = '%s%s' % ('0',fips)
+    return fips
+    
+def pad_county(fips):
+    if len(fips) == 1:
+        fips = '%s%s' % ('00', fips)
+    elif len(fips) == 2:
+        fips = '%s%s' % ('0', fips)
+    return fips
