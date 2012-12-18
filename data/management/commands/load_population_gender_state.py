@@ -1,213 +1,150 @@
 from django import db
 from django.conf import settings
-from django.core.management.base import NoArgsCommand
-from django.db import connection, transaction
+from django.core.management.base import BaseCommand, CommandError
+from django.db import transaction
+from django.db.models import Sum
+from data.models import PopulationEst10Raw, PopulationEst00Raw, PopulationGenderState, State
+from datetime import datetime
+from pandas import DataFrame
+import pandas as pd
+import numpy as np
 
-class Command(NoArgsCommand):
-    
-    def handle_noargs(self, **options):
-    
-        cursor = connection.cursor()
-        
-        #load 2000-2010
-        cursor.execute('''
-        CREATE TEMPORARY TABLE normalized_years (
-            state CHAR(2), 
-            county CHAR(3), 
-            gender CHAR(1), 
-            ethnic_origin CHAR(1),
-            race CHAR(1), 
-            VALUE INT, 
-            YEAR INT);
-        ''')
-        
-        cursor.execute('''
-        INSERT INTO normalized_years
-            SELECT
-              state
-            , county
-            , gender
-            , ethnic_origin
-            , race
-            , popestimate2000 AS 'value'
-            , 2000 AS 'year'
-            FROM 
-             data_populationest00raw
-             UNION
-             SELECT
-              state
-            , county
-            , gender
-            , ethnic_origin
-            , race
-            , popestimate2001 AS 'value'
-            , 2001 AS 'year'                    
-            FROM 
-             data_populationest00raw
-             UNION
-             SELECT
-              state
-            , county
-            , gender
-            , ethnic_origin
-            , race
-            , popestimate2002 AS 'value'
-            , 2002 AS 'year'
-            FROM 
-             data_populationest00raw
-             UNION
-             SELECT
-              state
-            , county
-            , gender
-            , ethnic_origin
-            , race
-            , popestimate2003 AS 'value'
-            , 2003 AS 'year'
-            FROM 
-             data_populationest00raw
-             UNION
-             SELECT
-              state
-            , county
-            , gender
-            , ethnic_origin
-            , race
-            , popestimate2004 AS 'value'
-            , 2004 AS 'year'
-            FROM 
-             data_populationest00raw
-             UNION
-             SELECT
-              state
-            , county
-            , gender
-            , ethnic_origin
-            , race
-            , popestimate2005 AS 'value'
-            , 2005 AS 'year'
-            FROM 
-             data_populationest00raw
-             UNION
-             SELECT
-              state
-            , county
-            , gender
-            , ethnic_origin
-            , race
-            , popestimate2006 AS 'value'
-            , 2006 AS 'year'
-            FROM 
-             data_populationest00raw
-             UNION
-             SELECT
-              state
-            , county
-            , gender
-            , ethnic_origin
-            , race
-            , popestimate2007 AS 'value'
-            , 2007 AS 'year'
-            FROM 
-             data_populationest00raw
-             UNION
-             SELECT
-              state
-            , county
-            , gender
-            , ethnic_origin
-            , race
-            , popestimate2008 AS 'value'
-            , 2008 AS 'year'
-            FROM 
-             data_populationest00raw
-             UNION
-             SELECT
-              state
-            , county
-            , gender
-            , ethnic_origin
-            , race
-            , popestimate2009 AS 'value'
-            , 2009 AS 'year'
-            FROM 
-             data_populationest00raw
-             UNION
-             SELECT
-              state
-            , county
-            , gender
-            , ethnic_origin
-            , race
-            , popestimate2010 AS 'value'
-            , 2010 AS 'year'
-            FROM 
-             data_populationest00raw
-            ;
-            ''')
+# National Priorities Project Data Repository
+# load_population_gender_state
 
-        cursor.execute('''
-            insert into data_populationgenderstate
-            SELECT 
-                NULL
-            ,   YEAR
-            ,   s.id
-            ,   SUM(CASE WHEN gender = 0 THEN VALUE ELSE 0 END) AS 'total'
-            ,   SUM(CASE WHEN gender = 2 THEN VALUE ELSE 0 END) AS 'female'
-            ,   0
-            ,   SUM(CASE WHEN gender = 1 THEN VALUE ELSE 0 END) AS 'male'
-            ,   0
-            ,   NOW()
-            ,   NOW()
-            FROM 
-                normalized_years p
-                JOIN data_state s
-                ON p.state = s.state_ansi
-            WHERE race = 0 AND ethnic_origin = 0 
-            GROUP BY
-                YEAR, s.id
-               ;
-        ''')
-        
-        #load 1990-1999
-        cursor.execute('''
-        insert into data_populationgenderstate
-        select 
-            NULL
-        ,   case
-                when p.year = 90 then 1990
-                when p.year = 91 then 1991
-                when p.year = 92 then 1992
-                when p.year = 93 then 1993
-                when p.year = 94 then 1994
-                when p.year = 95 then 1995
-                when p.year = 96 then 1996
-                when p.year = 97 then 1997
-                when p.year = 98 then 1998
-                when p.year = 99 then 1999
-            end 
-        ,   s.id
-        ,   sum(population)
-        ,   sum(case when race_gender in (2,4,6,8) then population else 0 end)
-        ,   0
-        ,   sum(case when race_gender in (1,3,5,7) then population else 0 end)
-        ,   0
-        ,   now()
-        ,   now()
-        from 
-            data_populationest90raw p
-            join data_state s
-            on p.state = s.state_ansi
-        group by
-            p.year, s.id
-        ''')
-              
-        #calculate percentages
-        cursor.execute('''
-        update data_populationgenderstate
-        set 
-        female_percent = ROUND(female / total,4) * 100
-        ,male_percent = ROUND(male / total,4) * 100
-        ''')
-        
-        transaction.commit_unless_managed()
+# Populates Population Data used by API
+
+# Safe to rerun: yes
+
+class Command(BaseCommand):
+    args = '<decade>'
+    help = 'Loads state population estimates for the specified decade [90, 00, 10]'
+    
+    @transaction.commit_on_success  
+    def handle(self, *args, **options):
+    
+        def load_years(years):
+            for year in years:
+                print 'loading %s' %  year
+                pop = DataFrame(index=['state','county'])
+                column = 'popestimate%s' % year
+                
+                #create a DataFrame for each series of population estimates:
+                #total, male, and female
+                query = ("PopulationEst%sRaw.objects.values('state')" 
+                    ".filter(gender='0',ethnic_origin='0')"  
+                    ".annotate(population=Sum(column))" % args[0])
+                total_pop = eval(query) 
+                total_pop = DataFrame.from_records(
+                    total_pop,
+                    index=['state'])
+                total_pop.columns = ['total']
+                if np.isnan(total_pop.sum()):
+                    #No data yet for the current year, which means no data yet
+                    #for future years in the decade, so stop right here
+                    print 'No data for year %s. Stopping load.' % year
+                    return 0
+                query = ("PopulationEst%sRaw.objects.values('state')"
+                    ".filter(gender='1',ethnic_origin='0')"
+                    ".annotate(population=Sum(column))" % args[0])
+                male_pop = eval(query)
+                male_pop = DataFrame.from_records(
+                    male_pop,
+                    index=['state'])
+                male_pop.columns = ['male']
+                query = ("PopulationEst%sRaw.objects.values('state')"
+                    ".filter(gender='2',ethnic_origin='0')"
+                    ".annotate(population=Sum(column))" % args[0])
+                female_pop = eval(query)
+                female_pop = DataFrame.from_records(
+                    female_pop,
+                    index=['state'])
+                female_pop.columns = ['female']
+                
+                #merge the total, male, and female DataFrames into final, master df
+                pop = pd.merge(pop,
+                    total_pop,
+                    how='right',
+                    left_index=True,
+                    right_index=True)
+                pop = pd.merge(pop,
+                    male_pop,
+                    how='right',
+                    left_index=True,
+                    right_index=True)
+                pop = pd.merge(pop,
+                    female_pop,
+                    how='right',
+                    left_index=True,
+                    right_index=True)
+                
+                #calculate male and female percentages and merge those in, too
+                male_percent = DataFrame(pop.apply(
+                    lambda row: row['male']*1.0/row['total']*100,axis=1),
+                    columns=['male_percent'])
+                pop = pd.merge(pop,
+                    male_percent,
+                    left_index=True,
+                    right_index=True)
+                female_percent = DataFrame(pop.apply(
+                    lambda row: row['female']*1.0/row['total']*100,axis=1),
+                    columns=['female_percent'])
+                pop = pd.merge(pop,
+                    female_percent,
+                    left_index=True,
+                    right_index=True)
+                
+                #add DataFrame contents to database
+                #DataFrame is indexed by state code
+                #i.e., p[0] = state code
+                for p in pop.itertuples():
+                    state_id = states['id'][p[0]]
+                    try:
+                        record = PopulationGenderState.objects.get(
+                            state = state_id,
+                            year = year)
+                    except:
+                        record = PopulationGenderState()
+                        record.state_id = state_id
+                        record.year = year
+                    record.total = p[1]
+                    record.male = p[2]
+                    record.female = p[3]
+                    record.male_percent = str(p[4])
+                    record.female_percent = str(p[5])
+                    record.save()
+                    db.reset_queries()
+                
+        start_time = datetime.now()
+        if len(args):
+            states = DataFrame.from_records(State.objects.values(
+                'id','state_ansi'),index=['state_ansi'])
+            if args[0] == '10':
+                if PopulationEst10Raw.objects.count():
+                    years = ['2010','2011','2012','2013','2014','2015',
+                        '2016','2017','2018','2019','2020']
+                    load_years(years)
+                else:
+                    print ("No population data in the "
+                        "2010-2020 table (PopulationEst10Raw), "
+                        "so there's nothing to do.")
+                    return 0
+            elif args[0] == '00':
+                if PopulationEst00Raw.objects.count():
+                    years = ['2000','2001','2002','2003','2004','2005',
+                        '2006','2007','2008','2009','2010']
+                    load_years(years)
+                else:
+                    print ("No population data in the "
+                        "2000-2010 table (PopulationEst00Raw), "
+                        "so there's nothing to do.")
+                    return 0
+            elif args[0] == '90':
+                print ("The 90s population estimates are no longer subject to"
+                    "change, so we're not loading them anymore.")
+            else:
+                print 'Invalid decade: please specify 10, 00, or 90'
+        else:
+            print 'Please specify a decade: 10, 00, or 09'
+        elapsed_time = datetime.now() - start_time
+        print 'total elasped time = %s ' % elapsed_time
