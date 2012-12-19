@@ -452,6 +452,13 @@ def population_congressional_district():
     run_command('import_population_congressional_district')
 
 @task
+def population_est_10():
+    '''
+    fab staging imports.population_est_10               Import Population Est '10
+    '''
+    run_command('import_population_est_10')
+    
+@task
 def population_est_00():
     '''
     fab staging imports.population_est_00               Import Population Est '00
