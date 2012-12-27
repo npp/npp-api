@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, HttpResponse
 from npp_api.data.models import Category, Source
 import npp_api.api.handlers
 import urllib
@@ -55,3 +55,6 @@ def source_search(request, source):
 
 def source_select(request):
     return HttpResponseRedirect("/search/%s/" % request.GET['source'])
+
+def monitor(request):
+    return HttpResponse("Online")

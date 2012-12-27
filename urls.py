@@ -1,12 +1,13 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 
-from npp_api.data.views import source_select, source_search, index, result
+from npp_api.data.views import source_select, source_search, index, result, monitor
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
     (r'^$', index),
+    (r'^monitor/$', monitor),
     (r'^search/source_select/$', source_select),
     (r'^search/(?P<source>\w+)/$', source_search),
     (r'^search/$', index),
