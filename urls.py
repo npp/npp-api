@@ -7,7 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     (r'^$', index),
-    (r'^monitor/$', monitor),
+    (r'^api.monitor/$', monitor),
     (r'^search/source_select/$', source_select),
     (r'^search/(?P<source>\w+)/$', source_search),
     (r'^search/$', index),
