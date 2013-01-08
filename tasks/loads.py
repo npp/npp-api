@@ -23,6 +23,15 @@ def cffr():
     fab staging loads.cffr                          Loads CFFR
     '''
     run_command('load_cffr')
+    
+@task
+def cffr_per_capita(year = None):
+    '''
+    fab staging loads.cffr_per_capita:year                          Refreshes CFFR Per-Capita Calculations
+    '''
+    if year is None:
+        raise ValueError('Missing year')
+    run_command('load_cffr_per_capita %s' % year)
 
 @task
 def cffr_program():
