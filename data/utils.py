@@ -62,6 +62,30 @@ def get_proportion_moe(num, denom, nummoe, denommoe):
     p = num/denom
     p2 = p**2
     nummoe2 = nummoe**2
-    denommoe2 = denommoe**2
+    denommoe2 = denommoe**2 
     pmoe = (math.sqrt(nummoe2 - (p2 * denommoe2)))/denom
     return Decimal(str(pmoe))
+    
+def aggregate_and_moe(valuemoe):
+    #using a passed list of tuples, where each tuple represents a value
+    #and its corresponding margin or error, calculate the sum of the values
+    #and the sum's resulting margin of error
+    
+    sum = 0
+    moe = 0
+    
+    try:
+        tuple(valuemoe)
+    except:
+        raise Exception("invalid input")
+        
+    for v in valuemoe:
+        if len(v) <> 2:
+            raise Exception("invalid input")
+        sum = sum + v[0]
+        #moe of ***** is a controlled estimate; there's no margin of error
+        if str(v[1]).find('*****') == -1:
+            moe = moe + v[1]**2
+
+    moe = int(round(math.sqrt(moe)))
+    return (sum, moe)
