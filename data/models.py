@@ -346,6 +346,7 @@ class HealthInsurance(models.Model):
     
 class HealthInsuranceStateRaw(models.Model):
     year = models.IntegerField()
+    geoid = models.CharField(max_length=15)
     state = models.CharField(max_length=255)
     pop = models.IntegerField()
     pop_moe = models.IntegerField()
