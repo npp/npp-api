@@ -399,6 +399,43 @@ class HealthInsuranceHandler(GenericHandler):
         model = HealthInsurance
         super(HealthInsuranceHandler, self).__init__(allowed_keys, model)
 
+class HealthInsuranceStateHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('state', 'year')
+        model = HealthInsuranceState
+        fields = ('year', ('state', ('state_ansi', 'state_abbr', 'state_name')),
+            'year', 'pop', 'pop_moe', 'pop_ins', 'pop_ins_percent', 
+            'pop_no_ins', 'pop_no_ins_percent', 'pop_under_18',
+            'pop_under_18_moe', 'pop_under_18_private',
+            'pop_under_18_private_moe', 'pop_under_18_public',
+            'pop_under_18_public_moe', 'pop_under_18_private_public',
+            'pop_under_18_private_public_moe', 'pop_under_18_ins',
+            'pop_under_18_ins_percent', 'pop_under_18_no_ins',
+            'pop_under_18_no_ins_moe', 'pop_under_18_no_ins_percent',
+            'pop_18_34', 'pop_18_34_moe', 'pop_18_34_private',
+            'pop_18_34_private_moe', 'pop_18_34_public', 
+            'pop_18_34_public_moe', 'pop_18_34_private_public',
+            'pop_18_34_private_public_moe', 'pop_18_34_ins',
+            'pop_18_34_ins_percent', 'pop_18_34_no_ins', 
+            'pop_18_34_no_ins_moe', 'pop_18_34_no_ins_percent',
+            'pop_35_64', 'pop_35_64_moe', 'pop_35_64_private',
+            'pop_35_64_private_moe', 'pop_35_64_public',
+            'pop_35_64_public_moe', 'pop_35_64_private_public',
+            'pop_35_64_private_public_moe', 'pop_35_64_ins',
+            'pop_35_64_ins_percent', 'pop_35_64_no_ins',
+            'pop_35_64_no_ins_moe', 'pop_35_64_no_ins_percent',
+            'pop_18_64', 'pop_18_64_private', 'pop_18_64_public',
+            'pop_18_64_private_public', 'pop_18_64_ins', 
+            'pop_18_64_ins_percent', 'pop_18_64_no_ins',
+            'pop_18_64_no_ins_moe', 'pop_18_64_no_ins_percent',
+            'pop_over_64', 'pop_over_64_moe', 'pop_over_64_private',
+            'pop_over_64_private_moe', 'pop_over_64_public',
+            'pop_over_64_public_moe', 'pop_over_64_private_public',
+            'pop_over_64_private_public_moe', 'pop_over_64_ins',
+            'pop_over_64_ins_percent', 'pop_over_64_no_ins',
+            'pop_over_64_no_ins_moe', 'pop_over_64_no_ins_percent')
+        super(HealthInsuranceStateHandler, self).__init__(allowed_keys, model, fields)
+
 class HighSchoolDropoutsHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state', 'year')

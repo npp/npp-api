@@ -43,6 +43,7 @@ free_reduced_lunch_eligible_county_handler = Resource(FreeReducedLunchEligibleCo
 half_pints_handler = Resource(HalfPintsHandler)
 head_start_enrollment_handler = Resource(HeadStartEnrollmentHandler)
 health_insurance_handler = Resource(HealthInsuranceHandler)
+health_insurance_coverage_state_handler = Resource(HealthInsuranceStateHandler)
 high_school_other_handler = Resource(HighSchoolOtherHandler)
 high_school_dropouts_handler = Resource(HighSchoolDropoutsHandler)
 housing_occupancy_state_handler = Resource(HousingOccupancyStateHandler)
@@ -135,7 +136,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^free_reduced_lunch_eligible_county.html$', 'direct_to_template', {'template': 'api/free_reduced_lunch_eligible_county.html'}),
     (r'^half_pints.html$', 'direct_to_template', {'template': 'api/half_pints.html'}),
     (r'^head_start_enrollment.html$', 'direct_to_template', {'template': 'api/head_start_enrollment.html'}),
-    (r'^health_insurance.html$', 'direct_to_template', {'template': 'api/health_insurance.html'}),
+    (r'^health_insurance_coverage.html$', 'direct_to_template', {'template': 'api/health_insurance_coverage.html'}),
     (r'^high_school_dropouts.html$', 'direct_to_template', {'template': 'api/high_school_dropouts.html'}),
     (r'^high_school_other.html$', 'direct_to_template', {'template': 'api/high_school_other.html'}),
     (r'^housing_occupancy.html$', 'direct_to_template', {'template': 'api/housing_occupancy.html'}),
@@ -267,6 +268,8 @@ urlpatterns += patterns('',
     url(r'^head_start_enrollment/list\.(?P<emitter_format>.+)', head_start_enrollment_handler),
     url(r'^health_insurance/$', health_insurance_handler),
     url(r'^health_insurance/list\.(?P<emitter_format>.+)', health_insurance_handler),
+    url(r'^health_insurance_coverage_state/$', health_insurance_coverage_state_handler),
+    url(r'^health_insurance_coverage_state/list\.(?P<emitter_format>.+)', health_insurance_coverage_state_handler),
     url(r'^high_school_dropouts/$', high_school_dropouts_handler),
     url(r'^high_school_dropouts/list\.(?P<emitter_format>.+)', high_school_dropouts_handler),
     url(r'^high_school_other/$', high_school_other_handler),
