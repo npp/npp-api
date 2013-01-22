@@ -34,7 +34,7 @@ class Command(NoArgsCommand):
             for i, row in enumerate(data_reader):
                 if i == 0:
                     header_row = row
-                elif file.find('ann') <> -1 and i == 1:
+                elif row[0][0].isdigit() == False and i == 1:
                     #if we're working with an annotated version of the 
                     #downloaded ACS file, ignore the 2nd row
                     pass
