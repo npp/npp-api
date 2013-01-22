@@ -1,4 +1,4 @@
 local_settings.py
 *.pyc
-apache
-*.log
+fabfile.py
+
