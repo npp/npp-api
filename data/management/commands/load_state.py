@@ -49,7 +49,7 @@ class Command(NoArgsCommand):
                 
         # a few ancillary state records (e.g., Undistributed funds, terriories not in the state ansi file)
         more_states = {}
-        more_states['99'] = ['UD','U.S. undistributed']
+        more_states['99'] = ['UD','U.S. Undistributed']
         more_states['64'] = ['FM','Federated States of Micronesia']
         more_states['68'] = ['MH', 'Marshall Islands']
         more_states['70'] = ['PW', 'Palau']
