@@ -30,7 +30,7 @@ class Command(NoArgsCommand):
         
             if u.state != state_name:
                 try:
-                    state_ref_current = State.objects.get(state_name=u.state)
+                    state_ref_current = State.objects.get(state_name__iexact=u.state)
                 except:
                     print 'Skipping record. Unable to find state: ' + u.state
                     continue
