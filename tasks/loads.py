@@ -95,6 +95,13 @@ def gender():
     fab staging loads.gender                        Loads Gender
     '''
     run_command('load_gender')
+    
+@task
+def health_insurance_state():
+    '''
+    fab staging loads.health_insurance_state        Loads Health Insurance By State
+    '''
+    run_command('load_health_insurance_state')
 
 @task
 def housing_occupancy_state():
