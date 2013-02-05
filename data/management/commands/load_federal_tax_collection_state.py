@@ -40,11 +40,11 @@ class Command(NoArgsCommand):
             if r.state != state_name:
                 try:
                     if r.state.lower().find('undistributed') >= 0:
-                        state_ref_current = State.objects.get(state_abbr='UD')
+                        state_ref_current = State.objects.get(state_abbr__iexact='UD')
                     elif r.state.lower().find('maryland and district') >= 0:
-                        state_ref_current = State.objects.get(state_abbr='MD')
+                        state_ref_current = State.objects.get(state_abbr__iexact='MD')
                     else:
-                        state_ref_current = State.objects.get(state_name=r.state)
+                        state_ref_current = State.objects.get(state_name__iexact=r.state)
                 except:
                     #print 'Skipping record. Unable to find state: ' + r.state
                     continue

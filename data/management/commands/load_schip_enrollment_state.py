@@ -31,7 +31,7 @@ class Command(NoArgsCommand):
         for r in raw:
             if r.state != state_name:
                 try:
-                    state_ref_current = State.objects.get(state_name=r.state)
+                    state_ref_current = State.objects.get(state_name__iexact=r.state)
                 except:
                     print 'Skipping record. Unable to find state: ' + r.state
                     continue

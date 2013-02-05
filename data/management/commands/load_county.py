@@ -26,9 +26,9 @@ class Command(NoArgsCommand):
                 #for each state, add 1) a county-level record to be used for
                 #tracking CFFR state undistributed funds 2) an "unknown" county
                 #record
-                county_ref_row = County(state=state_ref_current, county_ansi='999', county_name='State undistributed')
+                county_ref_row = County(state=state_ref_current, county_ansi='999', county_name='State Undistributed')
                 county_ref_row.save()
-                county_ref_row = County(state=state_ref_current, county_ansi='000', county_name='Unknown county')
+                county_ref_row = County(state=state_ref_current, county_ansi='000', county_name='Unknown County')
                 county_ref_row.save()
                 db.reset_queries()
             county_ref_row = County(state=state_ref_current, county_ansi=c.code, county_name=c.county)
@@ -38,7 +38,6 @@ class Command(NoArgsCommand):
             
         #add county row to correspond to US Undistributed state record
         state_ref_current = State.objects.get(state_ansi='99')
-        county_ref_row = County(state=state_ref_current, county_ansi = '999', county_name = 'U.S. undistributed')
+        county_ref_row = County(state=state_ref_current, county_ansi = '999', county_name = 'U.S. Undistributed')
         county_ref_row.save()
-        db.reset_queries()
-            
+        db.reset_queries() 

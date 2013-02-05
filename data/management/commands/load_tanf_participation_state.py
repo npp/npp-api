@@ -33,7 +33,7 @@ class Command(NoArgsCommand):
             if t.state != state_name:
                 clean_state = clean_state_name(t.state)
                 try:
-                    state_ref_current = State.objects.get(state_name=clean_state)
+                    state_ref_current = State.objects.get(state_name__iexact=clean_state)
                 except:
                     print 'Skipping record. Unable to find state: ' + clean_state
                     continue
