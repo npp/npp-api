@@ -97,7 +97,7 @@ class Command(NoArgsCommand):
             record.pop_35_64_no_ins_moe = r.pop_35_64_no_ins_moe
             record.pop_35_64_no_ins_percent = format(
                 record.pop_35_64_no_ins / Decimal(record.pop_35_64) * 100, '.1f')
-            record.pop_35_64_ins = record.pop_35_64 = record.pop_35_64_no_ins
+            record.pop_35_64_ins = record.pop_35_64 - record.pop_35_64_no_ins
             record.pop_35_64_ins_percent = format(
                 record.pop_35_64_ins / Decimal(record.pop_35_64) * 100, '.1f')
             record.pop_18_64 = record.pop_18_34 + record.pop_35_64
