@@ -42,13 +42,11 @@ free_reduced_lunch_eligible_handler = Resource(FreeReducedLunchEligibleHandler)
 free_reduced_lunch_eligible_county_handler = Resource(FreeReducedLunchEligibleCountyHandler)
 half_pints_handler = Resource(HalfPintsHandler)
 head_start_enrollment_handler = Resource(HeadStartEnrollmentHandler)
-health_insurance_handler = Resource(HealthInsuranceHandler)
 health_insurance_coverage_state_handler = Resource(HealthInsuranceStateHandler)
 high_school_other_handler = Resource(HighSchoolOtherHandler)
 high_school_dropouts_handler = Resource(HighSchoolDropoutsHandler)
 housing_occupancy_state_handler = Resource(HousingOccupancyStateHandler)
 individual_education_programs_handler = Resource(IndividualEducationProgramsHandler)
-kids_health_insurance_handler = Resource(KidsHealthInsuranceHandler)
 labor_force_county_handler = Resource(LaborForceCountyHandler)
 labor_force_state_handler = Resource(LaborForceStateHandler)
 labor_underutilization_state_handler = Resource(LaborUnderutilizationStateHandler)
@@ -141,7 +139,6 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^high_school_other.html$', 'direct_to_template', {'template': 'api/high_school_other.html'}),
     (r'^housing_occupancy.html$', 'direct_to_template', {'template': 'api/housing_occupancy.html'}),
     (r'^individual_education_programs.html$', 'direct_to_template', {'template': 'api/individual_education_programs.html'}),
-    (r'^kids_health_insurance.html$', 'direct_to_template', {'template': 'api/kids_health_insurance.html'}),
     (r'^labor_force.html$', 'direct_to_template', {'template': 'api/labor_force.html'}),
     (r'^labor_underutilization.html$', 'direct_to_template', {'template': 'api/labor_underutilization.html'}),
     (r'^nces_school_district.html$', 'direct_to_template', {'template': 'api/nces_school_district.html'}),
@@ -266,8 +263,6 @@ urlpatterns += patterns('',
     url(r'^half_pints/list\.(?P<emitter_format>.+)', half_pints_handler),
     url(r'^head_start_enrollment/$', head_start_enrollment_handler),
     url(r'^head_start_enrollment/list\.(?P<emitter_format>.+)', head_start_enrollment_handler),
-    url(r'^health_insurance/$', health_insurance_handler),
-    url(r'^health_insurance/list\.(?P<emitter_format>.+)', health_insurance_handler),
     url(r'^health_insurance_coverage_state/$', health_insurance_coverage_state_handler),
     url(r'^health_insurance_coverage_state/list\.(?P<emitter_format>.+)', health_insurance_coverage_state_handler),
     url(r'^high_school_dropouts/$', high_school_dropouts_handler),
@@ -278,8 +273,6 @@ urlpatterns += patterns('',
     url(r'^housing_occupancy_state/list\.(?P<emitter_format>.+)', housing_occupancy_state_handler),
     url(r'^individual_education_programs/$', individual_education_programs_handler),
     url(r'^individual_education_programs/list\.(?P<emitter_format>.+)', individual_education_programs_handler),
-    url(r'^kids_health_insurance/$', kids_health_insurance_handler),
-    url(r'^kids_health_insurance/list\.(?P<emitter_format>.+)', kids_health_insurance_handler),
     url(r'^labor_force_county/$', labor_force_county_handler),
     url(r'^labor_force_county/list\.(?P<emitter_format>.+)',labor_force_county_handler),
     url(r'^labor_force_state/$', labor_force_state_handler),
