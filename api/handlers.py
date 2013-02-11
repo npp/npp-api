@@ -393,12 +393,6 @@ class HeadStartEnrollmentHandler(GenericHandler):
         model = HeadStartEnrollment
         super(HeadStartEnrollmentHandler, self).__init__(allowed_keys, model)
                 
-class HealthInsuranceHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = HealthInsurance
-        super(HealthInsuranceHandler, self).__init__(allowed_keys, model)
-
 class HealthInsuranceStateHandler(GenericHandler):
     def __init__(self):
         allowed_keys = ('state', 'year')
@@ -467,12 +461,6 @@ class IndividualEducationProgramsHandler(GenericHandler):
         allowed_keys = ('state', 'year', 'agency_name', 'agency_id')
         model = IndividualEducationPrograms
         super(IndividualEducationProgramsHandler, self).__init__(allowed_keys, model)
-        
-class KidsHealthInsuranceHandler(GenericHandler):
-    def __init__(self):
-        allowed_keys = ('state', 'year')
-        model = KidsHealthInsurance
-        super(KidsHealthInsuranceHandler, self).__init__(allowed_keys, model)
 
 class LaborForceCountyHandler(GenericHandler):
     def __init__(self):
