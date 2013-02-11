@@ -46,7 +46,6 @@ INSTALLED_APPS = (
     'npp_api.data',
     'npp_api.api',
     'piston',
-    'sentry.client',
     'south',
 )
 
