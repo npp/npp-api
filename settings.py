@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'npp_api.api',
     'piston',
     'south',
+    'raven.contrib.django',
 )
 
 #api reocrds per page
