@@ -944,6 +944,28 @@ class TotalStudents(models.Model):
     year = models.IntegerField()
     state = models.CharField(max_length=2)
     value = models.IntegerField(null=True)
+    
+class UsaspendingAssistanceRaw(models.Model):
+    cfda_program = models.CharField(max_length=100)
+    cfda_program_title = models.CharField(max_length=255)
+    agency_code = models.CharField(max_length=10)
+    agency_name = models.CharField(max_length=255)
+    recipient_county_code = models.CharField(max_length=10)
+    recipient_state_code = models.CharField(max_length=10)
+    recipient_country_code = models.CharField(max_length=10)
+    assistance_type = models.CharField(max_length=5)
+    assistance_type_name = models.CharField(max_length=100)
+    fiscal_year = models.IntegerField()
+    asst_cat_type = models.CharField(max_length=1)
+    recip_cat_type = models.CharField(max_length=1)
+    recip_cat_type_name = models.CharField(max_length=50)
+    fed_funding_amount = models.BigIntegerField()
+    non_fed_funding_amount = models.BigIntegerField()
+    total_funding_amount = models.BigIntegerField()
+    face_loan_guran = models.BigIntegerField()
+    orig_sub_guran = models.BigIntegerField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
 
 class VehicleRegistrations(models.Model):
     year = models.IntegerField()
