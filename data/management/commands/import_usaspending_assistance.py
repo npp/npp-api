@@ -46,24 +46,8 @@ class Command(BaseCommand):
                         header_row = row
                     else:
                         record = UsaspendingAssistanceRaw()
-                        record.cfda_program = row[0]
-                        record.cfda_program_title = row[1]
-                        record.agency_code = row[2]
-                        record.agency_name = row[3]
-                        record.recipient_county_code = row[4]
-                        record.recipient_state_code = row[5]
-                        record.recipient_country_code = row[6]
-                        record.assistance_type = row[7]
-                        record.assistance_type_name = row[8]
-                        record.fiscal_year = row[9]
-                        record.asst_cat_type = row[10]
-                        record.recip_cat_type = row[11]
-                        record.recip_cat_type_name = row[12]
-                        record.fed_funding_amount = clean_num(row[13])
-                        record.non_fed_funding_amount = clean_num(row[14])
-                        record.total_funding_amount = clean_num(row[15])
-                        record.face_loan_guran = clean_num(row[16])
-                        record.orig_sub_guran = clean_num(row[17])
+                        for j,col in enumerate(row):
+                            setattr(record, header_row[j], col)
                         record.save()
                         db.reset_queries()
                         insert_count = insert_count + 1
