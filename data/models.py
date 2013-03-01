@@ -946,7 +946,7 @@ class TotalStudents(models.Model):
     value = models.IntegerField(null=True)
     
 class UsaspendingAssistanceRaw(models.Model):
-    cfda_program = models.CharField(max_length=100)
+    cfda_program_num = models.CharField(max_length=100)
     cfda_program_title = models.CharField(max_length=255)
     agency_code = models.CharField(max_length=10)
     agency_name = models.CharField(max_length=255)
