@@ -40,6 +40,12 @@ class AnsiState(models.Model):
     state_name = models.CharField(max_length=50)
     gnisid = models.CharField(max_length=8)
     
+class AnsiState(models.Model):
+    ansi_state = models.CharField(max_length=2)
+    state = models.CharField(max_length=2)
+    state_name = models.CharField(max_length=50)
+    gnisid = models.CharField(max_length=8)
+    
 class AtCodes(models.Model):
     code = models.CharField(max_length=1)
     assistance_type = models.CharField(max_length=64)
@@ -950,8 +956,8 @@ class UsaspendingAssistanceRaw(models.Model):
     cfda_program_title = models.CharField(max_length=255)
     agency_code = models.CharField(max_length=10)
     agency_name = models.CharField(max_length=255)
-    recipient_county_code = models.CharField(max_length=10)
-    recipient_state_code = models.CharField(max_length=10)
+    recipient_county_code = models.CharField(max_length=10, null=True)
+    recipient_state_code = models.CharField(max_length=10, null=True)
     recipient_country_code = models.CharField(max_length=10)
     assistance_type = models.CharField(max_length=5)
     assistance_type_name = models.CharField(max_length=100)

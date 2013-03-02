@@ -33,6 +33,13 @@ class Command(BaseCommand):
                read_year(file)
 
         def read_year(file):
+        
+            def nullify(value):
+                if len(value):
+                    return value
+                else:
+                    return None
+
             with open(file) as f:
                 reader = csv.reader(f)
                 oldrecs = UsaspendingAssistanceRaw.objects.filter(fiscal_year=year, asst_cat_type = file.split('/')[-1][0])
@@ -47,7 +54,7 @@ class Command(BaseCommand):
                     else:
                         record = UsaspendingAssistanceRaw()
                         for j,col in enumerate(row):
-                            setattr(record, header_row[j], col)
+                            setattr(record, header_row[j], nullify(col))
                         record.save()
                         db.reset_queries()
                         insert_count = insert_count + 1

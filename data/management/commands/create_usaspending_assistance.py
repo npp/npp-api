@@ -23,8 +23,54 @@ class Command(BaseCommand):
     help = 'Creates aggregate files from raw USASpending.gov archive files. Requires fiscal and date of the archive file (yyyymmdd)'
     
     def handle(self, *args, **options):
-
+    
         def create_aggregate(year, archive_date):
+
+            def clean_country(row):
+                country = row['recipient_country_code']
+                state = row['recipient_state_code']
+                if country == 'missing' and state <> '99':
+                    #TOLOG: record has missing country
+                    if state <> '99':
+                        #note: incoming country codes are inconsistent for
+                        #US territories (e.g., PR country could be Puerto
+                        #Rico or USA)
+                        #Not fixing this now--not sure of the right way.
+                        return 'USA'
+                    else:
+                        return None
+                else:
+                    return country
+                        
+            def clean_state(row):
+                country = row['recipient_country_code']
+                state = row['recipient_state_code']
+                if country <> 'USA' and state == 'VA':
+                    #TOLOG: valid state w/ incorrect country
+                    #logic needs fleshed out
+                    return None
+                elif country <> 'USA' and state in ['00','99']:
+                    #technically, if the country code is a U.S. territory or
+                    #outlying area, we should return '99' for a missing state
+                    return None
+                elif state in ['0','00']:
+                    return '99'
+                else:
+                    return state
+
+            def clean_county(row):
+                country = row['recipient_country_code']
+                state = row['recipient_state_code']
+                county = row['recipient_county_code']
+                if country <> 'USA':
+                    return None
+                elif state == '99' and county <> '999':
+                    #TOLOG: rare, but it happens--county code w/o state code
+                    return '999'
+                elif county in ['0','00','000']:
+                    return '999'
+                else:
+                    return county
 
             collist = [
                 'unique_transaction_id',
@@ -60,11 +106,10 @@ class Command(BaseCommand):
                 details = details.fillna({
                     'fyq': 'missing',
                     'cfda_program_num': 'missing',
-                    'recipient_county_code': 'missing',
-                    'project_description': 'missing',
+                    'recipient_county_code': '999',
                     'recipient_country_code': 'missing',
                     'uri': 'missing',
-                    'recipient_state_code': 'missing'
+                    'recipient_state_code': '99'
                 })
                 
                 totals = details.groupby([
@@ -87,8 +132,13 @@ class Command(BaseCommand):
                 totals['assistance_type'], totals['assistance_type_name'] = zip(
                     *totals['assistance_type'].apply(lambda x: x.split(': ', 1)))
                 totals['recip_cat_type'], totals['recip_cat_type_name'] = zip(
-                    *totals['recip_cat_type'].apply(lambda x: x.split(': ', 1)))   
-                
+                    *totals['recip_cat_type'].apply(lambda x: x.split(': ', 1)))
+
+                #clean countries, states, counties
+                totals['recipient_country_code'] = totals.apply(lambda row: clean_country(row),axis=1)
+                totals['recipient_state_code'] = totals.apply(lambda row: clean_state(row), axis=1)
+                totals['recipient_county_code'] = totals.apply(lambda row: clean_county(row), axis=1)
+
                 #fix up data types
                 totals.fed_funding_amount = totals.fed_funding_amount.astype(np.int64)
                 totals.non_fed_funding_amount = totals.non_fed_funding_amount.astype(np.int64)
