@@ -26,6 +26,12 @@ class Command(BaseCommand):
     
         def create_aggregate(year, archive_date):
 
+            def clean_cfda(value):
+                if value == '00.000':
+                    return '99.999'
+                else:
+                    return value
+
             def clean_country(row):
                 country = row['recipient_country_code']
                 state = row['recipient_state_code']
@@ -105,13 +111,17 @@ class Command(BaseCommand):
                 #clean up missing values (so they're not excluded from the groupby)  
                 details = details.fillna({
                     'fyq': 'missing',
-                    'cfda_program_num': 'missing',
+                    'cfda_program_num': '99.999',
                     'recipient_county_code': '999',
                     'recipient_country_code': 'missing',
                     'uri': 'missing',
                     'recipient_state_code': '99'
                 })
                 
+                #clean up cfda program numbers
+                details['cfda_program_num'] = details['cfda_program_num'].apply(lambda x: clean_cfda(x))
+
+                #aggregate numeric fields
                 totals = details.groupby([
                     details['cfda_program_num'],
                     details['cfda_program_title'],

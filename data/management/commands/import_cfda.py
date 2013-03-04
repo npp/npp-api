@@ -109,6 +109,19 @@ class Command(NoArgsCommand):
                         for j,col in enumerate(row):
                             print '%s: %s %s' % (header_row[j], len(col), col.decode("windows-1252"))
                         return
+                        
+            #insert record for "missing" program code
+            try:
+                record = Cfda.objects.get(program_number='99.999')
+            except:
+                record = Cfda()
+                for field in Cfda._meta.fields:
+                    if not field.name.find('_date'):
+                        setattr(record, field, 'Unknown')
+                record.program_number = '99.999'
+                record.save()
+                db.reset_queries()
+                insert_count = insert_count + 1
 
             print 'CFDA loaded: %s records inserted, %s updated' % (insert_count, update_count)
             if update_count > 0:
