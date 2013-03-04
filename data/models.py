@@ -1035,7 +1035,7 @@ class CffrProgram(models.Model):
 
 class Cfda(models.Model):
     program_title = models.CharField(max_length=255)
-    program_number = models.CharField(max_length=10)
+    program_number = models.CharField(max_length=10, unique=True)
     popular_name = models.TextField()
     agency_name = models.TextField()
     authorization = models.TextField()
