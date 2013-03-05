@@ -115,14 +115,11 @@ class Command(NoArgsCommand):
                 record = Cfda.objects.get(program_number='99.999')
             except:
                 record = Cfda()
-                for field in Cfda._meta.fields:
-                    if not field.name.find('_date'):
-                        setattr(record, field, 'Unknown')
                 record.program_number = '99.999'
+                record.published_date = parse('1/1/1980')
+                record.program_title = 'Missing or Unknown'
                 record.save()
                 db.reset_queries()
                 insert_count = insert_count + 1
 
             print 'CFDA loaded: %s records inserted, %s updated' % (insert_count, update_count)
-            if update_count > 0:
-                print 'updated programs: %s' % update_list
