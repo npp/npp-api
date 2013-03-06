@@ -1884,6 +1884,39 @@ class TanfParticipationState(models.Model):
     class Meta:
         unique_together = ('year', 'state')
 
+class UsaspendingAssistanceCounty(models.Model):
+    year = models.IntegerField()
+    cfda = models.ForeignKey(Cfda)
+    state = models.ForeignKey(State)
+    county = models.ForeignKey(County)
+    fed_funding = models.BigIntegerField()
+    loan_value = models.BigIntegerField()
+    loan_subsidy = models.BigIntegerField()
+    fed_funding_per_capita = models.DecimalField(max_digits=20, decimal_places=2, null=True)
+    loan_value_per_capita = models.DecimalField(max_digits=20, decimal_places=2, null=True)
+    loan_subsidy_per_capita = models.DecimalField(max_digits=20, decimal_places=2, null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('year', 'cfda', 'state', 'county')
+
+class UsaspendingAssistanceState(models.Model):
+    year = models.IntegerField()
+    cfda = models.ForeignKey(Cfda)
+    state = models.ForeignKey(State)
+    fed_funding = models.BigIntegerField()
+    loan_value = models.BigIntegerField()
+    loan_subsidy = models.BigIntegerField()
+    fed_funding_per_capita = models.DecimalField(max_digits=20, decimal_places=2, null=True)
+    loan_value_per_capita = models.DecimalField(max_digits=20, decimal_places=2, null=True)
+    loan_subsidy_per_capita = models.DecimalField(max_digits=20, decimal_places=2, null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('year', 'cfda', 'state')
+
 class WicBenefitsState(models.Model):
     year = models.IntegerField()
     state = models.ForeignKey(State)
