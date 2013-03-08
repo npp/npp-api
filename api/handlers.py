@@ -147,7 +147,14 @@ class BudgetCategorySubfunctionsHandler(GenericHandler):
         allowed_keys = ('subfunction',)
         model = BudgetCategorySubfunctions
         super(BudgetCategorySubfunctionsHandler, self).__init__(allowed_keys, model)
-
+        
+class CfdaHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('program_number',)
+        model = Cfda
+        exclude = ('id',)
+        super(CfdaHandler, self).__init__(allowed_keys, model)
+        
 class CffrHandler(GenericHandler):
     def __init__(self):
         #for the Cffr handler, allowed keys & field names depend on the
@@ -780,6 +787,27 @@ class TotalStudentsHandler(GenericHandler):
         allowed_keys = ('state', 'year')
         model = TotalStudents
         super(TotalStudentsHandler, self).__init__(allowed_keys, model)
+        
+class UsaspendingAssistanceCountyHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'program_number', 'county_ansi')
+        model = UsaspendingAssistanceCounty
+        fields = ('year', 'fed_funding', 'fed_funding_per_capita', 'loan_value',
+            'loan_value_per_capita', 'loan_subsidy', 'loan_subsidy_per_capita',
+            ('state', ('state_ansi', 'state_abbr', 'state_name')),
+            ('cfda', ('program_title', 'program_number')),
+            ('county', ('county_ansi', 'county_name')))
+        super(UsaspendingAssistanceCountyHandler, self).__init__(allowed_keys, model, fields)
+        
+class UsaspendingAssistanceStateHandler(GenericHandler):
+    def __init__(self):
+        allowed_keys = ('year', 'state_abbr', 'state_ansi', 'program_number')
+        model = UsaspendingAssistanceState
+        fields = ('year', 'fed_funding', 'fed_funding_per_capita', 'loan_value',
+            'loan_value_per_capita', 'loan_subsidy', 'loan_subsidy_per_capita',
+            ('cfda', ('program_title', 'program_number')),
+            ('state', ('state_ansi', 'state_abbr', 'state_name')))
+        super(UsaspendingAssistanceStateHandler, self).__init__(allowed_keys, model, fields)
         
 class VehicleRegistrationsHandler(GenericHandler):
     def __init__(self):

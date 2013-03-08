@@ -9,6 +9,7 @@ at_codes_handler = Resource(AtCodesHandler)
 average_teacher_salary_handler = Resource(AverageTeacherSalaryHandler)
 bilingual_ed_spending_handler = Resource(BilingualEdSpendingHandler)
 budget_category_subfunctions_handler = Resource(BudgetCategorySubfunctionsHandler)
+cfda_handler = Resource(CfdaHandler)
 cffr_handler = Resource(CffrHandler)
 cffr_agency_handler = Resource(CffrAgencyHandler)
 cffr_geo_handler = Resource(CffrGeoHandler)
@@ -93,6 +94,8 @@ summer_lunch_participation_state_handler = Resource(SummerLunchParticipationStat
 tanf_participation_state_handler = Resource(TanfParticipationStateHandler)
 title_i_funding_handler = Resource(TitleIFundingHandler)
 total_students_handler = Resource(TotalStudentsHandler)
+usaspending_assistance_county_handler = Resource(UsaspendingAssistanceCountyHandler)
+usaspending_assistance_state_handler = Resource(UsaspendingAssistanceStateHandler)
 subfunctions_cffr_handler = Resource(SubfunctionsCffrHandler)
 vehicle_registrations_handler = Resource(VehicleRegistrationsHandler)
 vocational_ed_spending_handler = Resource(VocationalEdSpendingHandler)
@@ -108,6 +111,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^average_teacher_salary.html$', 'direct_to_template', {'template': 'api/average_teacher_salary.html'}),
     (r'^bilingual_ed_spending.html$', 'direct_to_template', {'template': 'api/bilingual_ed_spending.html'}),
     (r'^budget_category_subfunctions.html$', 'direct_to_template', {'template': 'api/budget_category_subfunctions.html'}),
+    (r'^cfda.html$', 'direct_to_template', {'template': 'api/cfda.html'}),
     (r'^cffr.html$', 'direct_to_template', {'template': 'api/cffr.html'}),
     (r'^children_poverty.html$', 'direct_to_template', {'template': 'api/children_poverty.html'}),
     (r'^diploma_recipient_total.html$', 'direct_to_template', {'template': 'api/diploma_recipient_total.html'}),
@@ -180,6 +184,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^tanf_participation.html$', 'direct_to_template', {'template': 'api/tanf_participation.html'}),
     (r'^title_i_funding.html$', 'direct_to_template', {'template': 'api/title_i_funding.html'}),
     (r'^total_students.html$', 'direct_to_template', {'template': 'api/total_students.html'}),
+    (r'^usaspending.html$', 'direct_to_template', {'template': 'api/usaspending.html'}),
     (r'^vocational_ed_spending.html$', 'direct_to_template', {'template': 'api/vocational_ed_spending.html'}),
     (r'^wic_benefits.html$', 'direct_to_template', {'template': 'api/wic_benefits.html'}),
     (r'^wic_participation.html$', 'direct_to_template', {'template': 'api/wic_participation.html'}),
@@ -199,10 +204,12 @@ urlpatterns += patterns('',
     url(r'^bilingual_ed_spending/list\.(?P<emitter_format>.+)', bilingual_ed_spending_handler),
     url(r'^budget_category_subfunctions/$', budget_category_subfunctions_handler),
     url(r'^budget_category_subfunctions/list\.(?P<emitter_format>.+)', budget_category_subfunctions_handler),
+    url(r'^cfda/$', cfda_handler),
+    url(r'^cfda/list\.(?P<emitter_format>.+)', cfda_handler),
     url(r'^cffr/$', cffr_handler),
+    url(r'^cffr/list\.(?P<emitter_format>.+)', cffr_handler),
     url(r'^schip/$', cffr_handler, {'program_code': 93.767, }),
     url(r'^schip/list\.(?P<emitter_format>.+)', cffr_handler, {'program_code': 93.767, }),
-    url(r'^cffr/list\.(?P<emitter_format>.+)', cffr_handler),
     url(r'^cffragency/$', cffr_agency_handler),
     url(r'^cffragency/list\.(?P<emitter_format>.+)', cffr_agency_handler),   
     url(r'^cffrgeo/$', cffr_geo_handler),
@@ -373,6 +380,10 @@ urlpatterns += patterns('',
     url(r'^total_students/list\.(?P<emitter_format>.+)', total_students_handler),
     url(r'^title_i_funding/$', title_i_funding_handler),
     url(r'^title_i_funding/list\.(?P<emitter_format>.+)', title_i_funding_handler),
+    url(r'^usaspending_assistance_county/$', usaspending_assistance_county_handler),
+    url(r'^usaspending_assistance_county/list\.(?P<emitter_format>.+)', usaspending_assistance_county_handler),
+    url(r'^usaspending_assistance_state/$', usaspending_assistance_state_handler),
+    url(r'^usaspending_assistance_state/list\.(?P<emitter_format>.+)', usaspending_assistance_state_handler),
     url(r'^vocational_ed_spending/$', vocational_ed_spending_handler),
     url(r'^vocational_ed_spending/list\.(?P<emitter_format>.+)', vocational_ed_spending_handler),
     url(r'^wic_benefits_state/$', wic_benefits_state_handler),

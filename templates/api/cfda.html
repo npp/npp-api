@@ -1,0 +1,17 @@
+{% extends "api/api_base.html" %}
+
+{% block content %}
+<h1>Catalog of Federal Domestic Assistance</h1>
+
+<div class="api_urls">
+	<div><span class="api_urls_header">URL Format: </div>
+	<div>http://data.nationalpriorities.org/api/&lt;source&gt;/list.&lt;format&gt;?...</div>
+</div>
+
+<h2>CFDA</h2>
+<p>A U.S. government-wide compendium of all federal programs available to state and local governments; federally-recognized Indian tribal governments; territories of the U.S.; domestic public, quasi-public, and private profit and non-profit organizations and institutions; specialized groups; and individuals.</p>
+
+<strong>Allowed keys:</strong> 'program_number'<br/>
+Example: <a href="/api/cfda/list.json?program_number=10.551">http://data.nationalpriorities.org/api/cfda/list.json?program_number=10.551</a>
+
+{% endblock %}

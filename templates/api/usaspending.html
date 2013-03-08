@@ -1,0 +1,21 @@
+{% extends "api/api_base.html" %}
+
+{% block content %}
+<h1>USASpending</h1>
+
+<div class="api_urls">
+	<div><span class="api_urls_header">URL Format: </div>
+	<div>http://data.nationalpriorities.org/api/&lt;source&gt;/list.&lt;format&gt;?...</div>
+</div>
+
+<h2>Assistance Data</h2>
+<p>Federal assistance award data from the USASpending.gov archive files. Data are aggregated by program and geographic area.</p>
+<h3>Geography</h3>
+<h4>County</h4>
+<strong>Allowed keys:</strong> 'year', 'state_ansi', 'state_abbr', 'county_ansi', 'program_number'<br/>
+Example: <a href="/api/usaspending_assistance_county/list.json?state_abbr=PA&county_ansi=043&program_number=10.551&year=2011">http://data.nationalpriorities.org/api/usaspending_assistance_county/list.json?state_abbr=FL&amp;county_ansi=001&amp;program_number=10.551&amp;year=2011</a>
+
+<h4>State</h4>
+<strong>Allowed keys:</strong> 'year', 'state_ansi', 'state_abbr', 'program_number'<br/>
+Example: <a href="/api/usaspending_assistance_state/list.json?state_abbr=DC&program_number=10.551&year=2011">http://data.nationalpriorities.org/api/usaspending_assistance_state/list.json?state_abbr=DC&amp;program_number=10.551&amp;year=2011</a>
+{% endblock %}
