@@ -660,6 +660,26 @@ def total_students():
     fab staging imports.total_students                  Import Total Students
     '''
     run_command('import_total_students')
+    
+@task
+def create_usaspending_assistance(fiscal_year = None, archive_date = None):
+    '''
+    fab staging imports.create_usaspending_assistance:fiscal_year,archive_date   Create USASpending Assistance Files
+    '''
+    if fiscal_year is None:
+        raise ValueError('Missing fiscal year')
+    elif archive_date is None:
+        raise ValueError('Missing archive date')
+    run_command('create_usaspending_assistance %s %s' % (fiscal_year, archive_date))
+
+@task
+def usaspending_assistance(year = None):
+    '''
+    fab staging imports.usaspending_assistance          Import USASpending Assistance
+    '''
+    if year is None:
+        raise ValueError('Missing year')
+    run_command('import_usaspending_assistance %s' % year)
 
 @task
 def vehicle_registrations():

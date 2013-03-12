@@ -265,6 +265,16 @@ def tanf_participation_state():
     run_command('load_tanf_participation_state')
 
 @task
+def usaspending_assistance(year = None):
+    '''
+    fab staging loads.usaspending_assistance        Loads USASpending Assistance by State/County
+    '''
+    if year is None:
+        run_command('load_usaspending_assistance')
+    else:
+        run_command('load_usaspending_assistance %s' % year)
+
+@task
 def wic_benefits_state():
     '''
     fab staging loads.wic_benefits_state            Loads WIC Benefits By State
