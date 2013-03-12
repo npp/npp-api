@@ -18,13 +18,6 @@ def age_group():
     run_command('load_age_group')
 
 @task
-def cfda():
-    '''
-    fab staging loads.cfda                          Loads Catalog of Federal Domestic Assistance (CFDA)
-    '''
-    run_command('load_cfda')
-
-@task
 def cffr():
     '''
     fab staging loads.cffr                          Loads CFFR
