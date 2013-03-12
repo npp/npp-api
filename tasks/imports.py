@@ -58,6 +58,13 @@ def budget_category_subfunctions():
     fab staging imports.budget_category_subfunctions    Import Budget Category Subfunctions
     '''
     run_command('import_budget_category_subfunctions')
+@task
+
+def cfda():
+    '''
+    fab staging imports.cfda                            Import Catalog of Federal Domestic Assistance (CFDA)
+    '''
+    run_command('import_cfda')
 
 @task
 def cffr_annual():
