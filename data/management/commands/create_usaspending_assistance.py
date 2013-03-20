@@ -15,7 +15,7 @@ import os, glob
 
 # Safe to re-run: yes
 
-SOURCE_DIR = '%s/usaspending/archives' % (settings.LOCAL_DATA_ROOT)
+SOURCE_DIR = '%s/usaspending/datafeeds' % (settings.LOCAL_DATA_ROOT)
 OUTPUT_DIR = '%s/usaspending' % (settings.LOCAL_DATA_ROOT)
 
 class Command(BaseCommand):
