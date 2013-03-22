@@ -25,6 +25,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
     
         def create_aggregate(year, archive_date):
+        
+            recip_cat_type_names = {
+                'f':'For-Profit Organization',
+                'g':'Government',
+                'h':'Higher Education',
+                'n':'Non-Profit Organization',
+                'o':'Other',
+                'i':'Individual'
+            }
 
             def clean_cfda(value):
                 if value == '00.000':
@@ -77,6 +86,17 @@ class Command(BaseCommand):
                     return '999'
                 else:
                     return county
+                    
+            def clean_recip_cat_type(value):
+                list = value.split(': ', 1)
+                if len(list) == 2 and len(list[1]):
+                    return list
+                elif len(list) == 2:
+                    list[1] = recip_cat_type_names.get(list[0],'Unknown Value')
+                    return list
+                else:
+                    list.append(recip_cat_type_names.get(list[0],'Unknown Value'))
+                    return list
 
             collist = [
                 'unique_transaction_id',
@@ -142,7 +162,9 @@ class Command(BaseCommand):
                 totals['assistance_type'], totals['assistance_type_name'] = zip(
                     *totals['assistance_type'].apply(lambda x: x.split(': ', 1)))
                 totals['recip_cat_type'], totals['recip_cat_type_name'] = zip(
-                    *totals['recip_cat_type'].apply(lambda x: x.split(': ', 1)))
+                    *totals['recip_cat_type'].apply(lambda x: clean_recip_cat_type(x)))
+                #totals['recip_cat_type'], totals['recip_cat_type_name'] = zip(
+                #    *totals['recip_cat_type'].apply(lambda x: x.split(': ', 1)))
 
                 #clean countries, states, counties
                 totals['recipient_country_code'] = totals.apply(lambda row: clean_country(row),axis=1)
