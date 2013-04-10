@@ -10,8 +10,7 @@ from npp_api.data.utils import clean_num
 # import_energy_production.py 
 
 # Imports U.S. Department of Energy Annual State Energy Production data (from SEDS)
-# government source: http://www.eia.doe.gov/state/seds/seds-data-complete.cfm#production --> "data files" --> "production in btu"
-# source file: http://www.eia.gov/state/seds/sep_prod/xls/Prod_dataset.xls (accurate as of 11/17/2009)
+# government source: http://www.eia.doe.gov/state/seds/seds-data-complete.cfm#production --> "data files" --> "all production estimates". filename is Prod_datasets.xls (accurate as of 4/10/2013)
 # destination model:  EnergyProductionStateRaw
 
 # HOWTO:

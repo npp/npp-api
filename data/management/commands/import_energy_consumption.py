@@ -8,11 +8,9 @@ from npp_api.data.utils import clean_num
 
 # National Priorities Project Data Repository
 # import_energy_consumption.py 
-# Updated 3/17/2010, Joshua Ruihley, Sunlight Foundation
 
 # Imports U.S. Department of Energy Annual State Energy Consumption data (from SEDS)
-# government source: http://www.eia.doe.gov/state/seds/seds-data-complete.cfm#consumption --> "data files" --> "consumption in btu"
-# source file: http://www.eia.doe.gov/state/seds/sep_use/total/csv/use_all_btu.csv (accurate as of 11/17/2009)
+# government source: http://www.eia.doe.gov/state/seds/seds-data-complete.cfm#consumption --> "data files" --> "consumption in btu". filename is use_all_btu.csv(accurate as of 4/10/2013)
 # destination model:  EnergyConsumptionStateRaw
 
 # HOWTO:
