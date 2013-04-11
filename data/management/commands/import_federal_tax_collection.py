@@ -9,7 +9,7 @@ import csv
 # import_federal_tax_collection.py
 
 # Imports IRS Data Book Gross Collections, by Type of Tax and State
-# source info: http://www.irs.gov/taxstats/article/0,,id=206488,00.html (accurate as of 11/28/2011)
+# source info: http://www.irs.gov/uac/SOI-Tax-Stats-Gross-Collections,-by-Type-of-Tax-and-State,-Fiscal-Year-IRS-Data-Book-Table-5 (accurate as of 4/11/2013)
 # destination model:  FederalTaxCollectionStateRaw
 
 # HOWTO:
