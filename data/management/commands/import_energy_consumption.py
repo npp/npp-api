@@ -1,10 +1,12 @@
 from django import db
+from django.db import transaction
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
 from django.core.exceptions import MultipleObjectsReturned
 from data.models import EnergyConsumptionStateRaw
 import csv
 from npp_api.data.utils import clean_num
+from datetime import datetime
 
 # National Priorities Project Data Repository
 # import_energy_consumption.py 
@@ -25,44 +27,38 @@ SOURCE_FILE = '%s/energy/use_all_btu.csv' % settings.LOCAL_DATA_ROOT
 class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
-        data_reader = csv.reader(open(SOURCE_FILE))
-        update_count = 0
-        insert_count = 0
-        unchanged_count = 0
-        for i, row in enumerate(data_reader):
-            if i==0:
-                fields = row
-            else:
-                for j, col in enumerate(row):
-                    if fields[j].lower() == 'state':
-                        state = col
-                    elif fields[j].lower() == 'msn':
-                        msn = col
-                    else:
-                        year = int(fields[j])
-                        value = clean_num(col)
-                        try:
-                            record = EnergyConsumptionStateRaw.objects.get(
+
+        @transaction.commit_on_success
+        def import_consumption():
+            data_reader = csv.reader(open(SOURCE_FILE))
+            insert_count = 0
+            cutoff_year = 1990
+            for i, row in enumerate(data_reader):
+                if i==0:
+                    years = row[2:]
+                    #if we already have data for the years in the file, delete it
+                    for h, header in enumerate(years):
+                        if header >= cutoff_year:
+                            print 'deleting %s records' % header
+                            data = EnergyConsumptionStateRaw.objects.filter(year=header)
+                            data.delete()
+                else:
+                    for j, col in enumerate(row[2:]):
+                        year = years[j]
+                        if year >= cutoff_year:
+                            record = EnergyConsumptionStateRaw(
                                 year=year,
-                                state=state,
-                                msn=msn)
-                            if record.value <> value:
-                                record.value = value
-                                record.save()
-                                db.reset_queries()
-                                update_count = update_count + 1
-                            else:
-                                unchanged_count = unchanged_count + 1
-                        except MultipleObjectsReturned:
-                            print 'error: multiple records exist for %s %s %s' % (
-                                year, state, msn)
-                            continue
-                        except:
-                            record = EnergyConsumptionStateRaw(state=state, 
-                                msn=msn, year=year, value=value)
+                                state=row[0],
+                                msn=row[1],
+                                value=clean_num(col))
                             record.save()
                             db.reset_queries()
-                            insert_count = insert_count + 1
+                            insert_count = insert_count + 1             
             
-        print '%s import complete. %s records updated, %s inserted, %s unchanged' % (
-                    SOURCE_FILE, update_count, insert_count, unchanged_count)
+            print '%s import complete. %s records inserted' % (
+                        SOURCE_FILE, insert_count)
+                        
+        start_time = datetime.now()
+        import_consumption()
+        elapsed_time = datetime.now() - start_time
+        print 'elasped time = ' + str(elapsed_time)

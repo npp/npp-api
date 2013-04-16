@@ -183,7 +183,7 @@ class EnergyConsumptionStateRaw(models.Model):
     state = models.CharField(max_length=2)
     msn = models.CharField(max_length=5)
     year = models.IntegerField()
-    value = models.FloatField(null=True)
+    value = models.DecimalField(max_digits=20,decimal_places=2,null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     
@@ -1217,7 +1217,7 @@ class EnergyConsumptionState(models.Model):
     year = models.IntegerField()
     state = models.ForeignKey(State)
     msn = models.ForeignKey(Msn)
-    value = models.FloatField(null=True)
+    value = models.DecimalField(max_digits=20,decimal_places=2,null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     
