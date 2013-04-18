@@ -1,4 +1,5 @@
 from django import db
+from django.db import transaction
 from django.core.management.base import NoArgsCommand
 from django.core.exceptions import MultipleObjectsReturned
 from data.models import State, Msn, ElectricEmissionsStateRaw, ElectricEmissionsState
@@ -20,6 +21,7 @@ from data.models import State, Msn, ElectricEmissionsStateRaw, ElectricEmissions
 
 class Command(NoArgsCommand):
     
+   @transaction.commit_on_success
     def handle_noargs(self, **options):
     
         state_abbr = ''

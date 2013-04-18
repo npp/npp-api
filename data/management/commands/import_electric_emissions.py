@@ -1,4 +1,5 @@
 from django import db
+from django.db import transaction
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
 from data.models import ElectricEmissionsStateRaw
@@ -32,6 +33,7 @@ SOURCE_FILE = '%s/energy/emission_state.csv' % (settings.LOCAL_DATA_ROOT)
 
 class Command(NoArgsCommand):
     
+    @transaction.commit_on_success
     def handle_noargs(self, **options):
         data_reader = csv.reader(open(SOURCE_FILE))
         update_count = 0
