@@ -21,7 +21,7 @@ from data.models import State, Msn, ElectricEmissionsStateRaw, ElectricEmissions
 
 class Command(NoArgsCommand):
     
-   @transaction.commit_on_success
+    @transaction.commit_on_success
     def handle_noargs(self, **options):
     
         state_abbr = ''
